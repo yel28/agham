@@ -1,0 +1,142 @@
+/* Archive Page Styles */
+
+/* Archive-specific styles only - don't override main sidebar */
+.archive-container {
+  padding: 24px;
+}
+
+.tab-navigation {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.tab-button {
+  background: #f8f9fa;
+  color: #6c757d;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-button.active {
+  background: #4fa37e;
+  color: white;
+}
+
+.tab-button:hover:not(.active) {
+  background: #e9ecef;
+}
+
+.content-area {
+  padding: 0 24px;
+}
+
+.students-tab,
+.quizzes-tab {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.student-card,
+.quiz-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  gap: 16;
+  margin-bottom: 16px;
+}
+
+.student-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #e9ecef;
+}
+
+.quiz-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #4fa37e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.student-info,
+.quiz-info {
+  flex: 1;
+}
+
+.student-name,
+.quiz-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.student-details,
+.quiz-details {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 4px;
+}
+
+.deletion-info {
+  font-size: 12px;
+  color: #999;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.restore-button {
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.delete-forever-button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+  font-size: 16px;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 32px;
+  font-size: 18px;
+  color: #6c757d;
+}

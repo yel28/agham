@@ -1,0 +1,306 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'fredoka', sans-serif;
+}
+body {
+    position: relative;
+    width: 100%;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #3f5d54;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.left-section i {
+  font-size: 28px;
+  color: #fff;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 36px;
+  width: 36px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.logo h2 {
+  color: #fff;
+  margin: 0;
+  font-weight: 800;
+  font-size: 1.4em;
+}
+
+
+.profile-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-right: 40px;
+}
+
+.profile-wrapper .name p {
+    margin: 0;
+    color: white;
+    font-weight: normal;
+}
+
+.picon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.picon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.main {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 60px);
+}
+/*----------------sidebar-------------------*/
+/* Sidebar styles are now handled by the main dashboard style.css */
+
+/* Sidebar and main content styles are handled by the main dashboard style.css */
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    margin-top: 30px;
+}
+
+/* Override spacing when no title is provided */
+.overview.no-title {
+    margin-top: 0;
+}
+
+.overview.no-title .title {
+    display: none;
+}
+.section--title {
+    font-weight: 400;
+    font-size: 30px;
+    
+}
+.dropdown {
+    outline: none;
+    border: none;
+    background-color: #f1f4f8;
+    border-radius: 5px;
+    width: 150px;
+    font-size: 10px;
+    padding: 5px;
+    font-size: 15px;
+
+}
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    width: 100%;
+}
+    
+.card {
+    padding: 25px;
+    border-radius: 20px;
+    min-width: 280px;
+    height: 250px;
+    transition: .3s;
+}
+.card:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+.card--data {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.card h1 {
+    font-size: 40px;
+    margin-top: 10px;
+    font-weight: 500;
+}
+.card--title {
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.card--icon--lg {
+    font-size: 100px;
+}
+.card--icon--lg canvas {
+    display: block;
+    margin: 0 auto;
+  }
+  
+.card--stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+.card--stats span {
+    display: flex;
+    align-items: center;
+}
+.card--icon {
+    margin-right: 5px;
+}
+.stat--icon {
+    color: #5f5ce0;
+}
+.up--arrow {
+    color: #70d7a5;
+}
+.down--arrow {
+    color: #e86786;
+}
+.card-1 {
+    background-color: rgba(112, 215, 165, .1);
+}
+.card-1 .card--title {
+    color: rgba(112, 215, 165, 1);
+}
+.card-1 .card--icon--lg {
+    color: rgba(112, 215, 165, .4);
+}
+.card-2 {
+    background-color: rgba(241, 210, 67, .1);
+}
+.card-2 .card--title {
+    color: rgba(241, 210, 67, 1);
+}
+.card-2 .card--icon--lg {
+    color: rgba(241, 210, 67, .4);
+}
+.card-3 {
+    background-color: rgba(214, 156, 111, 0.1);
+}
+.card-3 .card--title {
+    color: rgba(214, 179, 111, 1);
+}
+.card-3 .card--icon--lg {
+    color: rgba(214, 151, 111, 0.4);
+}
+.card-4 {
+    background-color: rgba(214, 111, 111, 0.1);
+}
+.card-4 .card--title {
+    color: rgba(214, 111, 111, 1);
+}
+.card-4 .card--icon--lg {
+    color: rgba(214, 111, 111, 0.4);
+}
+.card-5 {
+    background-color: rgba(112, 215, 165, .1);
+}
+.card-5 .card--title {
+    color: rgba(112, 215, 165, 1);
+}
+.card-5 .card--icon--lg {
+    color: rgba(112, 215, 165, .4);
+}
+
+
+/* responsive starts here */
+@media screen and (max-width:1350px) {
+    .cards,
+    .doctors--cards {
+        overflow-x: scroll;
+    }
+}
+@media screen and (max-width:1024px) {
+    table {
+        min-width: 600px;
+    }
+}
+/* Responsive styles are handled by the main dashboard style.css */
+/* Section-based Assessment Styles */
+.section-selector {
+    transition: all 0.3s ease;
+}
+
+.section-selector:focus {
+    border-color: #4fa37e !important;
+    box-shadow: 0 0 0 3px rgba(79, 163, 126, 0.1) !important;
+}
+
+
+.section-badge {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.student-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.student-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.empty-state {
+    animation: fadeIn 0.5s ease;
+}
+
+.loading-state {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+
+@media screen and (max-width:450px) {
+    .doctor--filter {
+        display: none;
+    }
+    
+    /* Mobile responsive for section selector */
+    .section-selector {
+        min-width: 120px !important;
+        font-size: 12px !important;
+    }
+    
+    /* Mobile responsive for KPI cards */
+    .kpi-card {
+        padding: 16px !important;
+    }
+    
+    .kpi-card div:first-child {
+        font-size: 24px !important;
+    }
+}

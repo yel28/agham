@@ -1,0 +1,959 @@
+[
+  {
+    "id": "student_LRN000001",
+    "data": {
+      "firstName": "John",
+      "middleName": "A",
+      "lastName": "Smith",
+      "userName": "student001",
+      "password": "password123",
+      "lrn": "LRN000001",
+      "address": "100 Sample Street, Barangay SPCC, City",
+      "contact": "09001001001001001",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "John Smith Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055105,
+        "_nanoseconds": 560000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055105,
+        "_nanoseconds": 560000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000002",
+    "data": {
+      "firstName": "Jane",
+      "middleName": "B",
+      "lastName": "Johnson",
+      "userName": "student002",
+      "password": "password123",
+      "lrn": "LRN000002",
+      "address": "101 Sample Street, Barangay SPCC, City",
+      "contact": "09002002002002002",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Jane Johnson Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055106,
+        "_nanoseconds": 484000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055106,
+        "_nanoseconds": 484000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000003",
+    "data": {
+      "firstName": "Michael",
+      "middleName": "C",
+      "lastName": "Williams",
+      "userName": "student003",
+      "password": "password123",
+      "lrn": "LRN000003",
+      "address": "102 Sample Street, Barangay SPCC, City",
+      "contact": "09003003003003003",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "Michael Williams Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055107,
+        "_nanoseconds": 315000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055107,
+        "_nanoseconds": 315000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000004",
+    "data": {
+      "firstName": "Sarah",
+      "middleName": "D",
+      "lastName": "Brown",
+      "userName": "student004",
+      "password": "password123",
+      "lrn": "LRN000004",
+      "address": "103 Sample Street, Barangay SPCC, City",
+      "contact": "09004004004004004",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Sarah Brown Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055108,
+        "_nanoseconds": 258000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055108,
+        "_nanoseconds": 258000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000005",
+    "data": {
+      "firstName": "David",
+      "middleName": "E",
+      "lastName": "Jones",
+      "userName": "student005",
+      "password": "password123",
+      "lrn": "LRN000005",
+      "address": "104 Sample Street, Barangay SPCC, City",
+      "contact": "09005005005005005",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "David Jones Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055109,
+        "_nanoseconds": 141000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055109,
+        "_nanoseconds": 141000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000006",
+    "data": {
+      "firstName": "Emily",
+      "middleName": "A",
+      "lastName": "Garcia",
+      "userName": "student006",
+      "password": "password123",
+      "lrn": "LRN000006",
+      "address": "105 Sample Street, Barangay SPCC, City",
+      "contact": "09006006006006006",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Emily Garcia Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055110,
+        "_nanoseconds": 66000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055110,
+        "_nanoseconds": 66000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000007",
+    "data": {
+      "firstName": "James",
+      "middleName": "B",
+      "lastName": "Miller",
+      "userName": "student007",
+      "password": "password123",
+      "lrn": "LRN000007",
+      "address": "106 Sample Street, Barangay SPCC, City",
+      "contact": "09007007007007007",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "James Miller Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055111,
+        "_nanoseconds": 3000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055111,
+        "_nanoseconds": 3000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000008",
+    "data": {
+      "firstName": "Jessica",
+      "middleName": "C",
+      "lastName": "Davis",
+      "userName": "student008",
+      "password": "password123",
+      "lrn": "LRN000008",
+      "address": "107 Sample Street, Barangay SPCC, City",
+      "contact": "09008008008008008",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Jessica Davis Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055111,
+        "_nanoseconds": 783000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055111,
+        "_nanoseconds": 783000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000009",
+    "data": {
+      "firstName": "Robert",
+      "middleName": "D",
+      "lastName": "Rodriguez",
+      "userName": "student009",
+      "password": "password123",
+      "lrn": "LRN000009",
+      "address": "108 Sample Street, Barangay SPCC, City",
+      "contact": "09009009009009009",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "Robert Rodriguez Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055112,
+        "_nanoseconds": 638000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055112,
+        "_nanoseconds": 638000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000010",
+    "data": {
+      "firstName": "Ashley",
+      "middleName": "E",
+      "lastName": "Martinez",
+      "userName": "student010",
+      "password": "password123",
+      "lrn": "LRN000010",
+      "address": "109 Sample Street, Barangay SPCC, City",
+      "contact": "09010010010010010",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Ashley Martinez Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055113,
+        "_nanoseconds": 431000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055113,
+        "_nanoseconds": 431000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000011",
+    "data": {
+      "firstName": "William",
+      "middleName": "A",
+      "lastName": "Hernandez",
+      "userName": "student011",
+      "password": "password123",
+      "lrn": "LRN000011",
+      "address": "110 Sample Street, Barangay SPCC, City",
+      "contact": "09011011011011011",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "William Hernandez Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055114,
+        "_nanoseconds": 242000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055114,
+        "_nanoseconds": 242000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000012",
+    "data": {
+      "firstName": "Jennifer",
+      "middleName": "B",
+      "lastName": "Lopez",
+      "userName": "student012",
+      "password": "password123",
+      "lrn": "LRN000012",
+      "address": "111 Sample Street, Barangay SPCC, City",
+      "contact": "09012012012012012",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Jennifer Lopez Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055115,
+        "_nanoseconds": 72000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055115,
+        "_nanoseconds": 72000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000013",
+    "data": {
+      "firstName": "Richard",
+      "middleName": "C",
+      "lastName": "Gonzalez",
+      "userName": "student013",
+      "password": "password123",
+      "lrn": "LRN000013",
+      "address": "112 Sample Street, Barangay SPCC, City",
+      "contact": "09013013013013013",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "Richard Gonzalez Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055115,
+        "_nanoseconds": 889000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055115,
+        "_nanoseconds": 889000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000014",
+    "data": {
+      "firstName": "Amanda",
+      "middleName": "D",
+      "lastName": "Wilson",
+      "userName": "student014",
+      "password": "password123",
+      "lrn": "LRN000014",
+      "address": "113 Sample Street, Barangay SPCC, City",
+      "contact": "09014014014014014",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Amanda Wilson Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055116,
+        "_nanoseconds": 703000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055116,
+        "_nanoseconds": 703000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000015",
+    "data": {
+      "firstName": "Joseph",
+      "middleName": "E",
+      "lastName": "Anderson",
+      "userName": "student015",
+      "password": "password123",
+      "lrn": "LRN000015",
+      "address": "114 Sample Street, Barangay SPCC, City",
+      "contact": "09015015015015015",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "Joseph Anderson Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055117,
+        "_nanoseconds": 487000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055117,
+        "_nanoseconds": 487000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000016",
+    "data": {
+      "firstName": "Melissa",
+      "middleName": "A",
+      "lastName": "Thomas",
+      "userName": "student016",
+      "password": "password123",
+      "lrn": "LRN000016",
+      "address": "115 Sample Street, Barangay SPCC, City",
+      "contact": "09016016016016016",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Melissa Thomas Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055118,
+        "_nanoseconds": 350000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055118,
+        "_nanoseconds": 350000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000017",
+    "data": {
+      "firstName": "Thomas",
+      "middleName": "B",
+      "lastName": "Taylor",
+      "userName": "student017",
+      "password": "password123",
+      "lrn": "LRN000017",
+      "address": "116 Sample Street, Barangay SPCC, City",
+      "contact": "09017017017017017",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "Thomas Taylor Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055119,
+        "_nanoseconds": 129000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055119,
+        "_nanoseconds": 129000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000018",
+    "data": {
+      "firstName": "Deborah",
+      "middleName": "C",
+      "lastName": "Moore",
+      "userName": "student018",
+      "password": "password123",
+      "lrn": "LRN000018",
+      "address": "117 Sample Street, Barangay SPCC, City",
+      "contact": "09018018018018018",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Deborah Moore Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055119,
+        "_nanoseconds": 987000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055119,
+        "_nanoseconds": 987000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000019",
+    "data": {
+      "firstName": "Christopher",
+      "middleName": "D",
+      "lastName": "Jackson",
+      "userName": "student019",
+      "password": "password123",
+      "lrn": "LRN000019",
+      "address": "118 Sample Street, Barangay SPCC, City",
+      "contact": "09019019019019019",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "Christopher Jackson Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055120,
+        "_nanoseconds": 818000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055120,
+        "_nanoseconds": 818000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000020",
+    "data": {
+      "firstName": "Dorothy",
+      "middleName": "E",
+      "lastName": "Martin",
+      "userName": "student020",
+      "password": "password123",
+      "lrn": "LRN000020",
+      "address": "119 Sample Street, Barangay SPCC, City",
+      "contact": "09020020020020020",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Dorothy Martin Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055121,
+        "_nanoseconds": 576000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055121,
+        "_nanoseconds": 576000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000021",
+    "data": {
+      "firstName": "Charles",
+      "middleName": "A",
+      "lastName": "Lee",
+      "userName": "student021",
+      "password": "password123",
+      "lrn": "LRN000021",
+      "address": "120 Sample Street, Barangay SPCC, City",
+      "contact": "09021021021021021",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "Charles Lee Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055122,
+        "_nanoseconds": 332000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055122,
+        "_nanoseconds": 332000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000022",
+    "data": {
+      "firstName": "Lisa",
+      "middleName": "B",
+      "lastName": "Perez",
+      "userName": "student022",
+      "password": "password123",
+      "lrn": "LRN000022",
+      "address": "121 Sample Street, Barangay SPCC, City",
+      "contact": "09022022022022022",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Lisa Perez Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055123,
+        "_nanoseconds": 158000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055123,
+        "_nanoseconds": 158000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000023",
+    "data": {
+      "firstName": "Daniel",
+      "middleName": "C",
+      "lastName": "Thompson",
+      "userName": "student023",
+      "password": "password123",
+      "lrn": "LRN000023",
+      "address": "122 Sample Street, Barangay SPCC, City",
+      "contact": "09023023023023023",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "Daniel Thompson Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055123,
+        "_nanoseconds": 999000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055123,
+        "_nanoseconds": 999000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000024",
+    "data": {
+      "firstName": "Nancy",
+      "middleName": "D",
+      "lastName": "White",
+      "userName": "student024",
+      "password": "password123",
+      "lrn": "LRN000024",
+      "address": "123 Sample Street, Barangay SPCC, City",
+      "contact": "09024024024024024",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Nancy White Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055124,
+        "_nanoseconds": 748000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055124,
+        "_nanoseconds": 748000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000025",
+    "data": {
+      "firstName": "Matthew",
+      "middleName": "E",
+      "lastName": "Harris",
+      "userName": "student025",
+      "password": "password123",
+      "lrn": "LRN000025",
+      "address": "124 Sample Street, Barangay SPCC, City",
+      "contact": "09025025025025025",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "Matthew Harris Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055125,
+        "_nanoseconds": 638000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055125,
+        "_nanoseconds": 638000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000026",
+    "data": {
+      "firstName": "Karen",
+      "middleName": "A",
+      "lastName": "Sanchez",
+      "userName": "student026",
+      "password": "password123",
+      "lrn": "LRN000026",
+      "address": "125 Sample Street, Barangay SPCC, City",
+      "contact": "09026026026026026",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Karen Sanchez Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055126,
+        "_nanoseconds": 450000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055126,
+        "_nanoseconds": 450000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000027",
+    "data": {
+      "firstName": "Anthony",
+      "middleName": "B",
+      "lastName": "Clark",
+      "userName": "student027",
+      "password": "password123",
+      "lrn": "LRN000027",
+      "address": "126 Sample Street, Barangay SPCC, City",
+      "contact": "09027027027027027",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "Anthony Clark Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055127,
+        "_nanoseconds": 252000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055127,
+        "_nanoseconds": 252000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000028",
+    "data": {
+      "firstName": "Helen",
+      "middleName": "C",
+      "lastName": "Ramirez",
+      "userName": "student028",
+      "password": "password123",
+      "lrn": "LRN000028",
+      "address": "127 Sample Street, Barangay SPCC, City",
+      "contact": "09028028028028028",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Helen Ramirez Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055128,
+        "_nanoseconds": 140000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055128,
+        "_nanoseconds": 140000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000029",
+    "data": {
+      "firstName": "Mark",
+      "middleName": "D",
+      "lastName": "Lewis",
+      "userName": "student029",
+      "password": "password123",
+      "lrn": "LRN000029",
+      "address": "128 Sample Street, Barangay SPCC, City",
+      "contact": "09029029029029029",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "Mark Lewis Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055129,
+        "_nanoseconds": 4000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055129,
+        "_nanoseconds": 4000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000030",
+    "data": {
+      "firstName": "Sandra",
+      "middleName": "E",
+      "lastName": "Robinson",
+      "userName": "student030",
+      "password": "password123",
+      "lrn": "LRN000030",
+      "address": "129 Sample Street, Barangay SPCC, City",
+      "contact": "09030030030030030",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Sandra Robinson Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055129,
+        "_nanoseconds": 922000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055129,
+        "_nanoseconds": 922000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000031",
+    "data": {
+      "firstName": "Donald",
+      "middleName": "A",
+      "lastName": "Walker",
+      "userName": "student031",
+      "password": "password123",
+      "lrn": "LRN000031",
+      "address": "130 Sample Street, Barangay SPCC, City",
+      "contact": "09031031031031031",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "Donald Walker Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055130,
+        "_nanoseconds": 830000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055130,
+        "_nanoseconds": 830000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000032",
+    "data": {
+      "firstName": "Donna",
+      "middleName": "B",
+      "lastName": "Young",
+      "userName": "student032",
+      "password": "password123",
+      "lrn": "LRN000032",
+      "address": "131 Sample Street, Barangay SPCC, City",
+      "contact": "09032032032032032",
+      "gender": "Female",
+      "gradeLevel": "6",
+      "parentGuardianName": "Donna Young Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055131,
+        "_nanoseconds": 662000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055131,
+        "_nanoseconds": 662000000
+      }
+    }
+  },
+  {
+    "id": "student_LRN000033",
+    "data": {
+      "firstName": "Steven",
+      "middleName": "C",
+      "lastName": "Allen",
+      "userName": "student033",
+      "password": "password123",
+      "lrn": "LRN000033",
+      "address": "132 Sample Street, Barangay SPCC, City",
+      "contact": "09033033033033033",
+      "gender": "Male",
+      "gradeLevel": "6",
+      "parentGuardianName": "Steven Allen Sr.",
+      "dateOfEnrollment": "2024-08-15",
+      "currentStatus": "Regular Student",
+      "sectionId": "section_A",
+      "createdBy": "tester@tester.com",
+      "avatar": "/avatar3.png",
+      "createdAt": {
+        "_seconds": 1760055132,
+        "_nanoseconds": 486000000
+      },
+      "updatedAt": {
+        "_seconds": 1760055132,
+        "_nanoseconds": 486000000
+      }
+    }
+  }
+]

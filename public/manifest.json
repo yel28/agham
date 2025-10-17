@@ -1,0 +1,73 @@
+{
+  "name": "AGHAM - Student Management System",
+  "short_name": "AGHAM",
+  "description": "A comprehensive student management and assessment system for Grade 6 students",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4fa37e",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/AGHAM_LOGO2.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/AGHAM_LOGO2.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/AGHAM_LOGO2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Student Record",
+      "short_name": "Students",
+      "description": "Manage student information",
+      "url": "/dashboard/student-record",
+      "icons": [
+        {
+          "src": "/AGHAM_LOGO2.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Quizzes",
+      "short_name": "Quizzes",
+      "description": "Create and manage quizzes",
+      "url": "/dashboard/quizzes",
+      "icons": [
+        {
+          "src": "/AGHAM_LOGO2.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Student Assessment",
+      "short_name": "Assessment",
+      "description": "View student assessments",
+      "url": "/dashboard/student-assessment",
+      "icons": [
+        {
+          "src": "/AGHAM_LOGO2.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}

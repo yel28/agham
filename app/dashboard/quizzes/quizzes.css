@@ -1,0 +1,418 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'fredoka', sans-serif;
+}
+body {
+    position: relative;
+    width: 100%;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #3f5d54;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.left-section i {
+  font-size: 28px;
+  color: #fff;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 36px;
+  width: 36px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.logo h2 {
+  color: #fff;
+  margin: 0;
+  font-weight: 800;
+  font-size: 1.4em;
+}
+
+
+.profile-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-right: 40px;
+}
+
+.profile-wrapper .name p {
+    margin: 0;
+    color: white;
+    font-weight: normal;
+}
+
+.picon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.picon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.main {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 60px);
+}
+/*----------------sidebar-------------------*/
+/* Sidebar styles are now handled by the main dashboard style.css */
+/* Sidebar and main content styles are handled by the main dashboard style.css */
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    margin-top: 0px;
+}
+
+/* Override spacing when no title is provided */
+.overview.no-title {
+    margin-top: 0;
+}
+
+.overview.no-title .title {
+    display: none;
+}
+.section--title {
+    font-weight: 400;
+    font-size: 30px;
+    
+}
+.dropdown {
+    outline: none;
+    border: none;
+    background-color: #f1f4f8;
+    border-radius: 5px;
+    width: 150px;
+    font-size: 10px;
+    padding: 5px;
+    font-size: 15px;
+
+}
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    width: 100%;
+}
+    
+.card {
+    padding: 25px;
+    border-radius: 20px;
+    min-width: 280px;
+    height: 250px;
+    transition: .3s;
+}
+.card:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+.card--data {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.card h1 {
+    font-size: 40px;
+    margin-top: 10px;
+    font-weight: 500;
+}
+.card--title {
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.card--icon--lg {
+    font-size: 100px;
+}
+.card--icon--lg canvas {
+    display: block;
+    margin: 0 auto;
+  }
+  
+.card--stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+.card--stats span {
+    display: flex;
+    align-items: center;
+}
+.card--icon {
+    margin-right: 5px;
+}
+.stat--icon {
+    color: #5f5ce0;
+}
+.up--arrow {
+    color: #70d7a5;
+}
+.down--arrow {
+    color: #e86786;
+}
+.card-1 {
+    background-color: rgba(112, 215, 165, .1);
+}
+.card-1 .card--title {
+    color: rgba(112, 215, 165, 1);
+}
+.card-1 .card--icon--lg {
+    color: rgba(112, 215, 165, .4);
+}
+.card-2 {
+    background-color: rgba(241, 210, 67, .1);
+}
+.card-2 .card--title {
+    color: rgba(241, 210, 67, 1);
+}
+.card-2 .card--icon--lg {
+    color: rgba(241, 210, 67, .4);
+}
+.card-3 {
+    background-color: rgba(214, 156, 111, 0.1);
+}
+.card-3 .card--title {
+    color: rgba(214, 179, 111, 1);
+}
+.card-3 .card--icon--lg {
+    color: rgba(214, 151, 111, 0.4);
+}
+.card-4 {
+    background-color: rgba(214, 111, 111, 0.1);
+}
+.card-4 .card--title {
+    color: rgba(214, 111, 111, 1);
+}
+.card-4 .card--icon--lg {
+    color: rgba(214, 111, 111, 0.4);
+}
+.card-5 {
+    background-color: rgba(112, 215, 165, .1);
+}
+.card-5 .card--title {
+    color: rgba(112, 215, 165, 1);
+}
+.card-5 .card--icon--lg {
+    color: rgba(112, 215, 165, .4);
+}
+
+
+/* responsive starts here */
+@media screen and (max-width:1350px) {
+    .cards,
+    .doctors--cards {
+        overflow-x: scroll;
+    }
+}
+@media screen and (max-width:1024px) {
+    table {
+        min-width: 600px;
+    }
+}
+/* Responsive styles are handled by the main dashboard style.css */
+
+.quiz-list-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin: 2rem 0 0 0;
+  width: 100%;
+}
+
+.quiz-box-stacked {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 18px;
+  padding: 1.2rem 2rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  min-width: 320px;
+  min-height: 60px;
+  height: 60px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.08s, box-shadow 0.08s;
+  margin-bottom: 0.5rem;
+  cursor: default;
+}
+
+.quiz-box-stacked span {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  line-height: 1;
+}
+
+.quiz-box-stacked:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.quiz-edit-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  margin-left: 1.5rem;
+  cursor: pointer;
+}
+
+.quiz-edit-icon {
+  font-size: 2rem;
+  color: #4fa37e;
+}
+
+/* Quiz Button Alignment */
+.quiz-buttons-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  height: 40px;
+  min-height: 40px;
+}
+
+.quiz-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.quiz-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.quiz-button i {
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.quiz-button img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* Lock/Unlock Button */
+.quiz-lock-button {
+  background: rgba(40, 167, 69, 0.12);
+  border-color: rgba(40, 167, 69, 0.35);
+}
+
+.quiz-lock-button.locked {
+  background: rgba(220, 53, 69, 0.12);
+  border-color: rgba(220, 53, 69, 0.35);
+}
+
+.quiz-lock-button i {
+  color: #28a745;
+}
+
+.quiz-lock-button.locked i {
+  color: #dc3545;
+}
+
+/* Edit Button */
+.quiz-edit-button {
+  background: rgba(79, 163, 126, 0.1);
+  border-color: rgba(79, 163, 126, 0.2);
+}
+
+.quiz-edit-button:hover {
+  background: rgba(79, 163, 126, 0.2);
+  border-color: rgba(79, 163, 126, 0.4);
+}
+
+/* Assign Button */
+.quiz-assign-button {
+  background: rgba(52, 144, 220, 0.1);
+  border-color: rgba(52, 144, 220, 0.2);
+}
+
+.quiz-assign-button:hover {
+  background: rgba(52, 144, 220, 0.2);
+  border-color: rgba(52, 144, 220, 0.4);
+}
+
+.quiz-assign-button i {
+  color: #3490dc;
+}
+
+/* Answer Key Button */
+.quiz-answer-button {
+  background: rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.2);
+}
+
+.quiz-answer-button:hover {
+  background: rgba(255, 193, 7, 0.2);
+  border-color: rgba(255, 193, 7, 0.4);
+}
+
+.quiz-answer-button i {
+  color: #ffc107;
+}
+
+/* Delete Button */
+.quiz-delete-button {
+  background: rgba(220, 53, 69, 0.1);
+  border-color: rgba(220, 53, 69, 0.2);
+}
+
+.quiz-delete-button:hover {
+  background: rgba(220, 53, 69, 0.2);
+  border-color: rgba(220, 53, 69, 0.4);
+}
+
+.quiz-delete-button i {
+  color: #dc3545;
+}

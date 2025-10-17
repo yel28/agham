@@ -1,0 +1,58 @@
+// Updated Firebase Security Rules for New Collection Structure
+// Add these rules to your Firebase Console > Firestore Database > Rules
+
+// Main quizzes collection (moved from assessments/quizzes/quizzes)
+match /quizzes/{quizId} {
+  allow read, write: if request.auth != null;
+}
+
+// Quiz permissions collection (moved from assessments/quizzes/permissions)
+match /quiz_permissions/{permissionId} {
+  allow read, write: if request.auth != null;
+}
+
+// Keep existing rules for other collections
+// Students collection
+match /users/students/students/{studentId} {
+  allow read, write: if request.auth != null;
+}
+
+// Sections collection
+match /academic/sections/sections/{sectionId} {
+  allow read, write: if request.auth != null;
+}
+
+// Teachers collection
+match /users/teachers/teachers/{teacherId} {
+  allow read, write: if request.auth != null;
+}
+
+// Admins collection
+match /users/admins/admins/{adminId} {
+  allow read, write: if request.auth != null;
+}
+
+// Notifications collection
+match /system/notifications/notifications/{notificationId} {
+  allow read, write: if request.auth != null;
+}
+
+// Activity logs collection
+match /system/activity_logs/logs/{logId} {
+  allow read, write: if request.auth != null;
+}
+
+// Assignments collection
+match /assessments/assignments/assignments/{assignmentId} {
+  allow read, write: if request.auth != null;
+}
+
+// Archive collections
+match /archive/{archiveId} {
+  allow read, write: if request.auth != null;
+}
+
+// Deleted quizzes archive
+match /deleted_quizzes/{quizId} {
+  allow read, write: if request.auth != null;
+}

@@ -1,0 +1,302 @@
+.student-card{
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+.student-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  border-color: #4fa37e;
+}
+
+/* Student list responsive improvements */
+.student-list-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.student-list-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: start;
+  width: 100%;
+}
+
+/* Responsive breakpoints for student cards - maintain 2 columns */
+@media screen and (max-width: 1200px) {
+  .student-list-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .student-list-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .student-card {
+    padding: 14px !important;
+    min-height: 70px !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .student-list-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .student-card {
+    padding: 12px !important;
+    min-height: 65px !important;
+  }
+}
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'fredoka', sans-serif;
+}
+body {
+    position: relative;
+    width: 100%;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #3f5d54;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.left-section i {
+  font-size: 28px;
+  color: #fff;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 36px;
+  width: 36px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.logo h2 {
+  color: #fff;
+  margin: 0;
+  font-weight: 800;
+  font-size: 1.4em;
+}
+
+
+.profile-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-right: 40px;
+}
+
+.profile-wrapper .name p {
+    margin: 0;
+    color: white;
+    font-weight: normal;
+}
+
+.picon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.picon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.main {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 60px);
+}
+/*----------------sidebar-------------------*/
+/* Sidebar styles are now handled by the main dashboard style.css */
+/* Sidebar and main content styles are handled by the main dashboard style.css */
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    margin-top: 30px;
+}
+
+/* Override spacing when no title is provided */
+.overview.no-title {
+    margin-top: 0;
+}
+
+.overview.no-title .title {
+    display: none;
+}
+.section--title {
+    font-weight: 400;
+    font-size: 30px;
+    
+}
+.dropdown {
+    outline: none;
+    border: none;
+    background-color: #f1f4f8;
+    border-radius: 5px;
+    width: 150px;
+    font-size: 10px;
+    padding: 5px;
+    font-size: 15px;
+
+}
+/* Scoped to Student Record page only */
+.student-record-page .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(480px));
+    gap: 25px;
+    width: 100%;
+}
+    
+.student-record-page .card {
+    padding: 25px;
+    border-radius: 20px;
+    min-width: 280px;
+    height: 650px;
+    transition: .3s;
+}
+.student-record-page .card:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+.student-record-page .card--data {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.student-record-page .card h1 {
+    font-size: 40px;
+    margin-top: 10px;
+    font-weight: 500;
+}
+.student-record-page .card--title {
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.student-record-page .card--icon--lg {
+    font-size: 100px;
+}
+.student-record-page .card--icon--lg canvas {
+    display: block;
+    margin: 0 auto;
+  }
+  
+.student-record-page .card--stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+.student-record-page .card--stats span {
+    display: flex;
+    align-items: center;
+}
+.student-record-page .card--icon {
+    margin-right: 5px;
+}
+.student-record-page .stat--icon {
+    color: #5f5ce0;
+}
+.student-record-page .up--arrow {
+    color: #70d7a5;
+}
+.student-record-page .down--arrow {
+    color: #e86786;
+}
+.student-record-page .card-1 {
+    background-color: rgba(112, 215, 165, .1);
+}
+.student-record-page .card-1 .card--title {
+    color: rgba(112, 215, 165, 1);
+}
+.student-record-page .card-1 .card--icon--lg {
+    color: rgba(112, 215, 165, .4);
+}
+.student-record-page .card-2 {
+    background-color: rgba(241, 210, 67, .1);
+}
+.student-record-page .card-2 .card--title {
+    color: rgba(241, 210, 67, 1);
+}
+.student-record-page .card-2 .card--icon--lg {
+    color: rgba(241, 210, 67, .4);
+}
+.student-record-page .card-3 {
+    background-color: rgba(214, 156, 111, 0.1);
+}
+.student-record-page .card-3 .card--title {
+    color: rgba(214, 179, 111, 1);
+}
+.student-record-page .card-3 .card--icon--lg {
+    color: rgba(214, 151, 111, 0.4);
+}
+.student-record-page .card-4 {
+    background-color: rgba(214, 111, 111, 0.1);
+}
+.student-record-page .card-4 .card--title {
+    color: rgba(214, 111, 111, 1);
+}
+.student-record-page .card-4 .card--icon--lg {
+    color: rgba(214, 111, 111, 0.4);
+}
+.student-record-page .card-5 {
+    background-color: rgba(112, 215, 165, .1);
+}
+.student-record-page .card-5 .card--title {
+    color: rgba(112, 215, 165, 1);
+}
+.student-record-page .card-5 .card--icon--lg {
+    color: rgba(112, 215, 165, .4);
+}
+
+
+/* responsive starts here */
+@media screen and (max-width:1350px) {
+    .student-record-page .cards,
+    .student-record-page .doctors--cards {
+        overflow-x: scroll;
+    }
+}
+@media screen and (max-width:1024px) {
+    table {
+        min-width: 600px;
+    }
+}
+/* Responsive styles are handled by the main dashboard style.css */

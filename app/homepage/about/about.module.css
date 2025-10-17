@@ -1,0 +1,175 @@
+/* HomePage.module.css */
+
+.page {
+  font-family: 'Fredoka', sans-serif;
+  background-color: #3f5d54;
+  background-image: url('/aboutBG1.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/*---------------- Navbar ----------------*/
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 12rem;
+  margin-bottom: 5rem;
+  background-color: none;
+  color: white;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo img {
+  width: 40px;
+}
+
+.logo h1{
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.navLinks {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  margin-right: 27rem;
+  letter-spacing: 1px;
+}
+
+.navLinks li {
+  padding-bottom: 4px;
+}
+
+.navLinks li.active {
+  border-bottom: 2px solid #f25c5c;
+}
+
+.navLinks a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/*---------------- Main Section ----------------*/
+.mainSection {
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center;
+  padding: 3rem;
+  color: white;
+  min-height: 100vh;
+}
+
+.left {
+  position: fixed;
+  top: 25%;
+  left: 13%;
+  width: 100%;
+  z-index: 1;
+  color: white;
+  letter-spacing: 1px;
+}
+
+.left h1 {
+  font-size: 3.5rem;
+  line-height: 1.3;
+  font-weight: bold;
+  margin-left: 13rem;
+  margin-bottom: -3rem;
+}
+.aboutBox {
+  
+  width: 58rem;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  margin-left: 10rem;
+}
+
+/* Ensure image scales within its container on all viewports */
+.aboutImage {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/*---------------- Animation ----------------*/
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.formCard {
+  animation: fadeIn 0.5s ease;
+  transition: all 0.3s ease-in-out;
+}
+
+/*---------------- Responsive ----------------*/
+@media (max-width: 768px) {
+  .page {
+    height: 100dvh;
+    overflow: hidden;
+  }
+  .navbar {
+    flex-direction: column;
+    padding: 1rem 2rem;
+  }
+
+  .navLinks {
+    display: none; /* hidden on mobile; hamburger handles navigation */
+  }
+
+  .left {
+    position: static;
+    top: auto;
+    left: auto;
+    width: 100%;
+    padding: 0 1rem;
+    text-align: center;
+  }
+
+  .left h1 {
+    font-size: 3rem;
+    line-height: 1.2;
+    margin-left: 0;
+    margin-bottom: 1rem;
+    margin-top: -3.5rem; /* lift heading on mobile */
+  }
+
+  .mainSection {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 1rem; /* normal flow on mobile */
+  }
+
+  .aboutBox {
+    width: 100%;
+    margin: 0.5rem auto 0 auto;
+    padding: 0; 
+  }
+
+  .aboutBox img {
+    width: 147%;
+    height: auto;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: -27;
+    display: block;
+  }
+}
