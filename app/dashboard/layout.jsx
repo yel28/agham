@@ -249,18 +249,20 @@ export default function DashboardLayout({ children }) {
                 <button
                   onClick={cancelLogout}
                   style={{
-                    background: 'linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%)',
-                    color: 'white', border: 'none', borderRadius: 12, padding: '12px 25px',
-                    fontSize: 16, fontWeight: 600, cursor: 'pointer',
-                    transition: 'all 0.2s ease', boxShadow: '0 4px 12px rgba(149, 165, 166, 0.3)'
+                    background: '#f8f9fa',
+                    color: '#6c757d', border: '1px solid #e9ecef', borderRadius: 12, padding: '12px 25px',
+                    fontSize: 16, fontWeight: 500, cursor: 'pointer',
+                    transition: 'all 0.3s ease', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.transform = 'translateY(-2px)';
-                    e.target.style.boxShadow = '0 6px 20px rgba(149, 165, 166, 0.4)';
+                    e.target.style.transform = 'translateY(-1px)';
+                    e.target.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+                    e.target.style.background = '#e9ecef';
                   }}
                   onMouseLeave={(e) => {
                     e.target.style.transform = 'translateY(0)';
-                    e.target.style.boxShadow = '0 4px 12px rgba(149, 165, 166, 0.3)';
+                    e.target.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.05)';
+                    e.target.style.background = '#f8f9fa';
                   }}
                 >
                   <i className="ri-close-line" style={{ marginRight: 8 }}></i>
@@ -269,18 +271,20 @@ export default function DashboardLayout({ children }) {
                 <button
                   onClick={confirmLogout}
                   style={{
-                    background: 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)',
-                    color: 'white', border: 'none', borderRadius: 12, padding: '12px 25px',
-                    fontSize: 16, fontWeight: 600, cursor: 'pointer',
-                    transition: 'all 0.2s ease', boxShadow: '0 4px 12px rgba(231, 76, 60, 0.3)'
+                    background: '#ffebee',
+                    color: '#c62828', border: '1px solid #ffcdd2', borderRadius: 12, padding: '12px 25px',
+                    fontSize: 16, fontWeight: 500, cursor: 'pointer',
+                    transition: 'all 0.3s ease', boxShadow: '0 2px 8px rgba(198, 40, 40, 0.15)'
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.transform = 'translateY(-2px)';
-                    e.target.style.boxShadow = '0 6px 20px rgba(231, 76, 60, 0.4)';
+                    e.target.style.transform = 'translateY(-1px)';
+                    e.target.style.boxShadow = '0 4px 12px rgba(198, 40, 40, 0.25)';
+                    e.target.style.background = '#ffcdd2';
                   }}
                   onMouseLeave={(e) => {
                     e.target.style.transform = 'translateY(0)';
-                    e.target.style.boxShadow = '0 4px 12px rgba(231, 76, 60, 0.3)';
+                    e.target.style.boxShadow = '0 2px 8px rgba(198, 40, 40, 0.15)';
+                    e.target.style.background = '#ffebee';
                   }}
                 >
                   <i className="ri-logout-box-r-line" style={{ marginRight: 8 }}></i>

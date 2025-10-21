@@ -253,12 +253,12 @@ body {
   align-items: center;
   justify-content: space-between;
   border-radius: 18px;
-  padding: 1.2rem 2rem;
+  padding: 1.5rem 2.2rem;
   font-weight: 600;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   min-width: 320px;
-  min-height: 60px;
-  height: 60px;
+  min-height: 75px;
+  height: 75px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   transition: transform 0.08s, box-shadow 0.08s;
   margin-bottom: 0.5rem;
@@ -283,8 +283,8 @@ body {
   justify-content: center;
   border: none;
   border-radius: 10px;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   background: transparent;
   margin-left: 1.5rem;
   cursor: pointer;
@@ -301,17 +301,17 @@ body {
   align-items: center;
   gap: 12px;
   flex-wrap: nowrap;
-  height: 40px;
-  min-height: 40px;
+  height: 44px;
+  min-height: 44px;
 }
 
 .quiz-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  min-height: 40px;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;

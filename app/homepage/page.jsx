@@ -4,10 +4,11 @@
   import { usePathname } from 'next/navigation';
   import Link from 'next/link';
   import Image from 'next/image';
-  import styles from './homepage.module.css';
+import styles from './homepage.module.css';
 
   export default function HomePage() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [apkMeta, setApkMeta] = useState({ sizeMB: '', updated: '' });
     const pathname = usePathname();
     const drawerRef = useRef(null);
 
@@ -45,9 +46,189 @@
       }
     }, [isMenuOpen]);
 
-    return (
-      <div className={`${styles.page} overflow-x-hidden`}>
-        {/* NAVBAR */}
+    // Lightweight confetti burst on Download click
+    useEffect(() => {
+      const btn = document.getElementById('download-apk-btn');
+      const canvas = document.getElementById('confetti-canvas');
+      if (!btn || !canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      let raf = null;
+      let timeoutId = null;
+      
+      function burst() {
+        const particles = Array.from({ length: 80 }).map(() => ({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 6,
+          vy: (Math.random() - 0.8) * 6 - 2,
+          g: 0.12 + Math.random() * 0.08,
+          s: 2 + Math.random() * 2,
+          a: 1,
+          c: ['#3b82f6','#10b981','#f59e0b','#ef4444'][Math.floor(Math.random()*4)]
+        }));
+        const start = performance.now();
+        function step(t) {
+          const dt = Math.min((t - start) / 1000, 3);
+          ctx.clearRect(0,0,canvas.width,canvas.height);
+          particles.forEach(p => {
+            p.vy += p.g;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.a -= 0.01;
+            ctx.globalAlpha = Math.max(p.a, 0);
+            ctx.fillStyle = p.c;
+            ctx.fillRect(p.x, p.y, p.s, p.s);
+          });
+          if (dt < 2) raf = requestAnimationFrame(step);
+        }
+        raf = requestAnimationFrame(step);
+        timeoutId = setTimeout(() => {
+          if (raf) cancelAnimationFrame(raf);
+          raf = null;
+        }, 2200);
+      }
+      
+      function handleClick() {
+        // Resize canvas to hero card box for correct origin
+        const hero = document.querySelector(`.${styles.heroCard}`);
+        const rect = hero ? hero.getBoundingClientRect() : document.body.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        canvas.style.left = '0px';
+        canvas.style.top = '0px';
+        burst();
+      }
+      
+      btn.addEventListener('click', handleClick);
+      
+      return () => {
+        btn.removeEventListener('click', handleClick);
+        if (raf) cancelAnimationFrame(raf);
+        if (timeoutId) clearTimeout(timeoutId);
+      };
+    }, []);
+
+    // Try to fetch APK meta (size and last-modified) for the meta line
+    useEffect(() => {
+      let cancelled = false;
+      (async () => {
+        try {
+          const res = await fetch('/api/download-apk', { method: 'HEAD' });
+          const len = res.headers.get('content-length');
+          const lm = res.headers.get('last-modified');
+          let sizeMB = '';
+          if (len) {
+            const mb = (parseInt(len, 10) / (1024 * 1024));
+            sizeMB = mb > 0 ? `${mb.toFixed(1)} MB` : '';
+          }
+          let updated = '';
+          if (lm) {
+            const d = new Date(lm);
+            updated = d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+          }
+          if (!cancelled) setApkMeta({ sizeMB, updated });
+        } catch (_) {}
+      })();
+      return () => { cancelled = true; };
+    }, []);
+
+  return (
+    <div className={`${styles.page} overflow-x-hidden`}>
+      {/* Corner boy student illustration */}
+      <img src="/Boy student.png" alt="Student" className={styles.cornerBoy} />
+      {/* Corner teacher illustration */}
+      <img src="/Teacher.png" alt="Teacher" className={styles.cornerTeacher} />
+      {/* Floating Science Elements */}
+      <div className={styles.floatingElements}>
+        <div className={styles.floatingElement}>🧪</div>
+        <div className={styles.floatingElement}>⚗️</div>
+        <div className={styles.floatingElement}>🌋</div>
+        <div className={styles.floatingElement}>💫</div>
+        <div className={styles.floatingElement}>🧬</div>
+        <div className={styles.floatingElement}>⚛️</div>
+        <div className={styles.floatingElement}>🌡️</div>
+        <div className={styles.floatingElement}>🔭</div>
+        <div className={styles.floatingElement}>🧲</div>
+        <div className={styles.floatingElement}>⚡</div>
+        <div className={styles.floatingElement}>🌊</div>
+        <div className={styles.floatingElement}>🔥</div>
+        <div className={styles.floatingElement}>❄️</div>
+        <div className={styles.floatingElement}>🌍</div>
+        <div className={styles.floatingElement}>🪐</div>
+        <div className={styles.floatingElement}>⭐</div>
+        <div className={styles.floatingElement}>🌙</div>
+        <div className={styles.floatingElement}>☀️</div>
+        <div className={styles.floatingElement}>🌱</div>
+        <div className={styles.floatingElement}>🦠</div>
+        <div className={styles.floatingElement}>🧫</div>
+        <div className={styles.floatingElement}>🔋</div>
+        <div className={styles.floatingElement}>🧮</div>
+      </div>
+
+      {/* Science Line Art Background Elements */}
+      <div className={styles.scienceLineArt}>
+        {/* Beakers and Flasks */}
+        <div className={styles.beakerGroup}>
+        <svg className={styles.molecule} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="8" stroke="rgba(0,0,0,0.8)" strokeWidth="4" fill="none"/>
+            <circle cx="30" cy="30" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+            <circle cx="70" cy="30" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+            <circle cx="30" cy="70" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+            <circle cx="70" cy="70" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+            <circle cx="20" cy="50" r="4" stroke="rgba(0,0,0,0.7)" strokeWidth="2" fill="none"/>
+            <circle cx="80" cy="50" r="4" stroke="rgba(0,0,0,0.7)" strokeWidth="2" fill="none"/>
+            <line x1="50" y1="50" x2="30" y2="30" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+            <line x1="50" y1="50" x2="70" y2="30" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+            <line x1="50" y1="50" x2="30" y2="70" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+            <line x1="50" y1="50" x2="70" y2="70" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+            <line x1="50" y1="50" x2="20" y2="50" stroke="rgba(0,0,0,0.6)" strokeWidth="2"/>
+            <line x1="50" y1="50" x2="80" y2="50" stroke="rgba(0,0,0,0.6)" strokeWidth="2"/>
+          </svg>
+        </div>
+
+        {/* Volcano */}
+        <div className={styles.volcanoGroup}>
+        <svg className={styles.molecule} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="8" stroke="rgba(0,0,0,0.8)" strokeWidth="4" fill="none"/>
+            <circle cx="30" cy="30" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+            <circle cx="70" cy="30" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+            <circle cx="30" cy="70" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+            <circle cx="70" cy="70" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+            <circle cx="20" cy="50" r="4" stroke="rgba(0,0,0,0.7)" strokeWidth="2" fill="none"/>
+            <circle cx="80" cy="50" r="4" stroke="rgba(0,0,0,0.7)" strokeWidth="2" fill="none"/>
+            <line x1="50" y1="50" x2="30" y2="30" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+            <line x1="50" y1="50" x2="70" y2="30" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+            <line x1="50" y1="50" x2="30" y2="70" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+            <line x1="50" y1="50" x2="70" y2="70" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+            <line x1="50" y1="50" x2="20" y2="50" stroke="rgba(0,0,0,0.6)" strokeWidth="2"/>
+            <line x1="50" y1="50" x2="80" y2="50" stroke="rgba(0,0,0,0.6)" strokeWidth="2"/>
+          </svg>
+        </div>
+
+        {/* Molecular Structure */}
+        <div className={styles.moleculeGroup}>
+          <svg className={styles.molecule} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="8" stroke="rgba(0,0,0,0.8)" strokeWidth="4" fill="none"/>
+            <circle cx="30" cy="30" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+            <circle cx="70" cy="30" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+            <circle cx="30" cy="70" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+            <circle cx="70" cy="70" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+            <circle cx="20" cy="50" r="4" stroke="rgba(0,0,0,0.7)" strokeWidth="2" fill="none"/>
+            <circle cx="80" cy="50" r="4" stroke="rgba(0,0,0,0.7)" strokeWidth="2" fill="none"/>
+            <line x1="50" y1="50" x2="30" y2="30" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+            <line x1="50" y1="50" x2="70" y2="30" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+            <line x1="50" y1="50" x2="30" y2="70" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+            <line x1="50" y1="50" x2="70" y2="70" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+            <line x1="50" y1="50" x2="20" y2="50" stroke="rgba(0,0,0,0.6)" strokeWidth="2"/>
+            <line x1="50" y1="50" x2="80" y2="50" stroke="rgba(0,0,0,0.6)" strokeWidth="2"/>
+          </svg>
+        </div>
+
+      
+      </div>
+
+      {/* NAVBAR */}
         <nav className={`${styles.navbar} md:flex md:items-center md:justify-between`}>
           <Link href="/homepage" className={`${styles.logo} flex items-center gap-2 cursor-pointer`}>
             <Image src="/logo2.png" alt="AGHAM Logo" width={40} height={40} sizes="(max-width: 768px) 100vw, 700px" />
@@ -93,33 +274,66 @@
         )}
 
         {/* MAIN SECTION */}
-        <div className={`${styles.mainSection} max-w-screen-xl px-4 md:px-8 py-8 md:py-16 mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center`}>
-          {/* LEFT CONTENT */}
-          <div className={`${styles.left} max-md:static max-md:transform-none max-md:w-full max-md:max-w-none max-md:text-center md:col-span-8`}>
-            {pathname === '/homepage' && (
-              <>
-                <h1 className="balance break-words text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight text-center mx-auto max-w-[26ch] md:text-left md:max-w-none md:mx-0 mb-4 md:mb-6">
-                  Mobile E‑Learning for <br /><span>Grade 6 Science</span>
-                </h1>
-                      <p className="text-[0.95rem] md:text-lg leading-relaxed md:leading-loose text-left opacity-90 mt-3 md:mt-4 mx-auto max-w-[36ch] md:text-left md:mx-0 md:max-w-none">
-                  Explore science like never before! AGHAM is a fun and interactive mobile app made especially for Grade 6 students. Learn about mixtures, circulatory system, gravity, and more through exciting 3D models and with the power of Augmented Reality. Science has never been this cool!
-                </p>
-                <a 
-                  href="https://onedrive.live.com/?redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy9hNjQ3Zjc3NDJjMzg4MDdkL0Vaal8zV2hNdk5oQm1pT1ctNjNPTFBVQlJrRkZDdVhsQVNrQ1pJR01nUlpCYlE%5FZT0wS1ZtOUU&cid=A647F7742C38807D&id=A647F7742C38807D%21s68ddff98bc4c41d89a2396fbadce2cf5&parId=root&o=OneUp" 
+        <div className={`${styles.mainSection}`}>
+          <div className={styles.hero}>
+            <div className={styles.heroHeader}>
+              <div className={styles.heroBadge}>
+                <span>🔭</span>
+                <span>AR Science Learning</span>
+              </div>
+            </div>
+            <h1 className={styles.heroTitle}>
+              Mobile E‑Learning for <br />
+              <span className={styles.heroAccent}>Grade 6 Science</span>
+            </h1>
+            <p className={styles.heroText}>
+            Explore science like never before! AGHAM is a fun and interactive mobile app made especially for Grade 6 students. Learn about mixtures, circulatory system, gravity, and more through exciting 3D models and with the power of Augmented Reality. Science has never been this cool!            </p>
+            
+            {/* Highlighted Download placed ABOVE topics */}
+            <div className={styles.downloadSection}>
+              <div className={styles.downloadGlow}></div>
+              <div className={styles.downloadPanel}>
+                <a
+                  href="/api/download-apk"
                   download="AGHAM-App.apk"
-                  className={`${styles.downloadBtn} mt-6 inline-flex items-center justify-center h-11 px-5 rounded-xl bg-[var(--color-brand-600)] hover:bg-[var(--color-brand-700)] text-white font-semibold shadow-[var(--shadow-card)] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand-600)] min-h-[44px] text-base hover:scale-[1.02] active:scale-[0.98]`}
+                  id="download-apk-btn"
+                  className={`${styles.primaryBtn} ${styles.downloadCTA} inline-flex items-center justify-center min-h-[48px]`}
                 >
-                  <i className="ri-download-line" style={{ marginRight: '8px', fontSize: '18px' }}></i>
-                  Download APK
+                  <i className="ri-download-line" style={{ marginRight: '10px', fontSize: '20px' }}></i>
+                  Download
                 </a>
+                <div className={styles.downloadMeta}>
+                  {apkMeta.sizeMB ? apkMeta.sizeMB : ''}
+                  {apkMeta.updated ? ` • Updated ${apkMeta.updated}` : ''}
+                </div>
+              </div>
+              <canvas className={styles.confettiCanvas} id="confetti-canvas"/>
+            </div>
 
-                {/* Illustrations removed per requirements */}
-              </>
-            )}
+            {/* Science Concept Cards */}
+            <div className={styles.scienceConcepts}>
+              <div className={styles.conceptCard}>
+                <span className={styles.conceptIcon}>🧪</span>
+                <h3 className={styles.conceptTitle}>Mixtures</h3>
+                <p className={styles.conceptDescription}>Learn about different types of mixtures and how to separate them</p>
+              </div>
+              <div className={styles.conceptCard}>
+                <span className={styles.conceptIcon}>❤️</span>
+                <h3 className={styles.conceptTitle}>Circulatory System</h3>
+                <p className={styles.conceptDescription}>Explore how blood flows through your body and keeps you healthy</p>
+              </div>
+                <div className={styles.conceptCard}>
+                  <span className={styles.conceptIcon}>🏀</span>
+                  <h3 className={styles.conceptTitle}>Gravity & Friction</h3>
+                  <p className={styles.conceptDescription}>Discover the forces that make things fall and slide</p>
+                </div>
+              <div className={styles.conceptCard}>
+                <span className={styles.conceptIcon}>🌋</span>
+                <h3 className={styles.conceptTitle}>Volcanoes</h3>
+                <p className={styles.conceptDescription}>Witness the power of Earth's volcanic eruptions</p>
+              </div>
+            </div>
           </div>
-
-          
-
         </div>
       </div>
     );

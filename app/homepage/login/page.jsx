@@ -25,13 +25,81 @@ function LoginForm({
   loading, 
   error, 
   showLogin, 
-  setShowLogin 
+  setShowLogin,
+  showSuccess,
+  setShowSuccess,
+  countdown,
+  setCountdown
 }) {
   const [isClient, setIsClient] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // Form validation
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!email.trim()) {
+      errors.email = 'User ID is required';
+    } else if (email.length < 3) {
+      errors.email = 'User ID must be at least 3 characters';
+    }
+    
+    if (!password.trim()) {
+      errors.password = 'Password is required';
+    } else if (password.length < 6) {
+      errors.password = 'Password must be at least 6 characters';
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Enhanced form submission
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setValidationErrors({});
+    
+    try {
+      const result = await handleLogin(e);
+      // After successful login, show success modal
+      if (result && result.success) {
+        setShowSuccess(true);
+        setCountdown(4);
+        
+        // Countdown effect
+        const countdownInterval = setInterval(() => {
+          setCountdown(prev => {
+            if (prev <= 1) {
+              clearInterval(countdownInterval);
+              setShowSuccess(false);
+              // Use setTimeout to defer the navigation to avoid setState during render
+              setTimeout(() => {
+                router.push('/dashboard');
+              }, 0);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+      }
+      
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (!isClient) {
     return (
@@ -49,34 +117,123 @@ function LoginForm({
   return (
     <div className={`${styles.formContainer} max-w-sm w-full mx-auto md:mx-0`}>
       {showLogin ? (
-        <div className={`${styles.loginCard} ${styles.formCard}`}>
+        <form className={`${styles.loginCard} ${styles.formCard}`} onSubmit={handleFormSubmit}>
           <h2>Login</h2>
-          <input 
-            placeholder="User ID" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)}
-            suppressHydrationWarning={true}
-            autoComplete="username"
-          />
+          
+          <div className={styles.inputGroup}>
+            <div className={styles.inputWrapper}>
+              <input 
+                placeholder="User ID" 
+                value={email} 
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (validationErrors.email) {
+                    setValidationErrors(prev => ({ ...prev, email: '' }));
+                  }
+                }}
+                suppressHydrationWarning={true}
+                autoComplete="username"
+                className={validationErrors.email ? styles.inputError : ''}
+              />
+              <span className={styles.inputIcon}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </span>
+            </div>
+            {validationErrors.email && (
+              <div className={styles.errorMessage}>
+                <span className={styles.errorIcon}>⚠️</span>
+                {validationErrors.email}
+              </div>
+            )}
+          </div>
 
-          <input 
-            type="password" 
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            suppressHydrationWarning={true}
-            autoComplete="current-password"
-          />
+          <div className={styles.inputGroup}>
+            <div className={styles.inputWrapper}>
+              <input 
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (validationErrors.password) {
+                    setValidationErrors(prev => ({ ...prev, password: '' }));
+                  }
+                }}
+                suppressHydrationWarning={true}
+                autoComplete="current-password"
+                className={validationErrors.password ? styles.inputError : ''}
+              />
+              <span className={styles.inputIcon}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </span>
+              <button 
+                type="button"
+                className={styles.passwordToggle}
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex={-1}
+              >
+                {showPassword ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                )}
+              </button>
+            </div>
+            {validationErrors.password && (
+              <div className={styles.errorMessage}>
+                <span className={styles.errorIcon}>⚠️</span>
+                {validationErrors.password}
+              </div>
+            )}
+          </div>
 
           <button 
-            className={`${styles.formButton} min-h-[44px] text-base`} 
-            onClick={handleLogin}
-            disabled={loading}
+            type="submit"
+            className={`${styles.formButton} ${isSubmitting ? styles.buttonLoading : ''}`}
+            disabled={loading || isSubmitting}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {isSubmitting ? (
+              <>
+                <span className={styles.spinner}></span>
+                Logging in...
+              </>
+            ) : (
+              'Login'
+            )}
           </button>
-          {error && <p style={{ color: 'yellow' }}>{error}</p>}
-        </div>
+
+          
+          {error && (
+            <div className={styles.errorMessageMain}>
+              <span className={styles.errorIcon}>❌</span>
+              {error}
+            </div>
+          )}
+
+          {showSuccess && (
+            <div className={styles.successMessage}>
+              <span className={styles.successIcon}>✅</span>
+              <div className={styles.successContent}>
+                <div className={styles.successTitle}>Login Successful!</div>
+                <div className={styles.successSubtitle}>
+                  Redirecting to dashboard in {countdown} seconds...
+                </div>
+              </div>
+            </div>
+          )}
+        </form>
       ) : (
         <div className={`${styles.createCard} ${styles.formCard}`}>
           <h2>Create Account</h2>
@@ -88,6 +245,7 @@ function LoginForm({
           <p>Already have an account? <a onClick={() => setShowLogin(true)}>Login</a></p>
         </div>
       )}
+
     </div>
   );
 }
@@ -102,6 +260,8 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showLoadingScreen, setShowLoadingScreen] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [countdown, setCountdown] = useState(0);
   const router = useRouter();
   const { setTeacherEmail } = useTeacher();
 
@@ -145,8 +305,8 @@ export default function LoginPage() {
             await updateLastLogin(adminData.email);
             
             setLoading(false);
-            router.push('/dashboard');
-            return;
+            setShowLoadingScreen(false);
+            return { success: true }; // Return success instead of redirecting
           } else {
             console.log('Admin password mismatch');
             throw new Error('Invalid password');
@@ -191,7 +351,8 @@ export default function LoginPage() {
       setTeacherEmail(user.email);
 
       setLoading(false);
-      router.push('/dashboard');
+      setShowLoadingScreen(false);
+      return { success: true }; // Return success instead of redirecting
     } catch (error) {
       setLoading(false);
       setShowLoadingScreen(false);
@@ -219,6 +380,82 @@ export default function LoginPage() {
 
   return (
     <div className={styles.page}>
+      {/* Rotating Molecular Structures */}
+      <div className={styles.moleculeGroup1}>
+        <svg className={styles.molecule} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="8" stroke="rgba(0,0,0,0.8)" strokeWidth="4" fill="none"/>
+          <circle cx="30" cy="30" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+          <circle cx="70" cy="30" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+          <circle cx="30" cy="70" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+          <circle cx="70" cy="70" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+          <circle cx="20" cy="50" r="4" stroke="rgba(0,0,0,0.7)" strokeWidth="2" fill="none"/>
+          <circle cx="80" cy="50" r="4" stroke="rgba(0,0,0,0.7)" strokeWidth="2" fill="none"/>
+          <line x1="50" y1="50" x2="30" y2="30" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+          <line x1="50" y1="50" x2="70" y2="30" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+          <line x1="50" y1="50" x2="30" y2="70" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+          <line x1="50" y1="50" x2="70" y2="70" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+          <line x1="50" y1="50" x2="20" y2="50" stroke="rgba(0,0,0,0.6)" strokeWidth="2"/>
+          <line x1="50" y1="50" x2="80" y2="50" stroke="rgba(0,0,0,0.6)" strokeWidth="2"/>
+        </svg>
+      </div>
+
+      <div className={styles.moleculeGroup2}>
+        <svg className={styles.molecule} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="8" stroke="rgba(0,0,0,0.8)" strokeWidth="4" fill="none"/>
+          <circle cx="30" cy="30" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+          <circle cx="70" cy="30" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+          <circle cx="30" cy="70" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+          <circle cx="70" cy="70" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+          <circle cx="20" cy="50" r="4" stroke="rgba(0,0,0,0.7)" strokeWidth="2" fill="none"/>
+          <circle cx="80" cy="50" r="4" stroke="rgba(0,0,0,0.7)" strokeWidth="2" fill="none"/>
+          <line x1="50" y1="50" x2="30" y2="30" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+          <line x1="50" y1="50" x2="70" y2="30" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+          <line x1="50" y1="50" x2="30" y2="70" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+          <line x1="50" y1="50" x2="70" y2="70" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+          <line x1="50" y1="50" x2="20" y2="50" stroke="rgba(0,0,0,0.6)" strokeWidth="2"/>
+          <line x1="50" y1="50" x2="80" y2="50" stroke="rgba(0,0,0,0.6)" strokeWidth="2"/>
+        </svg>
+      </div>
+
+      <div className={styles.moleculeGroup3}>
+        <svg className={styles.molecule} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="8" stroke="rgba(0,0,0,0.8)" strokeWidth="4" fill="none"/>
+          <circle cx="30" cy="30" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+          <circle cx="70" cy="30" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+          <circle cx="30" cy="70" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+          <circle cx="70" cy="70" r="6" stroke="rgba(0,0,0,0.8)" strokeWidth="3" fill="none"/>
+          <circle cx="20" cy="50" r="4" stroke="rgba(0,0,0,0.7)" strokeWidth="2" fill="none"/>
+          <circle cx="80" cy="50" r="4" stroke="rgba(0,0,0,0.7)" strokeWidth="2" fill="none"/>
+          <line x1="50" y1="50" x2="30" y2="30" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+          <line x1="50" y1="50" x2="70" y2="30" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+          <line x1="50" y1="50" x2="30" y2="70" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+          <line x1="50" y1="50" x2="70" y2="70" stroke="rgba(0,0,0,0.7)" strokeWidth="3"/>
+          <line x1="50" y1="50" x2="20" y2="50" stroke="rgba(0,0,0,0.6)" strokeWidth="2"/>
+          <line x1="50" y1="50" x2="80" y2="50" stroke="rgba(0,0,0,0.6)" strokeWidth="2"/>
+        </svg>
+      </div>
+
+      {/* Clean Floating Science Elements */}
+      <div className={styles.floatingElements}>
+        <div className={styles.floatingElement}>🧪</div>
+        <div className={styles.floatingElement}>🔬</div>
+        <div className={styles.floatingElement}>⚗️</div>
+        <div className={styles.floatingElement}>🧬</div>
+        <div className={styles.floatingElement}>⚛️</div>
+        <div className={styles.floatingElement}>🔭</div>
+        <div className={styles.floatingElement}>💡</div>
+        <div className={styles.floatingElement}>⭐</div>
+        <div className={styles.floatingElement}>🌙</div>
+        <div className={styles.floatingElement}>☀️</div>
+      </div>
+
+      
+
+      {/* Corner student illustration */}
+      <img src="/Boy student.png" alt="Student" className={styles.cornerBoy} />
+      {/* Corner teacher illustration */}
+      <img src="/Teacher.png" alt="Teacher" className={styles.cornerTeacher} />
+
       {/* NAVBAR */}
       <nav className={`${styles.navbar} md:flex md:items-center md:justify-between`}>
         <Link href="/homepage" className={styles.logo}>
@@ -265,28 +502,54 @@ export default function LoginPage() {
       )}
 
       {/* MAIN SECTION */}
-      <div className={`${styles.mainSection} px-4 py-8 md:px-0 md:py-0`}>
-        {/* LEFT TEXT */}
-        <div className={`${styles.left} max-md:text-center`}>
-          <h1 className="text-2xl md:text-4xl font-bold">Welcome Teacher!</h1>
-          <p className="text-base md:text-lg">
-            Log in to manage your students, track their quiz scores, and guide them through engaging lessons
-            with interactive AR models in Grade 6 Science.
-          </p>
-        </div>
+      <div className={styles.mainSection}>
+        <div className={styles.loginContainer}>
+          {/* LEFT CONTENT - WELCOME SECTION */}
+          <div className={styles.leftContent}>
+            <div className={styles.welcomeSection}>
+              <h1 className={styles.welcomeTitle}>
+                Welcome Teacher!
+              </h1>
+              <p className={styles.welcomeText}>
+                Log in to manage your students, track their quiz scores, and guide them through engaging lessons
+                in Grade 6 Science.
+              </p>
+              <div className={styles.featuresList}>
+                <div className={styles.feature}>
+                  <span className={styles.featureIcon}>👥</span>
+                  <span>Student Management</span>
+                </div>
+                <div className={styles.feature}>
+                  <span className={styles.featureIcon}>📊</span>
+                  <span>Progress Tracking</span>
+                </div>
+                <div className={styles.feature}>
+                  <span className={styles.featureIcon}>📝</span>
+                  <span>Quiz Management</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        {/* RIGHT FORM */}
-        <LoginForm 
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
-          handleLogin={handleLogin}
-          loading={loading}
-          error={error}
-          showLogin={showLogin}
-          setShowLogin={setShowLogin}
-        />
+          {/* RIGHT CONTENT - LOGIN FORM */}
+          <div className={styles.rightContent}>
+            <LoginForm 
+              email={email}
+              setEmail={setEmail}
+              password={password}
+              setPassword={setPassword}
+              handleLogin={handleLogin}
+              loading={loading}
+              error={error}
+              showLogin={showLogin}
+              setShowLogin={setShowLogin}
+              showSuccess={showSuccess}
+              setShowSuccess={setShowSuccess}
+              countdown={countdown}
+              setCountdown={setCountdown}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Login Loading Screen */}
@@ -314,25 +577,35 @@ export default function LoginPage() {
             maxWidth: 400,
             width: '90%'
           }}>
-            {/* Loading Spinner */}
-            <div style={{
-              width: 60,
-              height: 60,
-              border: '4px solid #f3f3f3',
-              borderTop: '4px solid #3f5d54',
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite',
-              margin: '0 auto 20px auto'
-            }}></div>
+            {/* Success Icon or Loading Spinner */}
+            {showSuccess ? (
+              <div style={{
+                fontSize: 60,
+                margin: '0 auto 20px auto',
+                animation: 'bounce 0.8s ease-in-out'
+              }}>
+                ✅
+              </div>
+            ) : (
+              <div style={{
+                width: 60,
+                height: 60,
+                border: '4px solid #f3f3f3',
+                borderTop: '4px solid #3f5d54',
+                borderRadius: '50%',
+                animation: 'spin 1s linear infinite',
+                margin: '0 auto 20px auto'
+              }}></div>
+            )}
             
-            {/* Loading Text */}
+            {/* Success or Loading Text */}
             <h3 style={{
               margin: '0 0 10px 0',
               fontSize: 24,
               fontWeight: 700,
-              color: '#2c3e50'
+              color: showSuccess ? '#22c55e' : '#2c3e50'
             }}>
-              Logging In...
+              {showSuccess ? 'Login Successful!' : 'Logging In...'}
             </h3>
             
             <p style={{
@@ -341,7 +614,7 @@ export default function LoginPage() {
               color: '#6c757d',
               lineHeight: 1.5
             }}>
-              Please wait while we authenticate your account
+              {showSuccess ? `Welcome back! Redirecting to dashboard in ${countdown} seconds...` : 'Please wait while we authenticate your account'}
             </p>
           </div>
         </div>

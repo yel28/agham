@@ -1386,25 +1386,14 @@ export default function DashboardPage() {
               gap: 12,
               marginTop: 8
             }}>
-              <label style={{ 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: '#2c3e50',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8
-              }}>
-                <i className="ri-filter-line" style={{ fontSize: 16 }}></i>
-                Section:
-              </label>
               <select
                 value={selectedSectionId}
                 onChange={(e) => handleSectionChange(e.target.value)}
                 style={{
-                  background: 'white',
-                  border: '2px solid #e9ecef',
-                  borderRadius: 12,
-                  padding: '10px 16px',
+                  background: 'rgba(255, 255, 255, 0.8)',
+                  border: '2px solid rgba(233, 236, 239, 0.8)',
+                  borderRadius: 16,
+                  padding: '12px 16px',
                   fontSize: 14,
                   fontWeight: 500,
                   color: '#2c3e50',
@@ -1412,10 +1401,19 @@ export default function DashboardPage() {
                   minWidth: 160,
                   outline: 'none',
                   transition: 'all 0.2s ease',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  backdropFilter: 'blur(10px)'
                 }}
-                onFocus={(e) => e.target.style.borderColor = '#4fa37e'}
-                onBlur={(e) => e.target.style.borderColor = '#e9ecef'}
+                onFocus={(e) => {
+                  e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                  e.target.style.background = 'rgba(255, 255, 255, 1)';
+                  e.target.style.boxShadow = '0 4px 12px rgba(79, 163, 126, 0.15)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'rgba(233, 236, 239, 0.8)';
+                  e.target.style.background = 'rgba(255, 255, 255, 0.8)';
+                  e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+                }}
               >
                 {sections.map(section => (
                   <option key={section.id} value={section.id}>

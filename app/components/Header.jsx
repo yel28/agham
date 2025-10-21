@@ -349,47 +349,86 @@ export default function Header({ teacherEmail, onMenuClick }) {
                       <button
                         onClick={() => setShowDeleteConfirm(true)}
                         style={{
-                          background: '#dc3545',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: 6,
-                          padding: '4px 8px',
+                          background: 'rgba(220, 53, 69, 0.1)',
+                          color: '#dc3545',
+                          border: '1px solid rgba(220, 53, 69, 0.2)',
+                          borderRadius: 12,
+                          padding: '6px 12px',
                           fontSize: 12,
                           cursor: 'pointer',
-                          fontWeight: 500
+                          fontWeight: 500,
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 4
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                          e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                          e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
                         }}
                       >
+                        <i className="ri-delete-bin-line" style={{ fontSize: 12 }}></i>
                         Delete ({selectedNotifications.length})
                       </button>
                     )}
                     <button
                       onClick={() => setShowDeleteAllConfirm(true)}
                       style={{
-                        background: '#6c757d',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: 6,
-                        padding: '4px 8px',
+                        background: 'rgba(108, 117, 125, 0.1)',
+                        color: '#6c757d',
+                        border: '1px solid rgba(108, 117, 125, 0.2)',
+                        borderRadius: 12,
+                        padding: '6px 12px',
                         fontSize: 12,
                         cursor: 'pointer',
-                        fontWeight: 500
+                        fontWeight: 500,
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.background = 'rgba(108, 117, 125, 0.2)';
+                        e.target.style.borderColor = 'rgba(108, 117, 125, 0.4)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.background = 'rgba(108, 117, 125, 0.1)';
+                        e.target.style.borderColor = 'rgba(108, 117, 125, 0.2)';
                       }}
                     >
+                      <i className="ri-delete-bin-6-line" style={{ fontSize: 12 }}></i>
                       Delete All
                     </button>
                     <button
                       onClick={markAllAsRead}
                       style={{
-                        background: '#28a745',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: 6,
-                        padding: '4px 8px',
+                        background: 'rgba(40, 167, 69, 0.1)',
+                        color: '#28a745',
+                        border: '1px solid rgba(40, 167, 69, 0.2)',
+                        borderRadius: 12,
+                        padding: '6px 12px',
                         fontSize: 12,
                         cursor: 'pointer',
-                        fontWeight: 500
+                        fontWeight: 500,
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.background = 'rgba(40, 167, 69, 0.2)';
+                        e.target.style.borderColor = 'rgba(40, 167, 69, 0.4)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.background = 'rgba(40, 167, 69, 0.1)';
+                        e.target.style.borderColor = 'rgba(40, 167, 69, 0.2)';
                       }}
                     >
+                      <i className="ri-check-double-line" style={{ fontSize: 12 }}></i>
                       Mark All Read
                     </button>
                   </div>
@@ -588,31 +627,59 @@ export default function Header({ teacherEmail, onMenuClick }) {
                       <button
                         onClick={() => setShowDeleteAllConfirm(false)}
                         style={{
-                          background: '#6c757d',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: 8,
-                          padding: '10px 20px',
+                          background: 'rgba(108, 117, 125, 0.1)',
+                          color: '#6c757d',
+                          border: '1px solid rgba(108, 117, 125, 0.2)',
+                          borderRadius: 16,
+                          padding: '12px 24px',
                           fontSize: 14,
                           cursor: 'pointer',
-                          fontWeight: 500
+                          fontWeight: 500,
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: 8
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.background = 'rgba(108, 117, 125, 0.2)';
+                          e.target.style.borderColor = 'rgba(108, 117, 125, 0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.background = 'rgba(108, 117, 125, 0.1)';
+                          e.target.style.borderColor = 'rgba(108, 117, 125, 0.2)';
                         }}
                       >
+                        <i className="ri-close-line" style={{ fontSize: 16 }}></i>
                         Cancel
                       </button>
                       <button
                         onClick={handleDeleteAll}
                         style={{
-                          background: '#dc3545',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: 8,
-                          padding: '10px 20px',
+                          background: 'rgba(220, 53, 69, 0.1)',
+                          color: '#dc3545',
+                          border: '1px solid rgba(220, 53, 69, 0.2)',
+                          borderRadius: 16,
+                          padding: '12px 24px',
                           fontSize: 14,
                           cursor: 'pointer',
-                          fontWeight: 500
+                          fontWeight: 500,
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: 8
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                          e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                          e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
                         }}
                       >
+                        <i className="ri-delete-bin-6-line" style={{ fontSize: 16 }}></i>
                         Delete All
                       </button>
                     </div>

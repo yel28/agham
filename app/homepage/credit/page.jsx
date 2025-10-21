@@ -10,6 +10,82 @@ export default function CreditPage() {
   const drawerRef = useRef(null);
   return (
     <div className={styles.page}>
+      {/* Floating Elements - Scattered All Around */}
+      <div className={styles.floatingElements}>
+        <div className={styles.floatingElement}>🧪</div>
+        <div className={styles.floatingElement}>🔬</div>
+        <div className={styles.floatingElement}>⚗️</div>
+        <div className={styles.floatingElement}>🧬</div>
+        <div className={styles.floatingElement}>⚛️</div>
+        <div className={styles.floatingElement}>🔭</div>
+        <div className={styles.floatingElement}>💡</div>
+        <div className={styles.floatingElement}>⭐</div>
+        <div className={styles.floatingElement}>🌙</div>
+        <div className={styles.floatingElement}>☀️</div>
+        <div className={styles.floatingElement}>🌍</div>
+        <div className={styles.floatingElement}>🔥</div>
+        <div className={styles.floatingElement}>💧</div>
+        <div className={styles.floatingElement}>🌪️</div>
+        <div className={styles.floatingElement}>⚡</div>
+        <div className={styles.floatingElement}>🌊</div>
+        <div className={styles.floatingElement}>❄️</div>
+        <div className={styles.floatingElement}>🌈</div>
+        <div className={styles.floatingElement}>🌋</div>
+        <div className={styles.floatingElement}>🌌</div>
+        <div className={styles.floatingElement}>🌱</div>
+        <div className={styles.floatingElement}>🦠</div>
+        <div className={styles.floatingElement}>🌿</div>
+        <div className={styles.floatingElement}>🦋</div>
+        <div className={styles.floatingElement}>🐛</div>
+        <div className={styles.floatingElement}>🦎</div>
+        <div className={styles.floatingElement}>🦜</div>
+        <div className={styles.floatingElement}>🦅</div>
+        <div className={styles.floatingElement}>🦉</div>
+        <div className={styles.floatingElement}>🦇</div>
+        <div className={styles.floatingElement}>🦆</div>
+        <div className={styles.floatingElement}>🔋</div>
+        <div className={styles.floatingElement}>📡</div>
+        <div className={styles.floatingElement}>🎯</div>
+        <div className={styles.floatingElement}>🔮</div>
+        <div className={styles.floatingElement}>🌠</div>
+        <div className={styles.floatingElement}>🪐</div>
+        <div className={styles.floatingElement}>🌺</div>
+        <div className={styles.floatingElement}>🌻</div>
+        <div className={styles.floatingElement}>🌼</div>
+        <div className={styles.floatingElement}>🌷</div>
+        <div className={styles.floatingElement}>🌵</div>
+        <div className={styles.floatingElement}>🌾</div>
+        <div className={styles.floatingElement}>🌰</div>
+        <div className={styles.floatingElement}>🍄</div>
+        <div className={styles.floatingElement}>🌲</div>
+        <div className={styles.floatingElement}>🌳</div>
+        <div className={styles.floatingElement}>🌴</div>
+        <div className={styles.floatingElement}>🌶️</div>
+        <div className={styles.floatingElement}>🌽</div>
+        <div className={styles.floatingElement}>🍀</div>
+        <div className={styles.floatingElement}>🍁</div>
+        <div className={styles.floatingElement}>🍂</div>
+        <div className={styles.floatingElement}>🍃</div>
+        <div className={styles.floatingElement}>🦗</div>
+        <div className={styles.floatingElement}>🕷️</div>
+        <div className={styles.floatingElement}>🕸️</div>
+        <div className={styles.floatingElement}>🦂</div>
+        <div className={styles.floatingElement}>🐝</div>
+        <div className={styles.floatingElement}>🐞</div>
+        <div className={styles.floatingElement}>🐜</div>
+        <div className={styles.floatingElement}>🦟</div>
+        <div className={styles.floatingElement}>🦠</div>
+        <div className={styles.floatingElement}>🧫</div>
+        <div className={styles.floatingElement}>🧪</div>
+        <div className={styles.floatingElement}>🔬</div>
+        <div className={styles.floatingElement}>⚗️</div>
+        <div className={styles.floatingElement}>🧬</div>
+        <div className={styles.floatingElement}>⚛️</div>
+        <div className={styles.floatingElement}>🔭</div>
+        <div className={styles.floatingElement}>💡</div>
+        <div className={styles.floatingElement}>⭐</div>
+      </div>
+
       <nav className={`${styles.navbar} md:flex md:items-center md:justify-between`}>
         <Link href="/homepage" className={styles.logo}>
           <Image src="/logo2.png" alt="AGHAM Logo" width={40} height={40} />
@@ -52,24 +128,58 @@ export default function CreditPage() {
 
       {/* MAIN SECTION */}
       <div className={styles.mainSection}>
-        {/* LEFT TEXT */}
-        <div className={styles.left}>
-          <p className={styles.desktopText}>
-          AGHAM is a capstone project developed by dedicated students from STI College Caloocan as part of their final 
-          requirement in the field of Information Technology. This project was created with the goal of enhancing science 
-          education for Grade 6 learners through the power of Augmented Reality (AR).
-          </p>
-          <p className={styles.mobileText}>
-          AGHAM is developed by students from STI College Caloocan. 
-          We are the creators and owners of this Grade 6 Science AR learning platform.
-          </p>
-        </div>
+        <div className={styles.hero}>
+          <h1 className={styles.heroTitle}>Project Credits</h1>
+          
+          <div className={styles.creditsContent}>
+            <div className={styles.projectDescription}>
+              <p className={styles.descriptionText}>
+                <strong>AGHAM</strong> is a capstone project developed by dedicated students from <span className={styles.highlight}>STI College Caloocan</span> as part of their final
+                requirement in the field of <span className={styles.highlight}>Information Technology</span>. This project was created with the goal of enhancing science
+                education for Grade 6 learners through the power of <span className={styles.highlight}>Augmented Reality (AR)</span>.
+              </p>
+            </div>
 
-        {/* RIGHT FORM */}
-        <div className={styles.container}>
-          <img src="/names.svg" alt="Developer Names" />
+            <div className={styles.creditsGrid}>
+              <div className={styles.creditCard}>
+                <div className={styles.creditHeader}>
+                  <div className={styles.creditIcon}>👨‍💻</div>
+                  <h3>Developers</h3>
+                </div>
+                <div className={styles.creditList}>
+                  <div className={styles.creditItem}>Alarcon, Miguella Regine C.</div>
+                  <div className={styles.creditItem}>Fegi, Lovely B.</div>
+                  <div className={styles.creditItem}>Marquez, John Ariel E.</div>
+                  <div className={styles.creditItem}>Radin, Rocel Kyla C.</div>
+                </div>
+              </div>
+
+              <div className={styles.creditCard}>
+                <div className={styles.creditHeader}>
+                  <div className={styles.creditIcon}>🎨</div>
+                  <h3>UI/UX Designers</h3>
+                </div>
+                <div className={styles.creditList}>
+                  <div className={styles.creditItem}>Alarcon, Miguella Regine C.</div>
+                  <div className={styles.creditItem}>Fegi, Lovely B.</div>
+                  <div className={styles.creditItem}>Radin, Rocel Kyla C.</div>
+                </div>
+              </div>
+
+              <div className={styles.creditCard}>
+                <div className={styles.creditHeader}>
+                  <div className={styles.creditIcon}>🔬</div>
+                  <h3>AR Integration</h3>
+                </div>
+                <div className={styles.creditList}>
+                  <div className={styles.creditItem}>Marquez, John Ariel E.</div>
+                  <div className={styles.creditItem}>Alarcon, Miguella Regine C.</div>
+                </div>
+              </div>
+            </div>
           </div>
-          </div>
+        </div>
+      </div>
     </div>
   );
 }

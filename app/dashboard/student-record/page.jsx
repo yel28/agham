@@ -16,6 +16,14 @@ import { LOADING_TYPES } from '../../lib/LoadingContext';
 
 const rowColors = ['#f9efc3', '#e6d1b3', '#e6b3b3', '#b3e6c7'];
 
+// Section color palette matching student cards exactly
+const sectionColors = ['#f9efc3', '#e6d1b3', '#e6b3b3', '#b3e6c7'];
+
+// Function to get section color based on index
+const getSectionColor = (index) => {
+  return sectionColors[index % sectionColors.length];
+};
+
 const defaultStudent = {
   firstName: '', middleName: '', lastName: '', userName: '', password: '', lrn: '', address: '', contact: '', 
   gender: '', gradeLevel: '', parentGuardianName: '', dateOfEnrollment: '', currentStatus: 'Regular Student', avatar: '/avatar3.png'
@@ -30,7 +38,7 @@ export default function StudentRecordPage() {
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({
     firstName: '', middleName: '', lastName: '', userName: '', password: '', lrn: '', address: '', contact: '',
-    gender: '', gradeLevel: '', parentGuardianName: '', dateOfEnrollment: '', currentStatus: 'Regular Student', sectionId: ''
+    gender: '', gradeLevel: 'Grade 6', parentGuardianName: '', dateOfEnrollment: '', currentStatus: 'Regular Student', sectionId: ''
   });
   const [editModal, setEditModal] = useState(false);
   const [editStudent, setEditStudent] = useState(null);
@@ -50,6 +58,7 @@ export default function StudentRecordPage() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [showSectionPassword, setShowSectionPassword] = useState(false);
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -315,28 +324,45 @@ export default function StudentRecordPage() {
       errors.userName = 'Username must be at least 3 characters';
     }
     
-    if (form.password && form.password.length < 6) {
+    // Password validation - required field
+    if (!form.password || form.password.trim() === '') {
+      errors.password = 'Password is required';
+    } else if (form.password.length < 6) {
       errors.password = 'Password must be at least 6 characters';
     }
 
+    // First Name validation - pure string only (no numbers, no special characters)
+    if (form.firstName && !/^[a-zA-Z\s]+$/.test(form.firstName)) {
+      errors.firstName = 'First name must contain only letters and spaces';
+    }
+
+    // Last Name validation - pure string only (no numbers, no special characters)
+    if (form.lastName && !/^[a-zA-Z\s]+$/.test(form.lastName)) {
+      errors.lastName = 'Last name must contain only letters and spaces';
+    }
+
+    // LRN validation - pure numbers only (no special characters)
     if (form.lrn && !/^\d+$/.test(form.lrn)) {
       errors.lrn = 'LRN must contain only numbers';
     }
 
-    if (form.contact && !/^[\d\s\-\+\(\)]+$/.test(form.contact)) {
-      errors.contact = 'Please enter a valid contact number';
+    // Contact number validation - must be exactly 11 digits
+    if (form.contact && !/^\d{11}$/.test(form.contact)) {
+      errors.contact = 'Contact number must be exactly 11 digits';
     }
 
     if (form.address && form.address.length < 5) {
       errors.address = 'Address must be at least 5 characters';
     }
 
-    if (form.gradeLevel && !/^[1-9]|1[0-2]$/.test(form.gradeLevel)) {
-      errors.gradeLevel = 'Please enter a valid grade level (1-12)';
+    // Grade Level validation - automatic Grade 6 (like student ID)
+    if (form.gradeLevel && form.gradeLevel !== 'Grade 6') {
+      errors.gradeLevel = 'Grade level must be Grade 6';
     }
 
-    if (form.parentGuardianName && form.parentGuardianName.length < 2) {
-      errors.parentGuardianName = 'Parent/Guardian name must be at least 2 characters';
+    // Parent/Guardian validation - pure string only (no numbers, no special characters)
+    if (form.parentGuardianName && !/^[a-zA-Z\s]+$/.test(form.parentGuardianName)) {
+      errors.parentGuardianName = 'Parent/Guardian name must contain only letters and spaces';
     }
 
     if (form.dateOfEnrollment) {
@@ -418,7 +444,7 @@ export default function StudentRecordPage() {
   const handleDelete = async (idx) => {
     // Check permissions first
     if (!canManageStudents) {
-      showError('You do not have permission to delete students.');
+      showError('You do not have permission to archive students.');
       return;
     }
     
@@ -468,7 +494,7 @@ export default function StudentRecordPage() {
         // Add notification
         await notifyStudentDeleted(teacherEmail, `${studentToDelete.firstName} ${studentToDelete.lastName}`);
         
-        // Show delete success message
+        // Show archive success message
         setDeletedStudentName(`${studentToDelete.firstName} ${studentToDelete.lastName}`);
         setShowDeleteSuccess(true);
         
@@ -477,8 +503,8 @@ export default function StudentRecordPage() {
           setShowDeleteSuccess(false);
         }, 3000);
       } catch (error) {
-        console.error('Error deleting student:', error);
-        alert('Error deleting student. Please try again.');
+        console.error('Error archiving student:', error);
+        alert('Error archiving student. Please try again.');
       }
     }
     setShowDeleteConfirm(false);
@@ -866,7 +892,7 @@ export default function StudentRecordPage() {
     if (!sectionToDelete) return;
     
     try {
-      deleteSectionLoading.start('Deleting section...');
+      deleteSectionLoading.start('Archiving section...');
       // Close the confirmation modal and show progress overlay
       setShowDeleteSectionModal(false);
       setIsDeletingSection(true);
@@ -1006,7 +1032,7 @@ export default function StudentRecordPage() {
       setSectionToDelete(null);
       
       // Show success message
-      showSuccess(`Section "${sectionToDelete.name}" and its students deleted successfully!`);
+      showSuccess(`Section "${sectionToDelete.name}" and its students archived successfully!`);
       deleteSectionLoading.stop(true);
 
       // Notify section deleted
@@ -1062,7 +1088,7 @@ export default function StudentRecordPage() {
     const nextStudentId = generateNextStudentId();
     setSectionStudentForm({
       firstName: '', middleName: '', lastName: '', studentId: nextStudentId, password: '', lrn: '', address: '', contact: '',
-      gender: '', gradeLevel: '', parentGuardianName: '', dateOfEnrollment: '', currentStatus: 'Regular Student', sectionId: section.id
+      gender: '', gradeLevel: 'Grade 6', parentGuardianName: '', dateOfEnrollment: '', currentStatus: 'Regular Student', sectionId: section.id
     });
     setSectionStudentErrors({});
     setShowSectionAddStudentModal(true);
@@ -1262,16 +1288,36 @@ export default function StudentRecordPage() {
 
     // Additional validations
     
-    if (sectionStudentForm.password && sectionStudentForm.password.length < 6) {
+    // Password validation - required field
+    if (!sectionStudentForm.password || sectionStudentForm.password.trim() === '') {
+      errors.password = 'Password is required';
+    } else if (sectionStudentForm.password.length < 6) {
       errors.password = 'Password must be at least 6 characters';
     }
 
+    // First Name validation - pure string only (no numbers, no special characters)
+    if (sectionStudentForm.firstName && !/^[a-zA-Z\s]+$/.test(sectionStudentForm.firstName)) {
+      errors.firstName = 'First name must contain only letters and spaces';
+    }
+
+    // Last Name validation - pure string only (no numbers, no special characters)
+    if (sectionStudentForm.lastName && !/^[a-zA-Z\s]+$/.test(sectionStudentForm.lastName)) {
+      errors.lastName = 'Last name must contain only letters and spaces';
+    }
+
+    // LRN validation - pure numbers only (no special characters)
     if (sectionStudentForm.lrn && !/^\d+$/.test(sectionStudentForm.lrn)) {
       errors.lrn = 'LRN must contain only numbers';
     }
 
-    if (sectionStudentForm.contact && !/^\d+$/.test(sectionStudentForm.contact)) {
-      errors.contact = 'Contact must contain only numbers';
+    // Contact number validation - must be exactly 11 digits
+    if (sectionStudentForm.contact && !/^\d{11}$/.test(sectionStudentForm.contact)) {
+      errors.contact = 'Contact number must be exactly 11 digits';
+    }
+
+    // Parent/Guardian validation - pure string only (no numbers, no special characters)
+    if (sectionStudentForm.parentGuardianName && !/^[a-zA-Z\s]+$/.test(sectionStudentForm.parentGuardianName)) {
+      errors.parentGuardianName = 'Parent/Guardian name must contain only letters and spaces';
     }
 
     setSectionStudentErrors(errors);
@@ -1597,30 +1643,30 @@ export default function StudentRecordPage() {
                   <button
                   onClick={() => setShowSectionModal(true)}
                     style={{
-                      background: 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)',
-                      color: 'white',
-                      border: 'none',
+                      background: '#e8f5e8',
+                      color: '#2e7d32',
+                      border: '1px solid #c8e6c9',
                       borderRadius: 12,
                       padding: '14px 24px',
                       fontSize: 15,
                       fontWeight: 600,
                       cursor: 'pointer',
-                      boxShadow: '0 4px 15px rgba(63, 131, 111, 0.3)',
-                      transition: 'all 0.2s ease',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                      transition: 'all 0.3s ease',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px'
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.transform = 'translateY(-2px)';
-                      e.target.style.boxShadow = '0 6px 20px rgba(63, 131, 111, 0.4)';
+                      e.target.style.background = '#d4edda';
+                      e.target.style.borderColor = '#a5d6a7';
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.transform = 'translateY(0)';
-                      e.target.style.boxShadow = '0 4px 15px rgba(63, 131, 111, 0.3)';
+                      e.target.style.background = '#e8f5e8';
+                      e.target.style.borderColor = '#c8e6c9';
                     }}
                   >
-                  <i className="ri-group-line" style={{ fontSize: '18px' }}></i>
+                  <i className="ri-group-line" style={{ fontSize: '18px', color: '#2e7d32' }}></i>
                   Manage Sections
                   </button>
               </div>
@@ -1669,42 +1715,46 @@ export default function StudentRecordPage() {
                 gap: 16,
                 gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))'
               }}>
-                {sections.map(section => {
+                {sections.map((section, index) => {
                   const studentsInSection = getStudentsInSection(section.id);
                   const isExpanded = expandedSections.has(section.id);
+                  const sectionColor = getSectionColor(index);
                   
                   return (
                     <div key={section.id} style={{
-                      background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
-                      borderRadius: 20,
-                      border: '2px solid #e9ecef',
+                      background: sectionColor,
+                      borderRadius: 18,
+                      border: '1px solid rgba(255,255,255,0.3)',
                       overflow: 'hidden',
                       transition: 'all 0.3s ease',
-                      boxShadow: '0 8px 25px rgba(0,0,0,0.1)'
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+                      position: 'relative'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.1)';
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
                     }}>
                       {/* Section Header */}
                       <div 
                   style={{
-                          background: 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)',
-                    color: 'white',
+                    color: '#343a40',
                           padding: '24px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                           justifyContent: 'space-between',
                           transition: 'all 0.3s ease',
-                          position: 'relative'
+                          position: 'relative',
+                          zIndex: 1
                   }}
                         onClick={(e) => {
-                          // reset any inline hover style to default on click
-                          e.currentTarget.style.background = 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)';
                           handleSectionClick(section);
-                        }}
-                  onMouseEnter={(e) => {
-                          e.currentTarget.style.background = 'linear-gradient(135deg, #3d8b6f 0%, #2d6b5a 100%)';
-                  }}
-                  onMouseLeave={(e) => {
-                          e.currentTarget.style.background = 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)';
                         }}
                       >
                         <div style={{ flex: 1 }}>
@@ -1743,11 +1793,11 @@ export default function StudentRecordPage() {
                               onClick={(e) => {
                                 e.stopPropagation();
                                 // reset hover style before opening modal
-                                e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                                e.currentTarget.style.background = 'rgba(220, 53, 69, 0.2)';
                                 handleDeleteSection(section);
                               }}
                   style={{
-                                background: 'rgba(255,255,255,0.2)',
+                                background: 'rgba(220, 53, 69, 0.2)',
                     border: 'none',
                                 borderRadius: 8,
                                 width: 36,
@@ -1760,15 +1810,15 @@ export default function StudentRecordPage() {
                                 backdropFilter: 'blur(10px)'
                   }}
                   onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'rgba(255,255,255,0.3)';
+                                e.currentTarget.style.background = 'rgba(220, 53, 69, 0.3)';
                                 e.currentTarget.style.transform = 'scale(1.1)';
                   }}
                   onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                                e.currentTarget.style.background = 'rgba(220, 53, 69, 0.2)';
                                 e.currentTarget.style.transform = 'scale(1)';
                   }}
                 >
-                              <i className="ri-delete-bin-6-line" style={{ fontSize: '18px', color: 'white' }}></i>
+                              <i className="ri-archive-line" style={{ fontSize: '18px', color: '#dc3545' }}></i>
                 </button>
               )}
               </div>
@@ -2312,12 +2362,13 @@ export default function StudentRecordPage() {
                     }}>
                       Password *
                     </label>
+                     <div style={{ position: 'relative' }}>
                     <input 
                       name="password" 
                       value={form.password} 
                       onChange={handleInputChange} 
                       placeholder="Enter password" 
-                      type="password" 
+                         type={showPassword ? "text" : "password"} 
                       style={{ 
                         background: fieldErrors.password 
                           ? 'linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%)' 
@@ -2326,7 +2377,7 @@ export default function StudentRecordPage() {
                           ? '2px solid #ff4444' 
                           : '2px solid #e9ecef', 
                         borderRadius: 10, 
-                        padding: '12px 16px', 
+                           padding: '12px 50px 12px 16px', 
                         fontSize: 14,
                         fontWeight: 500,
                         color: '#2c3e50',
@@ -2350,6 +2401,35 @@ export default function StudentRecordPage() {
                         }
                       }} 
                     />
+                       <button
+                         type="button"
+                         onClick={() => setShowPassword(!showPassword)}
+                         style={{
+                           position: 'absolute',
+                           right: 12,
+                           top: '50%',
+                           transform: 'translateY(-50%)',
+                           background: 'transparent',
+                           border: 'none',
+                           cursor: 'pointer',
+                           padding: 4,
+                           display: 'flex',
+                           alignItems: 'center',
+                           justifyContent: 'center',
+                           color: '#6c757d',
+                           fontSize: 18,
+                           transition: 'color 0.2s ease'
+                         }}
+                         onMouseEnter={(e) => {
+                           e.target.style.color = '#4fa37e';
+                         }}
+                         onMouseLeave={(e) => {
+                           e.target.style.color = '#6c757d';
+                         }}
+                       >
+                         <i className={showPassword ? "ri-eye-off-line" : "ri-eye-line"}></i>
+                       </button>
+                     </div>
                     {fieldErrors.password && (
                       <div style={{ 
                         color: '#ff4444', 
@@ -3219,16 +3299,17 @@ export default function StudentRecordPage() {
                       textTransform: 'uppercase',
                       letterSpacing: '0.5px'
                     }}>Grade Level</label>
-                    <input name="gradeLevel" value={editStudent.gradeLevel} onChange={handleEditInputChange} placeholder="Grade Level" style={{ 
-                      background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)', 
+                    <input name="gradeLevel" value={editStudent.gradeLevel} disabled placeholder="Grade Level" style={{ 
+                      background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
                       border: '1px solid rgba(179, 230, 199, 0.3)', 
                       borderRadius: 12, 
                       padding: 16, 
                       fontSize: 16,
                       fontWeight: 500,
-                      color: '#34495e',
+                      color: '#6c757d',
                       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-                      transition: 'all 0.2s ease'
+                      transition: 'all 0.2s ease',
+                      cursor: 'not-allowed'
                     }} />
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -3311,31 +3392,55 @@ export default function StudentRecordPage() {
                         setShowStudentInfo(true);
                       }
                     }} style={{ 
-                      background: 'linear-gradient(135deg, #6c757d 0%, #5a6268 100%)', 
-                      color: '#fff', 
-                      border: 'none', 
+                      background: '#f5f5f5', 
+                      color: '#616161', 
+                      border: '1px solid #e0e0e0', 
                       borderRadius: 12, 
                       padding: '16px 40px', 
-                      fontWeight: 700, 
+                      fontWeight: 600, 
                       fontSize: 16, 
                       cursor: 'pointer',
-                      boxShadow: '0 4px 12px rgba(108, 117, 125, 0.3)',
-                      transition: 'all 0.2s ease'
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                      transition: 'all 0.3s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = '#eeeeee';
+                      e.target.style.borderColor = '#bdbdbd';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = '#f5f5f5';
+                      e.target.style.borderColor = '#e0e0e0';
                     }}>
+                      <i className="ri-arrow-left-line" style={{ fontSize: '16px', color: '#616161' }}></i>
                       Back
                     </button>
                     <button type="submit" style={{ 
-                      background: 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)', 
-                      color: '#fff', 
-                      border: 'none', 
+                      background: '#e8f5e8', 
+                      color: '#2e7d32', 
+                      border: '1px solid #c8e6c9', 
                       borderRadius: 12, 
                       padding: '16px 40px', 
-                      fontWeight: 700, 
+                      fontWeight: 600, 
                       fontSize: 16, 
                       cursor: 'pointer',
-                      boxShadow: '0 4px 12px rgba(79, 163, 126, 0.3)',
-                      transition: 'all 0.2s ease'
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                      transition: 'all 0.3s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = '#d4edda';
+                      e.target.style.borderColor = '#a5d6a7';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = '#e8f5e8';
+                      e.target.style.borderColor = '#c8e6c9';
                     }}>
+                      <i className="ri-check-line" style={{ fontSize: '16px', color: '#2e7d32' }}></i>
                       Done
                     </button>
                   </div>
@@ -3357,44 +3462,72 @@ export default function StudentRecordPage() {
                     {canManageStudents && (
                       <button
                         style={{ 
-                          background: '#4fa37e', 
-                          color: 'white', 
-                          border: 'none', 
-                          borderRadius: 8, 
-                          padding: '8px 16px', 
+                          background: '#e8f5e8', 
+                          color: '#2e7d32', 
+                          border: '1px solid #c8e6c9', 
+                          borderRadius: 12, 
+                          padding: '12px 24px', 
                           fontSize: 14, 
                           fontWeight: 600, 
-                          cursor: 'pointer' 
+                          cursor: 'pointer',
+                          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                          transition: 'all 0.3s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 8
                         }}
                         onClick={() => {
                           handleEdit(selectedStudent);
                           // Keep section modal open by not closing it
                         }}
+                        onMouseEnter={(e) => {
+                          e.target.style.background = '#d4edda';
+                          e.target.style.borderColor = '#a5d6a7';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.background = '#e8f5e8';
+                          e.target.style.borderColor = '#c8e6c9';
+                        }}
                         title="Edit Student"
                       >
+                        <i className="ri-pencil-line" style={{ fontSize: '16px', color: '#2e7d32' }}></i>
                         Edit
                       </button>
                     )}
                     {canManageStudents && (
                       <button
                         style={{ 
-                          background: '#e86786', 
-                          color: 'white', 
-                          border: 'none', 
-                          borderRadius: 8, 
-                          padding: '8px 16px', 
+                          background: '#ffebee', 
+                          color: '#c62828', 
+                          border: '1px solid #ffcdd2', 
+                          borderRadius: 12, 
+                          padding: '12px 24px', 
                           fontSize: 14, 
                           fontWeight: 600, 
-                          cursor: 'pointer' 
+                          cursor: 'pointer',
+                          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                          transition: 'all 0.3s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 8
                         }}
                         onClick={() => {
                           const studentIndex = students.findIndex(s => s.id === selectedStudent.id);
                           // Open confirm dialog without closing Student Information modal
                           handleDelete(studentIndex);
                         }}
-                        title="Delete Student"
+                        onMouseEnter={(e) => {
+                          e.target.style.background = '#ffcdd2';
+                          e.target.style.borderColor = '#ef9a9a';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.background = '#ffebee';
+                          e.target.style.borderColor = '#ffcdd2';
+                        }}
+                        title="Archive Student"
                       >
-                        Delete
+                        <i className="ri-archive-line" style={{ fontSize: '16px', color: '#c62828' }}></i>
+                        Archive
                       </button>
                     )}
                   </div>
@@ -3805,33 +3938,47 @@ export default function StudentRecordPage() {
                     width: '64px', 
                     height: '64px', 
                     borderRadius: '50%', 
-                    background: '#e86786', 
+                    background: 'linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%)', 
                     margin: '0 auto 24px',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    boxShadow: '0 4px 15px rgba(198, 40, 40, 0.2)',
+                    border: '2px solid #ffcdd2'
                   }}>
-                    <i className="ri-delete-bin-6-line" style={{ fontSize: '32px', color: 'white' }}></i>
+                    <i className="ri-archive-line" style={{ fontSize: '32px', color: '#c62828' }}></i>
                   </div>
                   <div style={{ fontWeight: 600, fontSize: 22, marginBottom: 16, color: '#333' }}>
-                    Delete Student
+                    Archive Student
                   </div>
                   <div style={{ fontSize: 16, marginBottom: 32, color: '#666', lineHeight: 1.5 }}>
-                    Are you sure you want to delete <strong>{studentToDelete.firstName} {studentToDelete.lastName}</strong>?<br />
-                    This action cannot be undone.
+                    Are you sure you want to archive <strong>{studentToDelete.firstName} {studentToDelete.lastName}</strong>?<br />
+                    The student will be moved to the archive and can be restored later.
                   </div>
                   <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
                     <button 
                       onClick={cancelDelete}
                       style={{ 
-                        background: '#f1f1f1', 
-                        color: '#666', 
-                        border: 'none', 
-                        borderRadius: 8, 
+                        background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
+                        color: '#6c757d', 
+                        border: '2px solid #e9ecef', 
+                        borderRadius: 12, 
                         padding: '12px 24px', 
                         fontWeight: 600, 
                         fontSize: 16, 
-                        cursor: 'pointer' 
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.background = 'linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%)';
+                        e.target.style.borderColor = '#dee2e6';
+                        e.target.style.transform = 'translateY(-1px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.background = 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
+                        e.target.style.borderColor = '#e9ecef';
+                        e.target.style.transform = 'translateY(0)';
                       }}
                     >
                       Cancel
@@ -3839,17 +3986,33 @@ export default function StudentRecordPage() {
                     <button 
                       onClick={confirmDelete}
                       style={{ 
-                        background: '#e86786', 
-                        color: 'white', 
-                        border: 'none', 
-                        borderRadius: 8, 
+                        background: 'linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%)', 
+                        color: '#c62828', 
+                        border: '1px solid #ffcdd2', 
+                        borderRadius: 12, 
                         padding: '12px 24px', 
-                        fontWeight: 600, 
+                        fontWeight: 500, 
                         fontSize: 16, 
-                        cursor: 'pointer' 
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 8px rgba(198, 40, 40, 0.15)',
+                        transition: 'all 0.3s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.transform = 'translateY(-2px)';
+                        e.target.style.boxShadow = '0 4px 12px rgba(198, 40, 40, 0.25)';
+                        e.target.style.background = 'linear-gradient(135deg, #ffcdd2 0%, #ffb3ba 100%)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.transform = 'translateY(0)';
+                        e.target.style.boxShadow = '0 2px 8px rgba(198, 40, 40, 0.15)';
+                        e.target.style.background = 'linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%)';
                       }}
                     >
-                      Delete
+                      <i className="ri-archive-line" style={{ fontSize: '16px', color: '#c62828' }}></i>
+                      Archive
                     </button>
                   </div>
                 </div>
@@ -3986,17 +4149,17 @@ export default function StudentRecordPage() {
               </div>
             )}
 
-            {/* Delete Success Message */}
+            {/* Archive Success Message */}
             {showDeleteSuccess && (
               <div style={{
                 position: 'fixed',
                 top: '20px',
                 right: '20px',
-                background: '#e86786',
+                background: 'linear-gradient(135deg, #4fa37e 0%, #2d5a3d 100%)',
                 color: 'white',
                 padding: '16px 24px',
                 borderRadius: '12px',
-                boxShadow: '0 4px 20px rgba(232, 103, 134, 0.3)',
+                boxShadow: '0 4px 20px rgba(79, 163, 126, 0.3)',
                 zIndex: 2000,
                 display: 'flex',
                 alignItems: 'center',
@@ -4013,14 +4176,14 @@ export default function StudentRecordPage() {
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <i className="ri-check-line" style={{ fontSize: '16px', color: 'white' }}></i>
+                  <i className="ri-archive-line" style={{ fontSize: '16px', color: 'white' }}></i>
                 </div>
                 <div>
                   <div style={{ fontWeight: '600', fontSize: '16px', marginBottom: '4px' }}>
-                    Student Deleted Successfully!
+                    Student Archived Successfully!
                   </div>
                   <div style={{ fontSize: '14px', opacity: '0.9' }}>
-                    {deletedStudentName} has been removed from the system.
+                    {deletedStudentName} has been moved to the archive.
                   </div>
                 </div>
                 <button
@@ -4277,18 +4440,20 @@ export default function StudentRecordPage() {
                       disabled={sectionCreating}
                       style={{ 
                         background: sectionCreating 
-                          ? 'linear-gradient(135deg, #a0a0a0 0%, #808080 100%)'
-                          : 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)',
-                        color: '#fff', 
-                        border: 'none', 
+                          ? '#f5f5f5' 
+                          : '#e8f5e8',
+                        color: sectionCreating 
+                          ? '#9e9e9e' 
+                          : '#2e7d32', 
+                        border: sectionCreating 
+                          ? '1px solid #e0e0e0' 
+                          : '1px solid #c8e6c9', 
                         borderRadius: 12, 
                         padding: '14px 32px', 
                         fontWeight: 700, 
                         fontSize: 16, 
                         cursor: sectionCreating ? 'not-allowed' : 'pointer',
-                        boxShadow: sectionCreating 
-                          ? '0 6px 20px rgba(160, 160, 160, 0.3)'
-                          : '0 6px 20px rgba(63, 131, 111, 0.3)',
+                        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
                         transition: 'all 0.3s ease',
                         display: 'flex',
                         alignItems: 'center',
@@ -4298,15 +4463,19 @@ export default function StudentRecordPage() {
                         opacity: sectionCreating ? 0.7 : 1
                       }}
                       onMouseEnter={(e) => {
-                        e.target.style.transform = 'translateY(-3px)';
-                        e.target.style.boxShadow = '0 12px 35px rgba(63, 131, 111, 0.4)';
+                        if (!sectionCreating) {
+                          e.target.style.background = '#d4edda';
+                          e.target.style.borderColor = '#a5d6a7';
+                        }
                       }}
                       onMouseLeave={(e) => {
-                        e.target.style.transform = 'translateY(0)';
-                        e.target.style.boxShadow = '0 6px 20px rgba(63, 131, 111, 0.3)';
+                        if (!sectionCreating) {
+                          e.target.style.background = '#e8f5e8';
+                          e.target.style.borderColor = '#c8e6c9';
+                        }
                       }}
                     >
-                      <i className="ri-group-line" style={{ fontSize: '16px' }}></i>
+                      <i className="ri-group-line" style={{ fontSize: '16px', color: sectionCreating ? '#9e9e9e' : '#2e7d32' }}></i>
                       {sectionCreating ? 'Creating...' : 'Create Section'}
                     </button>
                   </div>
@@ -4437,9 +4606,9 @@ export default function StudentRecordPage() {
                   margin: '0 auto 18px', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: 'white', fontSize: 40
                 }}>
-                  <i className="ri-delete-bin-line"></i>
+                  <i className="ri-archive-line"></i>
                 </div>
-                <div style={{ fontSize: 28, fontWeight: 800, color: '#2c3e50' }}>Deleting Section</div>
+                <div style={{ fontSize: 28, fontWeight: 800, color: '#2c3e50' }}>Archiving Section</div>
                 <div style={{ marginTop: 6, fontSize: 16, fontWeight: 700, color: '#6b7280', letterSpacing: 1 }}>{sectionToDelete?.name?.toUpperCase?.() || sectionToDelete?.name}</div>
               </div>
               {/* Progress bar (orange gradient) */}
@@ -4543,8 +4712,8 @@ export default function StudentRecordPage() {
                       alignItems: 'center',
                       gap: 12
                     }}>
-                      <i className="ri-delete-bin-6-line" style={{ fontSize: '28px' }}></i>
-                      Delete Section
+                      <i className="ri-archive-line" style={{ fontSize: '28px' }}></i>
+                      Archive Section
                     </h2>
                     <p style={{ 
                       margin: '6px 0 0 0', 
@@ -4552,7 +4721,7 @@ export default function StudentRecordPage() {
                       opacity: 0.9,
                       fontWeight: 400
                     }}>
-                      This action cannot be undone
+                      The section will be archived for backup purposes
                     </p>
                   </div>
                   
@@ -4602,7 +4771,7 @@ export default function StudentRecordPage() {
                     justifyContent: 'center',
                     boxShadow: '0 8px 25px rgba(220, 53, 69, 0.3)'
                   }}>
-                    <i className="ri-delete-bin-6-line" style={{ fontSize: '40px', color: 'white' }}></i>
+                    <i className="ri-archive-line" style={{ fontSize: '40px', color: 'white' }}></i>
                   </div>
                   
                   <h3 style={{
@@ -4611,7 +4780,7 @@ export default function StudentRecordPage() {
                     color: '#2c3e50',
                     margin: '0 0 12px 0'
                   }}>
-                    Are you sure you want to delete "{sectionToDelete.name}"?
+                    Are you sure you want to archive "{sectionToDelete.name}"?
                   </h3>
                   
                   <p style={{
@@ -4620,7 +4789,7 @@ export default function StudentRecordPage() {
                     margin: '0 0 8px 0',
                     lineHeight: 1.5
                   }}>
-                    This will remove the section and unassign all students from it.
+                    This will archive the section and move all students to the archive.
                   </p>
                   
                   <p style={{
@@ -4629,7 +4798,7 @@ export default function StudentRecordPage() {
                     fontWeight: 600,
                     margin: 0
                   }}>
-                    This action cannot be undone!
+                    The section will be archived for backup purposes.
                   </p>
                 </div>
                 
@@ -4642,15 +4811,15 @@ export default function StudentRecordPage() {
                   <button 
                     onClick={cancelDeleteSection}
                     style={{ 
-                      background: 'linear-gradient(135deg, #6c757d 0%, #5a6268 100%)',
-                      color: '#fff', 
-                      border: 'none', 
+                      background: '#f5f5f5',
+                      color: '#616161', 
+                      border: '1px solid #e0e0e0', 
                       borderRadius: 12, 
                       padding: '14px 28px', 
                       fontWeight: 700, 
                       fontSize: 16, 
                       cursor: 'pointer',
-                      boxShadow: '0 6px 20px rgba(108, 117, 125, 0.3)',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
                       transition: 'all 0.3s ease',
                       display: 'flex',
                       alignItems: 'center',
@@ -4659,30 +4828,34 @@ export default function StudentRecordPage() {
                     }}
                     disabled={deleteSectionLoading.isLoading}
                     onMouseEnter={(e) => {
-                      e.target.style.transform = 'translateY(-2px)';
-                      e.target.style.boxShadow = '0 8px 25px rgba(108, 117, 125, 0.4)';
+                      if (!deleteSectionLoading.isLoading) {
+                        e.target.style.background = '#eeeeee';
+                        e.target.style.borderColor = '#bdbdbd';
+                      }
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.transform = 'translateY(0)';
-                      e.target.style.boxShadow = '0 6px 20px rgba(108, 117, 125, 0.3)';
+                      if (!deleteSectionLoading.isLoading) {
+                        e.target.style.background = '#f5f5f5';
+                        e.target.style.borderColor = '#e0e0e0';
+                      }
                     }}
                   >
-                    <i className="ri-close-line" style={{ fontSize: '16px' }}></i>
+                    <i className="ri-close-line" style={{ fontSize: '16px', color: '#616161' }}></i>
                     Cancel
                   </button>
                   
                   <button 
                     onClick={confirmDeleteSection}
                     style={{ 
-                      background: 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)',
-                      color: '#fff', 
-                      border: 'none', 
+                      background: deleteSectionLoading.isLoading ? '#f5f5f5' : '#ffebee',
+                      color: deleteSectionLoading.isLoading ? '#9e9e9e' : '#c62828', 
+                      border: deleteSectionLoading.isLoading ? '1px solid #e0e0e0' : '1px solid #ffcdd2', 
                       borderRadius: 12, 
                       padding: '14px 28px', 
                       fontWeight: 700, 
                       fontSize: 16, 
                       cursor: 'pointer',
-                      boxShadow: '0 6px 20px rgba(220, 53, 69, 0.3)',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
                       transition: 'all 0.3s ease',
                       display: 'flex',
                       alignItems: 'center',
@@ -4691,23 +4864,27 @@ export default function StudentRecordPage() {
                     }}
                     disabled={deleteSectionLoading.isLoading}
                     onMouseEnter={(e) => {
-                      e.target.style.transform = 'translateY(-2px)';
-                      e.target.style.boxShadow = '0 8px 25px rgba(220, 53, 69, 0.4)';
+                      if (!deleteSectionLoading.isLoading) {
+                        e.target.style.background = '#ffcdd2';
+                        e.target.style.borderColor = '#ef9a9a';
+                      }
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.transform = 'translateY(0)';
-                      e.target.style.boxShadow = '0 6px 20px rgba(220, 53, 69, 0.3)';
+                      if (!deleteSectionLoading.isLoading) {
+                        e.target.style.background = '#ffebee';
+                        e.target.style.borderColor = '#ffcdd2';
+                      }
                     }}
                   >
                     {deleteSectionLoading.isLoading ? (
                       <>
-                        <Spinner size="sm" color="white" className="mr-2" />
-                        Deleting...
+                        <Spinner size="sm" color="#9e9e9e" className="mr-2" />
+                        Archiving...
                       </>
                     ) : (
                       <>
-                        <i className="ri-delete-bin-6-line" style={{ fontSize: '16px' }}></i>
-                        Delete Section
+                        <i className="ri-archive-line" style={{ fontSize: '16px', color: '#c62828' }}></i>
+                        Archive Section
                       </>
                     )}
                   </button>
@@ -4849,15 +5026,15 @@ export default function StudentRecordPage() {
                   <button
                     onClick={() => handleSectionAddStudent(selectedSection)}
                     style={{
-                      background: 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)',
-                      color: 'white',
-                      border: 'none',
+                      background: '#e8f5e8',
+                      color: '#2e7d32',
+                      border: '1px solid #c8e6c9',
                       borderRadius: 12,
                       padding: '14px 28px',
                       fontSize: 15,
                       fontWeight: 600,
                       cursor: 'pointer',
-                      boxShadow: '0 4px 15px rgba(79, 163, 126, 0.3)',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
                       transition: 'all 0.3s ease',
                       display: 'flex',
                       alignItems: 'center',
@@ -4866,15 +5043,15 @@ export default function StudentRecordPage() {
                       justifyContent: 'center'
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.transform = 'translateY(-2px)';
-                      e.target.style.boxShadow = '0 6px 20px rgba(79, 163, 126, 0.4)';
+                      e.target.style.background = '#d4edda';
+                      e.target.style.borderColor = '#a5d6a7';
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.transform = 'translateY(0)';
-                      e.target.style.boxShadow = '0 4px 15px rgba(79, 163, 126, 0.3)';
+                      e.target.style.background = '#e8f5e8';
+                      e.target.style.borderColor = '#c8e6c9';
                     }}
                   >
-                    <i className="ri-add-line" style={{ fontSize: '18px' }}></i>
+                    <i className="ri-add-line" style={{ fontSize: '18px', color: '#2e7d32' }}></i>
                     Add Student
                   </button>
                   
@@ -4882,15 +5059,15 @@ export default function StudentRecordPage() {
                     <button
                       onClick={() => handleSectionImportStudents(selectedSection)}
                       style={{
-                        background: 'linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%)',
-                        color: 'white',
-                        border: 'none',
+                        background: '#f3e5f5',
+                        color: '#7b1fa2',
+                        border: '1px solid #e1bee7',
                         borderRadius: 12,
                         padding: '14px 28px',
                         fontSize: 15,
                         fontWeight: 600,
                         cursor: 'pointer',
-                        boxShadow: '0 4px 15px rgba(111, 66, 193, 0.3)',
+                        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
                         transition: 'all 0.3s ease',
                         display: 'flex',
                         alignItems: 'center',
@@ -4899,15 +5076,15 @@ export default function StudentRecordPage() {
                         justifyContent: 'center'
                       }}
                       onMouseEnter={(e) => {
-                        e.target.style.transform = 'translateY(-2px)';
-                        e.target.style.boxShadow = '0 6px 20px rgba(111, 66, 193, 0.4)';
+                        e.target.style.background = '#e8dae8';
+                        e.target.style.borderColor = '#ce93d8';
                       }}
                       onMouseLeave={(e) => {
-                        e.target.style.transform = 'translateY(0)';
-                        e.target.style.boxShadow = '0 4px 15px rgba(111, 66, 193, 0.3)';
+                        e.target.style.background = '#f3e5f5';
+                        e.target.style.borderColor = '#e1bee7';
                       }}
                     >
-                      <i className="ri-upload-line" style={{ fontSize: '18px' }}></i>
+                      <i className="ri-upload-line" style={{ fontSize: '18px', color: '#7b1fa2' }}></i>
                       Import Students
                     </button>
                   )}
@@ -4915,15 +5092,15 @@ export default function StudentRecordPage() {
                   <button
                     onClick={() => handleSectionExportStudents(selectedSection)}
                     style={{
-                      background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
-                      color: 'white',
-                      border: 'none',
+                      background: '#e8f5e8',
+                      color: '#2e7d32',
+                      border: '1px solid #c8e6c9',
                       borderRadius: 12,
                       padding: '14px 28px',
                       fontSize: 15,
                       fontWeight: 600,
                       cursor: 'pointer',
-                      boxShadow: '0 4px 15px rgba(40, 167, 69, 0.3)',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
                       transition: 'all 0.3s ease',
                       display: 'flex',
                       alignItems: 'center',
@@ -4932,15 +5109,15 @@ export default function StudentRecordPage() {
                       justifyContent: 'center'
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.transform = 'translateY(-2px)';
-                      e.target.style.boxShadow = '0 6px 20px rgba(40, 167, 69, 0.4)';
+                      e.target.style.background = '#d4edda';
+                      e.target.style.borderColor = '#a5d6a7';
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.transform = 'translateY(0)';
-                      e.target.style.boxShadow = '0 4px 15px rgba(40, 167, 69, 0.3)';
+                      e.target.style.background = '#e8f5e8';
+                      e.target.style.borderColor = '#c8e6c9';
                     }}
                   >
-                    <i className="ri-file-excel-line" style={{ fontSize: '18px' }}></i>
+                    <i className="ri-file-excel-line" style={{ fontSize: '18px', color: '#2e7d32' }}></i>
                     Export Students
                   </button>
                 </div>
@@ -5055,20 +5232,30 @@ export default function StudentRecordPage() {
                               setShowStudentInfo(true);
                             }}
                             style={{
-                              background: '#28a745',
-                              color: 'white',
-                              border: 'none',
-                              borderRadius: 6,
+                              background: '#e8f5e8',
+                              color: '#2e7d32',
+                              border: '1px solid #c8e6c9',
+                              borderRadius: 8,
                               width: 32,
                               height: 32,
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
                               cursor: 'pointer',
-                              fontSize: 14
+                              fontSize: 14,
+                              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                              transition: 'all 0.3s ease'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.background = '#d4edda';
+                              e.target.style.borderColor = '#a5d6a7';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.background = '#e8f5e8';
+                              e.target.style.borderColor = '#c8e6c9';
                             }}
                           >
-                            <i className="ri-eye-line"></i>
+                            <i className="ri-eye-line" style={{ color: '#2e7d32' }}></i>
                           </button>
                           
                           {canManageStudents && (
@@ -5078,20 +5265,30 @@ export default function StudentRecordPage() {
                                 setShowDeleteConfirm(true);
                               }}
                               style={{
-                                background: '#dc3545',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: 6,
+                                background: '#ffebee',
+                                color: '#c62828',
+                                border: '1px solid #ffcdd2',
+                                borderRadius: 8,
                                 width: 32,
                                 height: 32,
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 cursor: 'pointer',
-                                fontSize: 14
+                                fontSize: 14,
+                                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                                transition: 'all 0.3s ease'
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.background = '#ffcdd2';
+                                e.target.style.borderColor = '#ef9a9a';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.background = '#ffebee';
+                                e.target.style.borderColor = '#ffcdd2';
                               }}
                             >
-                              <i className="ri-delete-bin-line"></i>
+                              <i className="ri-archive-line" style={{ color: '#c62828' }}></i>
                             </button>
                           )}
                         </div>
@@ -5120,14 +5317,30 @@ export default function StudentRecordPage() {
                     onClick={goToPreviousSectionPage}
                     disabled={currentPage === 1}
                     style={{
-                      background: currentPage === 1 ? '#e9ecef' : '#6c757d',
-                      color: currentPage === 1 ? '#6c757d' : 'white',
-                      border: 'none',
+                      background: currentPage === 1 ? 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)' : 'linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%)',
+                      color: currentPage === 1 ? '#6c757d' : '#495057',
+                      border: '1px solid #e9ecef',
                       borderRadius: 12,
                       padding: '12px 24px',
                       cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
                       fontSize: 14,
-                      fontWeight: 600
+                      fontWeight: 500,
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (currentPage !== 1) {
+                        e.target.style.background = 'linear-gradient(135deg, #dee2e6 0%, #ced4da 100%)';
+                        e.target.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+                        e.target.style.transform = 'translateY(-1px)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (currentPage !== 1) {
+                        e.target.style.background = 'linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%)';
+                        e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+                        e.target.style.transform = 'translateY(0)';
+                      }
                     }}
                   >
                     Previous
@@ -5146,14 +5359,30 @@ export default function StudentRecordPage() {
                     onClick={goToNextSectionPage}
                     disabled={currentPage >= getTotalPagesForSection(selectedSection.id)}
                     style={{
-                      background: currentPage >= getTotalPagesForSection(selectedSection.id) ? '#e9ecef' : '#28a745',
-                      color: currentPage >= getTotalPagesForSection(selectedSection.id) ? '#6c757d' : 'white',
-                      border: 'none',
+                      background: currentPage >= getTotalPagesForSection(selectedSection.id) ? 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)' : 'linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%)',
+                      color: currentPage >= getTotalPagesForSection(selectedSection.id) ? '#6c757d' : '#2e7d32',
+                      border: '1px solid #e9ecef',
                       borderRadius: 12,
                       padding: '12px 24px',
                       cursor: currentPage >= getTotalPagesForSection(selectedSection.id) ? 'not-allowed' : 'pointer',
                       fontSize: 14,
-                      fontWeight: 600
+                      fontWeight: 500,
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (currentPage < getTotalPagesForSection(selectedSection.id)) {
+                        e.target.style.background = 'linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%)';
+                        e.target.style.boxShadow = '0 4px 8px rgba(46, 125, 50, 0.2)';
+                        e.target.style.transform = 'translateY(-1px)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (currentPage < getTotalPagesForSection(selectedSection.id)) {
+                        e.target.style.background = 'linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%)';
+                        e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+                        e.target.style.transform = 'translateY(0)';
+                      }
                     }}
                   >
                     Next
@@ -5489,9 +5718,10 @@ export default function StudentRecordPage() {
                     }}>
                       Password *
                     </label>
+                     <div style={{ position: 'relative' }}>
                     <input 
                       name="password" 
-                      type="password"
+                         type={showSectionPassword ? "text" : "password"}
                       value={sectionStudentForm.password} 
                       onChange={handleSectionStudentInputChange} 
                       placeholder="Enter password" 
@@ -5503,7 +5733,7 @@ export default function StudentRecordPage() {
                           ? '2px solid #ff4444' 
                           : '2px solid #e9ecef', 
                         borderRadius: 10, 
-                        padding: '12px 16px', 
+                           padding: '12px 50px 12px 16px', 
                         fontSize: 14,
                         fontWeight: 500,
                         color: '#2c3e50',
@@ -5527,6 +5757,35 @@ export default function StudentRecordPage() {
                         }
                       }}
                     />
+                       <button
+                         type="button"
+                         onClick={() => setShowSectionPassword(!showSectionPassword)}
+                         style={{
+                           position: 'absolute',
+                           right: 12,
+                           top: '50%',
+                           transform: 'translateY(-50%)',
+                           background: 'transparent',
+                           border: 'none',
+                           cursor: 'pointer',
+                           padding: 4,
+                           display: 'flex',
+                           alignItems: 'center',
+                           justifyContent: 'center',
+                           color: '#6c757d',
+                           fontSize: 18,
+                           transition: 'color 0.2s ease'
+                         }}
+                         onMouseEnter={(e) => {
+                           e.target.style.color = '#4fa37e';
+                         }}
+                         onMouseLeave={(e) => {
+                           e.target.style.color = '#6c757d';
+                         }}
+                       >
+                         <i className={showSectionPassword ? "ri-eye-off-line" : "ri-eye-line"}></i>
+                       </button>
+                     </div>
                     {sectionStudentErrors.password && (
                       <div style={{ 
                         color: '#ff4444', 
@@ -5817,38 +6076,20 @@ export default function StudentRecordPage() {
                     <input 
                       name="gradeLevel" 
                       value={sectionStudentForm.gradeLevel} 
-                      onChange={handleSectionStudentInputChange} 
-                      placeholder="Enter grade level" 
+                      disabled 
                       style={{ 
-                        background: sectionStudentErrors.gradeLevel 
-                          ? 'linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%)' 
-                          : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)', 
-                        border: sectionStudentErrors.gradeLevel 
-                          ? '2px solid #ff4444' 
-                          : '2px solid #e9ecef', 
+                        background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', 
+                        border: '2px solid #e9ecef', 
                         borderRadius: 10, 
                         padding: '12px 16px', 
                         fontSize: 14,
                         fontWeight: 500,
-                        color: '#2c3e50',
+                        color: '#6c757d',
                         width: '100%',
                         boxSizing: 'border-box',
                         transition: 'all 0.3s ease',
-                        boxShadow: sectionStudentErrors.gradeLevel 
-                          ? '0 4px 12px rgba(255, 68, 68, 0.15)' 
-                          : '0 2px 8px rgba(0,0,0,0.05)'
-                      }}
-                      onFocus={(e) => {
-                        if (!sectionStudentErrors.gradeLevel) {
-                          e.target.style.borderColor = '#4fa37e';
-                          e.target.style.boxShadow = '0 4px 12px rgba(79, 163, 126, 0.15)';
-                        }
-                      }}
-                      onBlur={(e) => {
-                        if (!sectionStudentErrors.gradeLevel) {
-                          e.target.style.borderColor = '#e9ecef';
-                          e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
-                        }
+                        cursor: 'not-allowed',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
                       }}
                     />
                     {sectionStudentErrors.gradeLevel && (
@@ -6050,15 +6291,15 @@ export default function StudentRecordPage() {
                     <button 
                       type="submit" 
                       style={{ 
-                        background: 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)',
-                        color: '#fff', 
-                        border: 'none', 
+                        background: '#e8f5e8',
+                        color: '#2e7d32', 
+                        border: '1px solid #c8e6c9', 
                         borderRadius: 12, 
                         padding: '14px 32px', 
-                        fontWeight: 700, 
+                        fontWeight: 500, 
                         fontSize: 16, 
                         cursor: 'pointer',
-                        boxShadow: '0 6px 20px rgba(79, 163, 126, 0.3)',
+                        boxShadow: '0 2px 8px rgba(46, 125, 50, 0.15)',
                         transition: 'all 0.3s ease',
                         display: 'flex',
                         alignItems: 'center',
@@ -6067,15 +6308,17 @@ export default function StudentRecordPage() {
                         letterSpacing: '0.5px'
                       }}
                       onMouseEnter={(e) => {
-                        e.target.style.transform = 'translateY(-3px)';
-                        e.target.style.boxShadow = '0 12px 35px rgba(79, 163, 126, 0.4)';
+                        e.target.style.transform = 'translateY(-2px)';
+                        e.target.style.boxShadow = '0 4px 12px rgba(46, 125, 50, 0.25)';
+                        e.target.style.background = '#c8e6c9';
                       }}
                       onMouseLeave={(e) => {
                         e.target.style.transform = 'translateY(0)';
-                        e.target.style.boxShadow = '0 6px 20px rgba(79, 163, 126, 0.3)';
+                        e.target.style.boxShadow = '0 2px 8px rgba(46, 125, 50, 0.15)';
+                        e.target.style.background = '#e8f5e8';
                       }}
                     >
-                      <i className="ri-user-add-line" style={{ fontSize: '16px' }}></i>
+                      <i className="ri-user-add-line" style={{ fontSize: '16px', color: '#2e7d32' }}></i>
                       Add to {selectedSection.name}
                     </button>
                   </div>

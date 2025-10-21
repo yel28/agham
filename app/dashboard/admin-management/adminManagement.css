@@ -325,20 +325,23 @@
   cursor: pointer;
 }
 
-/* Themed Admin Buttons (aligned with Quizzes palette) */
+/* Themed Admin Buttons (consistent with system design) */
 .admin-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 18px;
-  font-size: 13;
+  gap: 8px;
+  border: 1px solid;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: 14px;
   font-weight: 600;
-  color: #fff;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease, filter 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  flex-grow: 0;
+  min-height: 44px;
 }
 
 .admin-btn:focus {
@@ -347,46 +350,229 @@
 }
 
 .admin-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* Edit (Green) */
+.admin-btn i {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+}
+
+/* Edit Button - System Green */
 .admin-btn--edit {
-  background: #28a745;
+  background: rgba(79, 163, 126, 0.1);
+  border-color: rgba(79, 163, 126, 0.2);
+  color: #4fa37e;
 }
-.admin-btn--edit:hover { background: #218838; }
+.admin-btn--edit:hover {
+  background: rgba(79, 163, 126, 0.2);
+  border-color: rgba(79, 163, 126, 0.4);
+}
+.admin-btn--edit i {
+  color: #4fa37e;
+}
 
-/* Permissions (Blue → Purple accent) */
+/* Permissions Button - System Blue */
 .admin-btn--permissions {
-  background: #3490dc; /* quizzes blue */
+  background: rgba(52, 144, 220, 0.1);
+  border-color: rgba(52, 144, 220, 0.2);
+  color: #3490dc;
 }
-.admin-btn--permissions:hover { background: #2779bd; }
+.admin-btn--permissions:hover {
+  background: rgba(52, 144, 220, 0.2);
+  border-color: rgba(52, 144, 220, 0.4);
+}
+.admin-btn--permissions i {
+  color: #3490dc;
+}
 
-/* Toggle Deactivate (Amber) */
+/* Toggle Deactivate Button - System Amber */
 .admin-btn--deactivate {
-  background: #ffc107;
-  color: #1a1a1a;
+  background: rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
 }
-.admin-btn--deactivate:hover { background: #e0a800; }
+.admin-btn--deactivate:hover {
+  background: rgba(255, 193, 7, 0.2);
+  border-color: rgba(255, 193, 7, 0.4);
+}
+.admin-btn--deactivate i {
+  color: #ffc107;
+}
 
-/* Toggle Activate (Green) */
+/* Toggle Activate Button - System Green */
 .admin-btn--activate {
-  background: #4fa37e; /* site green */
+  background: rgba(79, 163, 126, 0.1);
+  border-color: rgba(79, 163, 126, 0.2);
+  color: #4fa37e;
 }
-.admin-btn--activate:hover { background: #3d8b6f; }
+.admin-btn--activate:hover {
+  background: rgba(79, 163, 126, 0.2);
+  border-color: rgba(79, 163, 126, 0.4);
+}
+.admin-btn--activate i {
+  color: #4fa37e;
+}
 
-/* Delete (Red) */
+/* Delete Button - System Red */
 .admin-btn--delete {
-  background: #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+  border-color: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
 }
-.admin-btn--delete:hover { background: #c82333; }
+.admin-btn--delete:hover {
+  background: rgba(220, 53, 69, 0.2);
+  border-color: rgba(220, 53, 69, 0.4);
+}
+.admin-btn--delete i {
+  color: #dc3545;
+}
 
-/* Primary CTA (Create New Admin) */
+/* Primary CTA (Create New Admin) - Soft UI Green */
 .admin-btn--primary {
-  background: #4fa37e;
+  background: #e8f5e8;
+  border-color: #c8e6c9;
+  color: #2e7d32;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-.admin-btn--primary:hover { background: #3d8b6f; }
+.admin-btn--primary:hover {
+  background: #d4edda;
+  border-color: #a5d6a7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.admin-btn--primary i {
+  color: #2e7d32;
+}
+
+/* Modal Button Styles - Consistent with system */
+.modal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 48px;
+  min-width: 120px;
+}
+
+.modal-btn:focus {
+  outline: 3px solid rgba(79, 163, 126, 0.25);
+  outline-offset: 2px;
+}
+
+.modal-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.modal-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.modal-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Modal Secondary Button - Soft UI */
+.modal-btn--secondary {
+  background: #f5f5f5;
+  border-color: #e0e0e0;
+  color: #616161;
+}
+
+.modal-btn--secondary:hover {
+  background: #eeeeee;
+  border-color: #bdbdbd;
+}
+
+/* Modal Primary Button - Soft UI */
+.modal-btn--primary {
+  background: #e8f5e8;
+  border-color: #c8e6c9;
+  color: #2e7d32;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.modal-btn--primary:hover {
+  background: #d4edda;
+  border-color: #a5d6a7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal Danger Button */
+.modal-btn--danger {
+  background: rgba(220, 53, 69, 0.1);
+  border-color: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+}
+
+.modal-btn--danger:hover {
+  background: rgba(220, 53, 69, 0.2);
+  border-color: rgba(220, 53, 69, 0.4);
+}
+
+/* Role Badge Styles - Consistent with system design */
+.role-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  letter-spacing: 0.8px;
+  transition: all 0.2s ease;
+}
+
+.role-badge i {
+  font-size: 12px;
+}
+
+/* Teacher Role Badge - System Green */
+.role-badge--teacher {
+  background: rgba(79, 163, 126, 0.1);
+  border-color: rgba(79, 163, 126, 0.2);
+  color: #4fa37e;
+}
+
+/* Sub-Teacher Role Badge - System Amber */
+.role-badge--sub-teacher {
+  background: rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+/* Admin Role Badge - System Blue */
+.role-badge--admin {
+  background: rgba(52, 144, 220, 0.1);
+  border-color: rgba(52, 144, 220, 0.2);
+  color: #3490dc;
+}
+
+/* Super Admin Role Badge - System Purple */
+.role-badge--super-admin {
+  background: rgba(111, 66, 193, 0.1);
+  border-color: rgba(111, 66, 193, 0.2);
+  color: #6f42c1;
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {

@@ -60,6 +60,10 @@ export default function AdminManagementPage() {
     confirmPassword: ''
   });
 
+  // Password visibility states
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   // Edit admin form state
   const [editForm, setEditForm] = useState({
     firstName: '',
@@ -276,10 +280,29 @@ export default function AdminManagementPage() {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric',
+      day: 'numeric', 
       hour: '2-digit',
       minute: '2-digit'
     });
+  };
+
+    // Color palette for staff account cards (subtle versions)
+  const getStaffCardColor = (adminId) => {
+    // Subtle, lighter versions of the original palette
+    const cardColors = [
+      '#f0f8f4', // Very light green (subtle version of #b3e6c7)
+      '#faf7f3', // Very light beige (subtle version of #e6d1b3)
+      '#fefdf8', // Very light cream (subtle version of #f9efc3)
+      '#faf5f5'  // Very light pink (subtle version of #e6b3b3)
+    ];  
+    
+    // Use a combination of ID length and character codes for better distribution
+    let hash = 0;
+    for (let i = 0; i < adminId.length; i++) {
+      hash = ((hash << 5) - hash + adminId.charCodeAt(i)) & 0xffffffff;
+    }
+    const colorIndex = Math.abs(hash) % cardColors.length;
+    return cardColors[colorIndex];
   };
 
   const getRoleBadgeColor = (role) => {
@@ -287,9 +310,9 @@ export default function AdminManagementPage() {
       case ADMIN_ROLES.SUB_TEACHER:
         return '#ffc107';
       case ADMIN_ROLES.TEACHER:
-        return '#28a745';
+        return '#4fa37e';
       case ADMIN_ROLES.ADMIN:
-        return '#007bff';
+        return '#3490dc';
       case ADMIN_ROLES.SUPER_ADMIN:
         return '#6f42c1';
       default:
@@ -312,7 +335,7 @@ export default function AdminManagementPage() {
       key={admin.id}
       className="admin-card"
       style={{
-        background: 'white',
+        background: getStaffCardColor(admin.id),
         borderRadius: 16,
         padding: 24,
         border: '1px solid #e2e8f0',
@@ -381,22 +404,7 @@ export default function AdminManagementPage() {
           <span style={{ letterSpacing: '-0.3px' }}>
             {admin.firstName} {admin.lastName}
           </span>
-          <button style={{
-            background: getRoleBadgeColor(admin.role),
-            color: 'white',
-            padding: '6px 14px',
-            borderRadius: 20,
-            fontSize: 11,
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            border: 'none',
-            cursor: 'default',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            boxShadow: '0 3px 8px rgba(0,0,0,0.15)',
-            letterSpacing: '0.8px'
-          }}>
+          <button className={`role-badge role-badge--${admin.role.toLowerCase().replace('_', '-')}`}>
             <i className="ri-user-line" style={{ fontSize: 12 }}></i>
             {admin.role.replace('_', ' ')}
           </button>
@@ -462,8 +470,8 @@ export default function AdminManagementPage() {
           onClick={() => { setSelectedAdmin(admin); setShowDeleteModal(true); }}
           className="admin-btn admin-btn--delete"
         >
-          <i className="ri-delete-bin-line" style={{ fontSize: 14 }}></i>
-          Delete
+          <i className="ri-archive-line" style={{ fontSize: 14 }}></i>
+          Archive
         </button>
       </div>
     </div>
@@ -550,7 +558,7 @@ export default function AdminManagementPage() {
               className="admin-btn admin-btn--primary"
               style={{ borderRadius: 12, padding: '12px 24px', fontSize: 16 }}
             >
-              <span style={{ fontSize: 20, color: 'white' }}>+</span>
+              <span style={{ fontSize: 20, color: '#2e7d32' }}>+</span>
               Create User
             </button>
           </div>
@@ -572,144 +580,6 @@ export default function AdminManagementPage() {
               </div>
             )}
 
-            {/* Current User Info */}
-            {currentTeacherEmail && (
-              <div style={{ 
-                background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', 
-                borderRadius: 20, 
-                padding: 28, 
-                marginBottom: 24,
-                border: '1px solid #cbd5e0',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
-                position: 'relative',
-                overflow: 'hidden'
-              }}>
-                {/* Decorative background pattern */}
-                <div style={{
-                  position: 'absolute',
-                  top: -20,
-                  right: -20,
-                  width: 80,
-                  height: 80,
-                  background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
-                  borderRadius: '50%',
-                  zIndex: 0
-                }}></div>
-                
-                <div style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: 20,
-                  marginBottom: 16,
-                  position: 'relative',
-                  zIndex: 1
-                }}>
-                  <div style={{
-                    width: 56,
-                    height: 56,
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontSize: 24,
-                    fontWeight: 700,
-                    boxShadow: '0 6px 20px rgba(102, 126, 234, 0.4)',
-                    border: '3px solid white',
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}>
-                    <img 
-                      src="/TeacherProfile.png" 
-                      alt="Teacher Avatar" 
-                      style={{ 
-                        width: '100%', 
-                        height: '100%', 
-                        objectFit: 'cover',
-                        borderRadius: '50%'
-                      }} 
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextSibling.style.display = 'flex';
-                      }}
-                    />
-                    <div style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      display: 'none',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      borderRadius: '50%'
-                    }}>
-                      <i className="ri-graduation-cap-line" style={{ fontSize: 24 }}></i>
-                    </div>
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ 
-                      fontSize: 20, 
-                      fontWeight: 700, 
-                      color: '#2c3e50',
-                      marginBottom: 6,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 12
-                    }}>
-                      <span>Currently Logged In</span>
-                      <div style={{
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        color: 'white',
-                        padding: '4px 12px',
-                        borderRadius: 12,
-                        fontSize: 11,
-                        fontWeight: 600,
-                        textTransform: 'uppercase',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 4,
-                        boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)'
-                      }}>
-                        <i className="ri-graduation-cap-line" style={{ fontSize: 10 }}></i>
-                        Administrator
-                      </div>
-                    </div>
-                    <div style={{ 
-                      fontSize: 15, 
-                      color: '#4a5568',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 8
-                    }}>
-                      <i className="ri-mail-line" style={{ fontSize: 14, color: '#667eea' }}></i>
-                      {currentTeacherEmail}
-                    </div>
-                  </div>
-                  <div style={{ marginLeft: 'auto' }}>
-                    <div style={{
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      color: 'white',
-                      padding: '8px 16px',
-                      borderRadius: 20,
-                      fontSize: 12,
-                      fontWeight: 600,
-                      textTransform: 'uppercase',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6,
-                      boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
-                      border: '2px solid rgba(255, 255, 255, 0.2)'
-                    }}>
-                      <i className="ri-check-line" style={{ fontSize: 12 }}></i>
-                      Active Session
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
             
             {loading ? (
               <div style={{
@@ -1026,38 +896,80 @@ export default function AdminManagementPage() {
                 <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: '#2c3e50' }}>
                   Password *
                 </label>
-                <input
-                  type="password"
-                  value={createForm.password}
-                  onChange={(e) => setCreateForm({...createForm, password: e.target.value})}
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    border: '1px solid #e9ecef',
-                    borderRadius: 8,
-                    fontSize: 16
-                  }}
-                  placeholder="Enter password (min 6 characters)"
-                />
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={createForm.password}
+                    onChange={(e) => setCreateForm({...createForm, password: e.target.value})}
+                    style={{
+                      width: '100%',
+                      padding: '12px 45px 12px 12px',
+                      border: '1px solid #e9ecef',
+                      borderRadius: 8,
+                      fontSize: 16
+                    }}
+                    placeholder="Enter password (min 6 characters)"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: 12,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 4,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    <i className={showPassword ? 'ri-eye-off-line' : 'ri-eye-line'} style={{ fontSize: 18, color: '#6c757d' }}></i>
+                  </button>
+                </div>
               </div>
               
               <div>
                 <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: '#2c3e50' }}>
                   Confirm Password *
                 </label>
-                <input
-                  type="password"
-                  value={createForm.confirmPassword}
-                  onChange={(e) => setCreateForm({...createForm, confirmPassword: e.target.value})}
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    border: '1px solid #e9ecef',
-                    borderRadius: 8,
-                    fontSize: 16
-                  }}
-                  placeholder="Confirm password"
-                />
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    value={createForm.confirmPassword}
+                    onChange={(e) => setCreateForm({...createForm, confirmPassword: e.target.value})}
+                    style={{
+                      width: '100%',
+                      padding: '12px 45px 12px 12px',
+                      border: '1px solid #e9ecef',
+                      borderRadius: 8,
+                      fontSize: 16
+                    }}
+                    placeholder="Confirm password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: 12,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 4,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    <i className={showConfirmPassword ? 'ri-eye-off-line' : 'ri-eye-line'} style={{ fontSize: 18, color: '#6c757d' }}></i>
+                  </button>
+                </div>
               </div>
             </div>
             
@@ -1069,14 +981,13 @@ export default function AdminManagementPage() {
             }}>
               <button
                 onClick={() => setShowCreateModal(false)}
-                className="btn-secondary"
+                className="modal-btn modal-btn--secondary"
               >
                 Cancel
               </button>
               <button
                 onClick={handleCreateAdmin}
-                className="admin-btn admin-btn--primary"
-                style={{ opacity: createLoading ? 0.7 : 1, cursor: createLoading ? 'not-allowed' : 'pointer' }}
+                className="modal-btn modal-btn--primary"
                 disabled={createLoading}
               >
                 {createLoading ? 'Creating...' : 'Create Admin'}
@@ -1129,7 +1040,7 @@ export default function AdminManagementPage() {
               color: '#dc3545',
               margin: '0 0 16px 0'
             }}>
-              Delete Admin Account
+              Archive Admin Account
             </h3>
             
             <p style={{
@@ -1138,8 +1049,8 @@ export default function AdminManagementPage() {
               margin: '0 0 24px 0',
               lineHeight: 1.5
             }}>
-              Are you sure you want to delete <strong>{selectedAdmin.firstName} {selectedAdmin.lastName}</strong>? 
-              This action cannot be undone and the admin will lose access to the system.
+              Are you sure you want to archive <strong>{selectedAdmin.firstName} {selectedAdmin.lastName}</strong>? 
+              The admin will be moved to the archive and will lose access to the system.
             </p>
             
             <div style={{
@@ -1149,15 +1060,16 @@ export default function AdminManagementPage() {
             }}>
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="btn-secondary"
+                className="modal-btn modal-btn--secondary"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteAdmin}
-                className="admin-btn admin-btn--delete"
+                className="modal-btn modal-btn--danger"
+                disabled={deleteLoading}
               >
-                Delete Admin
+                {deleteLoading ? 'Archiving...' : 'Archive Admin'}
               </button>
             </div>
           </div>
@@ -1287,39 +1199,16 @@ export default function AdminManagementPage() {
             }}>
               <button
                 onClick={() => setShowEditModal(false)}
-                style={{
-                  background: '#f8f9fa',
-                  color: '#6c757d',
-                  border: '1px solid #e9ecef',
-                  borderRadius: 8,
-                  padding: '12px 24px',
-                  fontSize: 16,
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseOver={(e) => e.target.style.background = '#e9ecef'}
-                onMouseOut={(e) => e.target.style.background = '#f8f9fa'}
+                className="modal-btn modal-btn--secondary"
               >
                 Cancel
               </button>
               <button
                 onClick={handleEditAdmin}
-                style={{
-                  background: '#28a745',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: 8,
-                  padding: '12px 24px',
-                  fontSize: 16,
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseOver={(e) => e.target.style.background = '#218838'}
-                onMouseOut={(e) => e.target.style.background = '#28a745'}
+                className="modal-btn modal-btn--primary"
+                disabled={editLoading}
               >
-                Update Admin
+                {editLoading ? 'Updating...' : 'Update Admin'}
               </button>
             </div>
           </div>

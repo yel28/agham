@@ -154,59 +154,48 @@ function StudentAssessmentPageContent() {
     return 0;
   };
 
-  // Calculate real-time score for selected student and quiz using database scores
+  // Calculate real-time score for selected student and quiz using quizResults subcollection
   const calculateScore = (student, quiz) => {
     if (!student || !quiz) return { correct: 0, total: 10, percentage: 0 };
     
-    // Get real scores from database
-    const studentScores = student.rawData?.scores || {};
+    // Get quiz results from studentQuizData (which is populated from quizResults subcollection)
+    const studentQuizResults = studentQuizData[student.id] || [];
     
-    // Debug logging
-    // (debug logs removed)
+    // Try to find quiz data by quizId first, then by topic matching
+    let quizData = studentQuizResults.find(q => q.quizId === quiz.id);
     
-    // Map quiz titles to database score keys
-    let scoreKey = '';
-    // (debug logs removed)
-    
-    if (quiz.title.toLowerCase().includes('mixtures') || quiz.title.includes('Quiz 1')) {
-      scoreKey = 'Mixtures';
-    } else if (quiz.title.toLowerCase().includes('circulatory') || quiz.title.includes('Quiz 2')) {
-      scoreKey = 'Circulatory';
-    } else if (quiz.title.toLowerCase().includes('gravity') || quiz.title.toLowerCase().includes('force') || quiz.title.includes('Quiz 3')) {
-      scoreKey = 'GravityForce';
-    } else if (quiz.title.toLowerCase().includes('volcano') || quiz.title.toLowerCase().includes('earth') || quiz.title.includes('Quiz 4')) {
-      scoreKey = 'EarthVolcano';
-    }
-    
-    // (debug logs removed)
-    
-    // Aliases observed in data (support older labels entered from other systems)
-    const aliasMap = {
-      Mixtures: ['Mixture', 'Mixtures Quiz', 'Mixture Quiz', 'Mixture Test', 'MIXTURE TEST', 'QUIZ 1', 'Quiz 1: Mixtures'],
-      Circulatory: ['Circulatory System', 'CIRCULATORY EXAM', 'Circulatory Exam', 'QUIZ 2', 'Quiz 2: Circulatory System'],
-      GravityForce: ['Gravity', 'Force', 'Gravity and Force', 'GRAVITY QUIZ', 'QUIZ 3', 'Quiz 3: Gravity and Force'],
-      EarthVolcano: ['Volcanic Eruption', 'Volcano', 'Volcano Quiz', 'VOLCANIC ERUPTION', 'Earth Volcano', 'QUIZ 4', 'Quiz 4: Volcanic Eruption']
-    };
-
-    // Get the actual score from database (out of 10) with alias matching
-    const correctAnswers = getScoreFromScores(studentScores, scoreKey, aliasMap[scoreKey] || []);
-
-    // TEMP DEBUG: Only for Student 004 Mixtures to verify key mapping
-    const isStudent004 = (student?.id && String(student.id).toLowerCase() === 'student004') || /student\s*004/i.test(String(student?.name || ''));
-    if (isStudent004 && scoreKey === 'Mixtures') {
-      try {
-        // Minimal, focused log
-        console.log('[Mixtures DEBUG][Student004]', {
-          availableKeys: Object.keys(studentScores || {}),
-          resolvedScore: correctAnswers,
-          rawScores: studentScores
+    if (!quizData) {
+      // Fallback: try to find by topic matching
+      const topic = getTopicFromTitle(quiz.title);
+      if (topic) {
+        quizData = studentQuizResults.find(q => {
+          // Check if the quiz data corresponds to this topic
+          return q.quizId && q.quizId.includes(topic);
         });
-      } catch (_) {}
+      }
     }
-    const totalQuestions = 10; // Each quiz has 10 questions
+    
+    if (!quizData || !quizData.questions) {
+      // Debug logging for troubleshooting
+      console.log(`[Score Calculation] No quiz data found for Student: ${student.name}, Quiz: ${quiz.title}`, {
+        availableQuizzes: studentQuizResults.map(q => ({ quizId: q.quizId, hasQuestions: !!q.questions })),
+        studentQuizData: studentQuizData[student.id]
+      });
+      return { correct: 0, total: 10, percentage: 0 };
+    }
+    
+    // Calculate score from individual question results
+    const totalQuestions = quizData.questions.length;
+    const correctAnswers = quizData.questions.filter(q => q.isCorrect === true).length;
     const percentage = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
     
-    // (debug logs removed)
+    // Debug logging for troubleshooting
+    console.log(`[Score Calculation] Student: ${student.name}, Quiz: ${quiz.title}`, {
+      totalQuestions,
+      correctAnswers,
+      percentage,
+      questions: quizData.questions.map(q => ({ answer: q.answer, isCorrect: q.isCorrect }))
+    });
     
     return { correct: correctAnswers, total: totalQuestions, percentage };
   };
@@ -674,26 +663,15 @@ function StudentAssessmentPageContent() {
               gap: 12,
               marginTop: 8
             }}>
-              <label style={{ 
-                fontSize: 14, 
-                fontWeight: 600, 
-                color: '#2c3e50',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8
-              }}>
-                <i className="ri-filter-line" style={{ fontSize: 16 }}></i>
-                Section:
-              </label>
               <select
                 value={selectedSectionId}
                 onChange={(e) => handleSectionChange(e.target.value)}
                 className="section-selector"
                 style={{
-                  background: 'white',
-                  border: '2px solid #e9ecef',
-                  borderRadius: 12,
-                  padding: '10px 16px',
+                  background: 'rgba(255, 255, 255, 0.8)',
+                  border: '2px solid rgba(233, 236, 239, 0.8)',
+                  borderRadius: 16,
+                  padding: '12px 16px',
                   fontSize: 14,
                   fontWeight: 500,
                   color: '#2c3e50',
@@ -701,10 +679,19 @@ function StudentAssessmentPageContent() {
                   minWidth: 160,
                   outline: 'none',
                   transition: 'all 0.2s ease',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  backdropFilter: 'blur(10px)'
                 }}
-                onFocus={(e) => e.target.style.borderColor = '#4fa37e'}
-                onBlur={(e) => e.target.style.borderColor = '#e9ecef'}
+                onFocus={(e) => {
+                  e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                  e.target.style.background = 'rgba(255, 255, 255, 1)';
+                  e.target.style.boxShadow = '0 4px 12px rgba(79, 163, 126, 0.15)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'rgba(233, 236, 239, 0.8)';
+                  e.target.style.background = 'rgba(255, 255, 255, 0.8)';
+                  e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+                }}
               >
                 {sections.map(section => (
                   <option key={section.id} value={section.id}>

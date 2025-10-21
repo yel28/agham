@@ -76,12 +76,12 @@ export default function LessonModulePage() {
     color
   });
 
-  // Palette (from provided image): soft gradients
+  // Palette matching student record section colors exactly
   const modules = [
-    { key: 'module_mixtures_unlocked', label: 'Mixtures', gradient: ['#d6f2e1', '#c0e6d3'], text: '#2c3e50', icon: '🧪', description: 'Fundamentals of mixtures and solutions' },
-    { key: 'module_circulatory_unlocked', label: 'Circulatory System', gradient: ['#ead8c2', '#dcc7af'], text: '#2c3e50', icon: '🫀', description: 'Human circulatory system and functions' },
-    { key: 'module_gravity_force_unlocked', label: 'Gravity and Friction', gradient: ['#fff7cf', '#ffefb0'], text: '#2c3e50', icon: '🏀', description: 'Forces in motion, gravity and friction' },
-    { key: 'module_volcanic_eruption_unlocked', label: 'Earthquakes and Volcanic Eruption', gradient: ['#eac0c3', '#e2a8ad'], text: '#2c3e50', icon: '🌋', description: 'Earthquakes and eruption effects' }
+    { key: 'module_mixtures_unlocked', label: 'Mixtures', gradient: ['#f9efc3', '#f9efc3'], text: '#2c3e50', icon: '🧪', description: 'Fundamentals of mixtures and solutions' },
+    { key: 'module_circulatory_unlocked', label: 'Circulatory System', gradient: ['#e6d1b3', '#e6d1b3'], text: '#2c3e50', icon: '🫀', description: 'Human circulatory system and functions' },
+    { key: 'module_gravity_force_unlocked', label: 'Gravity and Friction', gradient: ['#e6b3b3', '#e6b3b3'], text: '#2c3e50', icon: '🏀', description: 'Forces in motion, gravity and friction' },
+    { key: 'module_volcanic_eruption_unlocked', label: 'Earthquakes and Volcanic Eruption', gradient: ['#b3e6c7', '#b3e6c7'], text: '#2c3e50', icon: '🌋', description: 'Earthquakes and eruption effects' }
   ];
 
   useEffect(() => {
@@ -336,22 +336,33 @@ export default function LessonModulePage() {
           <div style={{ color: '#6c757d', marginTop: 6, fontSize: 14 }}>Unlock modules for a selected section</div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-          <label style={{ fontSize: 14, fontWeight: 600, color: '#2c3e50' }}>Section:</label>
           <select
             value={selectedSectionId}
             onChange={(e) => setSelectedSectionId(e.target.value)}
             style={{
-              background: 'white',
-              border: '2px solid #e9ecef',
-              borderRadius: 12,
-              padding: '10px 16px',
+              background: 'rgba(255, 255, 255, 0.8)',
+              border: '2px solid rgba(233, 236, 239, 0.8)',
+              borderRadius: 16,
+              padding: '12px 16px',
               fontSize: 14,
               fontWeight: 500,
               color: '#2c3e50',
               cursor: 'pointer',
               minWidth: 180,
               outline: 'none',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+              transition: 'all 0.2s ease',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+              backdropFilter: 'blur(10px)'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+              e.target.style.background = 'rgba(255, 255, 255, 1)';
+              e.target.style.boxShadow = '0 4px 12px rgba(79, 163, 126, 0.15)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = 'rgba(233, 236, 239, 0.8)';
+              e.target.style.background = 'rgba(255, 255, 255, 0.8)';
+              e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
             }}
           >
             {sections.map(section => (
@@ -363,7 +374,7 @@ export default function LessonModulePage() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 20 }}>
         {modules.map((m) => {
           const firestoreModuleName = moduleKeyMap[m.key];
           const isLocked = modulePermissions[firestoreModuleName]?.locked ?? true;
@@ -379,20 +390,21 @@ export default function LessonModulePage() {
               ...makeBtn(`linear-gradient(135deg, ${m.gradient[0]} 0%, ${m.gradient[1]} 100%)`, m.text || 'white'), 
               textAlign: 'left', 
               opacity: unlocking ? 0.7 : 1,
-              padding: '14px 16px',
+              padding: '16px 20px',
               position: 'relative',
-              filter: !isLocked ? 'none' : 'saturate(0.9)'
+              filter: !isLocked ? 'none' : 'saturate(0.9)',
+              minHeight: '100px'
             }}
             onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 18px rgba(0,0,0,0.15)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.08)'; }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{ width: 42, height: 42, borderRadius: 10, background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
                 {m.icon}
               </div>
               <div>
-                <div style={{ fontWeight: 800 }}>{m.label}</div>
-                <div style={{ fontSize: 12, opacity: 0.9 }}>{m.description}</div>
+                <div style={{ fontWeight: 800, fontSize: 15 }}>{m.label}</div>
+                <div style={{ fontSize: 12, opacity: 0.9, marginTop: 2 }}>{m.description}</div>
               </div>
             </div>
             {/* Lock/Unlock badge */}

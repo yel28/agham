@@ -949,6 +949,14 @@ export default function ArchivePage() {
     }
   };
 
+  const toggleAllSections = () => {
+    if (selectedSections.length === deletedSections.length) {
+      setSelectedSections([]);
+    } else {
+      setSelectedSections(deletedSections.map(section => section.id));
+    }
+  };
+
   const handleBulkRestoreClick = (type) => {
     if (!canRestoreItems) {
       showError('You do not have permission to restore items from archive.');
@@ -1043,6 +1051,26 @@ export default function ArchivePage() {
         setEntityOperationProgress({ isActive: false, entity: '', operation: '', current: 0, total: 0, currentName: '' });
         setSelectedAdmins([]);
         showSuccess(`${restoredCount} admins restored successfully!`);
+      } else if (bulkActionType === 'sections') {
+        let restoredCount = 0;
+        setEntityOperationProgress({ isActive: true, entity: 'section', operation: 'restore', current: 0, total: selectedSections.length, currentName: '' });
+        for (let i = 0; i < selectedSections.length; i++) {
+          const sectionId = selectedSections[i];
+          try {
+            const section = deletedSections.find(s => s.id === sectionId);
+            if (section && section.originalData) {
+              setEntityOperationProgress(prev => ({ ...prev, current: i + 1, currentName: section.originalData?.name || 'Section' }));
+              // Restore section
+              await restoreSection(section);
+              restoredCount++;
+            }
+          } catch (error) {
+            console.error(`Error restoring section ${sectionId}:`, error);
+          }
+        }
+        setEntityOperationProgress({ isActive: false, entity: '', operation: '', current: 0, total: 0, currentName: '' });
+        setSelectedSections([]);
+        showSuccess(`${restoredCount} sections restored successfully!`);
       }
     setShowBulkRestoreModal(false);
     setBulkActionType('');
@@ -1122,6 +1150,26 @@ export default function ArchivePage() {
         setEntityOperationProgress({ isActive: false, entity: '', operation: '', current: 0, total: 0, currentName: '' });
         setSelectedAdmins([]);
         showSuccess(`${deletedCount} admins permanently deleted!`);
+      } else if (bulkActionType === 'sections') {
+        let deletedCount = 0;
+        setEntityOperationProgress({ isActive: true, entity: 'section', operation: 'delete', current: 0, total: selectedSections.length, currentName: '' });
+        for (let i = 0; i < selectedSections.length; i++) {
+          const sectionId = selectedSections[i];
+          try {
+            const section = deletedSections.find(s => s.id === sectionId);
+            if (section && section.originalData) {
+              setEntityOperationProgress(prev => ({ ...prev, current: i + 1, currentName: section.originalData?.name || 'Section' }));
+              // Permanently delete section
+              await permanentlyDeleteSection(sectionId);
+              deletedCount++;
+            }
+          } catch (error) {
+            console.error(`Error deleting section ${sectionId}:`, error);
+          }
+        }
+        setEntityOperationProgress({ isActive: false, entity: '', operation: '', current: 0, total: 0, currentName: '' });
+        setSelectedSections([]);
+        showSuccess(`${deletedCount} sections permanently deleted!`);
       }
     setShowBulkDeleteModal(false);
     setBulkActionType('');
@@ -1208,8 +1256,8 @@ export default function ArchivePage() {
                   fontWeight: 600,
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
-                  background: activeTab === 'students' ? '#28a745' : '#f8f9fa',
-                  color: activeTab === 'students' ? 'white' : '#6c757d'
+                  background: activeTab === 'students' ? '#f9efc3' : '#f8f9fa',
+                  color: activeTab === 'students' ? '#2c3e50' : '#6c757d'
                 }}
                 onMouseOver={(e) => {
                   if (activeTab !== 'students') {
@@ -1238,8 +1286,8 @@ export default function ArchivePage() {
                 fontWeight: 600,
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
-                background: activeTab === 'sections' ? '#28a745' : '#f8f9fa',
-                color: activeTab === 'sections' ? 'white' : '#6c757d'
+                background: activeTab === 'sections' ? '#e6d1b3' : '#f8f9fa',
+                color: activeTab === 'sections' ? '#2c3e50' : '#6c757d'
               }}
               onMouseOver={(e) => {
                 if (activeTab !== 'sections') {
@@ -1267,8 +1315,8 @@ export default function ArchivePage() {
                 fontWeight: 600,
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
-                background: activeTab === 'admins' ? '#28a745' : '#f8f9fa',
-                color: activeTab === 'admins' ? 'white' : '#6c757d'
+                background: activeTab === 'admins' ? '#e6b3b3' : '#f8f9fa',
+                color: activeTab === 'admins' ? '#2c3e50' : '#6c757d'
               }}
               onMouseOver={(e) => {
                 if (activeTab !== 'admins') {
@@ -1295,8 +1343,8 @@ export default function ArchivePage() {
                 fontWeight: 600,
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
-                background: activeTab === 'quizzes' ? '#28a745' : '#f8f9fa',
-                color: activeTab === 'quizzes' ? 'white' : '#6c757d'
+                background: activeTab === 'quizzes' ? '#b3e6c7' : '#f8f9fa',
+                color: activeTab === 'quizzes' ? '#2c3e50' : '#6c757d'
               }}
               onMouseOver={(e) => {
                 if (activeTab !== 'quizzes') {
@@ -1477,16 +1525,29 @@ export default function ArchivePage() {
                                 <button
                                   onClick={() => handleBulkRestoreClick('students')}
                                   style={{
-                                    background: '#28a745',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: 8,
+                                    background: 'rgba(79, 163, 126, 0.1)',
+                                    color: '#4fa37e',
+                                    border: '1px solid rgba(79, 163, 126, 0.2)',
+                                    borderRadius: 12,
                                     padding: '8px 16px',
                                     fontSize: 14,
                                     cursor: 'pointer',
-                                    fontWeight: 500
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 6,
+                                    transition: 'all 0.2s ease'
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
                                   }}
                                 >
+                                  <i className="ri-refresh-line" style={{ fontSize: 14 }}></i>
                                   {selectedStudents.length === deletedStudents.length ? 'Restore All' : `Restore Selected (${selectedStudents.length})`}
                                 </button>
                               )}
@@ -1494,16 +1555,29 @@ export default function ArchivePage() {
                                 <button
                                   onClick={() => handleBulkDeleteClick('students')}
                                   style={{
-                                    background: '#dc3545',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: 8,
+                                    background: 'rgba(220, 53, 69, 0.1)',
+                                    color: '#dc3545',
+                                    border: '1px solid rgba(220, 53, 69, 0.2)',
+                                    borderRadius: 12,
                                     padding: '8px 16px',
                                     fontSize: 14,
                                     cursor: 'pointer',
-                                    fontWeight: 500
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 6,
+                                    transition: 'all 0.2s ease'
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                                    e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                                    e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
                                   }}
                                 >
+                                  <i className="ri-delete-bin-6-line" style={{ fontSize: 14 }}></i>
                                   {selectedStudents.length === deletedStudents.length ? 'Delete All' : `Delete Selected (${selectedStudents.length})`}
                                 </button>
                               )}
@@ -1513,15 +1587,44 @@ export default function ArchivePage() {
                             onClick={toggleAllStudents}
                             style={{
                               background: selectedStudents.length === deletedStudents.length 
-                                ? 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)'
-                                : 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)',
-                              color: 'white', border: 'none', borderRadius: 8, padding: '8px 16px',
-                              fontSize: 14, fontWeight: 600, cursor: 'pointer',
+                                ? 'rgba(220, 53, 69, 0.1)'
+                                : 'rgba(79, 163, 126, 0.1)',
+                              color: selectedStudents.length === deletedStudents.length 
+                                ? '#dc3545'
+                                : '#4fa37e',
+                              border: selectedStudents.length === deletedStudents.length 
+                                ? '1px solid rgba(220, 53, 69, 0.2)'
+                                : '1px solid rgba(79, 163, 126, 0.2)',
+                              borderRadius: 12, 
+                              padding: '12px 20px',
+                              fontSize: 14, 
+                              fontWeight: 600, 
+                              cursor: 'pointer',
                               transition: 'all 0.2s ease',
-                              display: 'flex', alignItems: 'center', gap: 8,
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              gap: 8,
                               width: '150px',
                               justifyContent: 'center',
                               flexShrink: 0
+                            }}
+                            onMouseEnter={(e) => {
+                              if (selectedStudents.length === deletedStudents.length) {
+                                e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                                e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                              } else {
+                                e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                                e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (selectedStudents.length === deletedStudents.length) {
+                                e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                                e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
+                              } else {
+                                e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                                e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                              }
                             }}
                           >
                             <i className={selectedStudents.length === deletedStudents.length ? 'ri-checkbox-line' : 'ri-checkbox-blank-line'} style={{ fontSize: 16 }}></i>
@@ -1553,16 +1656,21 @@ export default function ArchivePage() {
                               key={student.id}
                               style={{
                                 background: selectedStudents.includes(student.id) 
-                                  ? 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)'
+                                  ? 'rgba(79, 163, 126, 0.08)'
                                   : 'white',
-                                color: selectedStudents.includes(student.id) ? 'white' : '#2c3e50',
+                                color: '#2c3e50',
                                 borderRadius: 12,
                                 padding: 20,
-                                border: '1px solid #e9ecef',
+                                border: selectedStudents.includes(student.id) 
+                                  ? '2px solid rgba(79, 163, 126, 0.3)'
+                                  : '1px solid #e9ecef',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: 16,
-                                transition: 'all 0.3s ease'
+                                transition: 'all 0.3s ease',
+                                boxShadow: selectedStudents.includes(student.id) 
+                                  ? '0 4px 12px rgba(79, 163, 126, 0.15)'
+                                  : '0 2px 4px rgba(0,0,0,0.05)'
                               }}
                             >
                               <input
@@ -1617,17 +1725,35 @@ export default function ArchivePage() {
                                     style={{
                                         background: selectedStudents.includes(student.id) 
                                           ? 'rgba(255,255,255,0.2)'
-                                          : '#28a745',
-                                      color: 'white',
+                                          : 'rgba(79, 163, 126, 0.1)',
+                                      color: selectedStudents.includes(student.id) 
+                                        ? 'white'
+                                        : '#4fa37e',
                                         border: selectedStudents.includes(student.id) 
                                           ? '1px solid rgba(255,255,255,0.3)'
-                                          : 'none',
-                                      borderRadius: 8,
+                                          : '1px solid rgba(79, 163, 126, 0.2)',
+                                      borderRadius: 12,
                                       padding: '8px 16px',
                                       fontSize: 14,
                                       cursor: restoreLoading[student.id] ? 'not-allowed' : 'pointer',
-                                      fontWeight: 500,
-                                      opacity: restoreLoading[student.id] ? 0.6 : 1
+                                      fontWeight: 600,
+                                      opacity: restoreLoading[student.id] ? 0.6 : 1,
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      gap: 6,
+                                      transition: 'all 0.2s ease'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      if (!restoreLoading[student.id] && !selectedStudents.includes(student.id)) {
+                                        e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                                        e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                                      }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      if (!restoreLoading[student.id] && !selectedStudents.includes(student.id)) {
+                                        e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                                        e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                                      }
                                     }}
                                   >
                                     {restoreLoading[student.id] ? (
@@ -1639,7 +1765,10 @@ export default function ArchivePage() {
                                         Restoring...
                                       </>
                                     ) : (
-                                      'Restore'
+                                      <>
+                                        <i className="ri-refresh-line" style={{ fontSize: 14 }}></i>
+                                        Restore
+                                      </>
                                     )}
                                   </button>
                                 )}
@@ -1650,17 +1779,35 @@ export default function ArchivePage() {
                                     style={{
                                         background: selectedStudents.includes(student.id) 
                                           ? 'rgba(255,255,255,0.2)'
-                                          : '#dc3545',
-                                      color: 'white',
+                                          : 'rgba(220, 53, 69, 0.1)',
+                                      color: selectedStudents.includes(student.id) 
+                                        ? 'white'
+                                        : '#dc3545',
                                         border: selectedStudents.includes(student.id) 
                                           ? '1px solid rgba(255,255,255,0.3)'
-                                          : 'none',
-                                      borderRadius: 8,
+                                          : '1px solid rgba(220, 53, 69, 0.2)',
+                                      borderRadius: 12,
                                       padding: '8px 16px',
                                       fontSize: 14,
                                       cursor: deleteLoading[student.id] ? 'not-allowed' : 'pointer',
-                                      fontWeight: 500,
-                                      opacity: deleteLoading[student.id] ? 0.6 : 1
+                                      fontWeight: 600,
+                                      opacity: deleteLoading[student.id] ? 0.6 : 1,
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      gap: 6,
+                                      transition: 'all 0.2s ease'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      if (!deleteLoading[student.id] && !selectedStudents.includes(student.id)) {
+                                        e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                                        e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                                      }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      if (!deleteLoading[student.id] && !selectedStudents.includes(student.id)) {
+                                        e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                                        e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
+                                      }
                                     }}
                                   >
                                     {deleteLoading[student.id] ? (
@@ -1672,7 +1819,10 @@ export default function ArchivePage() {
                                         Deleting...
                                       </>
                                     ) : (
-                                      'Delete'
+                                      <>
+                                        <i className="ri-delete-bin-6-line" style={{ fontSize: 14 }}></i>
+                                        Delete
+                                      </>
                                     )}
                                   </button>
                                 )}
@@ -1701,16 +1851,29 @@ export default function ArchivePage() {
                                 <button
                                   onClick={() => handleBulkRestoreClick('admins')}
                                   style={{
-                                    background: '#28a745',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: 8,
+                                    background: 'rgba(79, 163, 126, 0.1)',
+                                    color: '#4fa37e',
+                                    border: '1px solid rgba(79, 163, 126, 0.2)',
+                                    borderRadius: 12,
                                     padding: '8px 16px',
                                     fontSize: 14,
                                     cursor: 'pointer',
-                                    fontWeight: 500
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 6,
+                                    transition: 'all 0.2s ease'
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
                                   }}
                                 >
+                                  <i className="ri-refresh-line" style={{ fontSize: 14 }}></i>
                                   {selectedAdmins.length === deletedAdmins.length ? 'Restore All' : `Restore Selected (${selectedAdmins.length})`}
                                 </button>
                               )}
@@ -1718,16 +1881,29 @@ export default function ArchivePage() {
                                 <button
                                   onClick={() => handleBulkDeleteClick('admins')}
                                   style={{
-                                    background: '#dc3545',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: 8,
+                                    background: 'rgba(220, 53, 69, 0.1)',
+                                    color: '#dc3545',
+                                    border: '1px solid rgba(220, 53, 69, 0.2)',
+                                    borderRadius: 12,
                                     padding: '8px 16px',
                                     fontSize: 14,
                                     cursor: 'pointer',
-                                    fontWeight: 500
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 6,
+                                    transition: 'all 0.2s ease'
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                                    e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                                    e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
                                   }}
                                 >
+                                  <i className="ri-delete-bin-6-line" style={{ fontSize: 14 }}></i>
                                   {selectedAdmins.length === deletedAdmins.length ? 'Delete All' : `Delete Selected (${selectedAdmins.length})`}
                                 </button>
                               )}
@@ -1737,15 +1913,44 @@ export default function ArchivePage() {
                             onClick={toggleAllAdmins}
                             style={{
                               background: selectedAdmins.length === deletedAdmins.length 
-                                ? 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)'
-                                : 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)',
-                              color: 'white', border: 'none', borderRadius: 8, padding: '8px 16px',
-                              fontSize: 14, fontWeight: 600, cursor: 'pointer',
+                                ? 'rgba(220, 53, 69, 0.1)'
+                                : 'rgba(79, 163, 126, 0.1)',
+                              color: selectedAdmins.length === deletedAdmins.length 
+                                ? '#dc3545'
+                                : '#4fa37e',
+                              border: selectedAdmins.length === deletedAdmins.length 
+                                ? '1px solid rgba(220, 53, 69, 0.2)'
+                                : '1px solid rgba(79, 163, 126, 0.2)',
+                              borderRadius: 12, 
+                              padding: '12px 20px',
+                              fontSize: 14, 
+                              fontWeight: 600, 
+                              cursor: 'pointer',
                               transition: 'all 0.2s ease',
-                              display: 'flex', alignItems: 'center', gap: 8,
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              gap: 8,
                               width: '150px',
                               justifyContent: 'center',
                               flexShrink: 0
+                            }}
+                            onMouseEnter={(e) => {
+                              if (selectedAdmins.length === deletedAdmins.length) {
+                                e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                                e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                              } else {
+                                e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                                e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (selectedAdmins.length === deletedAdmins.length) {
+                                e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                                e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
+                              } else {
+                                e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                                e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                              }
                             }}
                           >
                             <i className={selectedAdmins.length === deletedAdmins.length ? 'ri-checkbox-line' : 'ri-checkbox-blank-line'} style={{ fontSize: 16 }}></i>
@@ -1808,16 +2013,60 @@ export default function ArchivePage() {
                               {canManageAdmins && (
                                 <button
                                   onClick={() => { setItemToRestore(admin); setModalType('admin'); setShowRestoreModal(true); }}
-                                  style={{ background: '#28a745', color: 'white', border: 'none', borderRadius: 8, padding: '8px 16px', fontSize: 14, cursor: 'pointer', fontWeight: 500 }}
+                                  style={{ 
+                                    background: 'rgba(79, 163, 126, 0.1)', 
+                                    color: '#4fa37e', 
+                                    border: '1px solid rgba(79, 163, 126, 0.2)', 
+                                    borderRadius: 12, 
+                                    padding: '8px 16px', 
+                                    fontSize: 14, 
+                                    cursor: 'pointer', 
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 6,
+                                    transition: 'all 0.2s ease'
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                                  }}
                                 >
+                                  <i className="ri-refresh-line" style={{ fontSize: 14 }}></i>
                                   Restore
                                 </button>
                               )}
                               {canManageAdmins && (
                                 <button
                                   onClick={() => { setItemToDeleteForever(admin); setModalType('admin'); setShowDeleteForeverModal(true); }}
-                                  style={{ background: '#dc3545', color: 'white', border: 'none', borderRadius: 8, padding: '8px 16px', fontSize: 14, cursor: 'pointer', fontWeight: 500 }}
+                                  style={{ 
+                                    background: 'rgba(220, 53, 69, 0.1)', 
+                                    color: '#dc3545', 
+                                    border: '1px solid rgba(220, 53, 69, 0.2)', 
+                                    borderRadius: 12, 
+                                    padding: '8px 16px', 
+                                    fontSize: 14, 
+                                    cursor: 'pointer', 
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 6,
+                                    transition: 'all 0.2s ease'
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                                    e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                                    e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
+                                  }}
                                 >
+                                  <i className="ri-delete-bin-6-line" style={{ fontSize: 14 }}></i>
                                   Delete
                                 </button>
                               )}
@@ -1844,16 +2093,29 @@ export default function ArchivePage() {
                                 <button
                                   onClick={() => handleBulkRestoreClick('quizzes')}
                                   style={{
-                                    background: '#28a745',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: 8,
+                                    background: 'rgba(79, 163, 126, 0.1)',
+                                    color: '#4fa37e',
+                                    border: '1px solid rgba(79, 163, 126, 0.2)',
+                                    borderRadius: 12,
                                     padding: '8px 16px',
                                     fontSize: 14,
                                     cursor: 'pointer',
-                                    fontWeight: 500
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 6,
+                                    transition: 'all 0.2s ease'
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
                                   }}
                                 >
+                                  <i className="ri-refresh-line" style={{ fontSize: 14 }}></i>
                                   {selectedQuizzes.length === deletedQuizzes.length ? 'Restore All' : `Restore Selected (${selectedQuizzes.length})`}
                                 </button>
                           )}
@@ -1861,16 +2123,29 @@ export default function ArchivePage() {
                                 <button
                                   onClick={() => handleBulkDeleteClick('quizzes')}
                                   style={{
-                                    background: '#dc3545',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: 8,
+                                    background: 'rgba(220, 53, 69, 0.1)',
+                                    color: '#dc3545',
+                                    border: '1px solid rgba(220, 53, 69, 0.2)',
+                                    borderRadius: 12,
                                     padding: '8px 16px',
                                     fontSize: 14,
                                     cursor: 'pointer',
-                                    fontWeight: 500
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 6,
+                                    transition: 'all 0.2s ease'
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                                    e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                                    e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
                                   }}
                                 >
+                                  <i className="ri-delete-bin-6-line" style={{ fontSize: 14 }}></i>
                                   {selectedQuizzes.length === deletedQuizzes.length ? 'Delete All' : `Delete Selected (${selectedQuizzes.length})`}
                                 </button>
                               )}
@@ -1880,15 +2155,44 @@ export default function ArchivePage() {
                             onClick={toggleAllQuizzes}
                             style={{
                               background: selectedQuizzes.length === deletedQuizzes.length 
-                                ? 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)'
-                                : 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)',
-                              color: 'white', border: 'none', borderRadius: 8, padding: '8px 16px',
-                              fontSize: 14, fontWeight: 600, cursor: 'pointer',
+                                ? 'rgba(220, 53, 69, 0.1)'
+                                : 'rgba(79, 163, 126, 0.1)',
+                              color: selectedQuizzes.length === deletedQuizzes.length 
+                                ? '#dc3545'
+                                : '#4fa37e',
+                              border: selectedQuizzes.length === deletedQuizzes.length 
+                                ? '1px solid rgba(220, 53, 69, 0.2)'
+                                : '1px solid rgba(79, 163, 126, 0.2)',
+                              borderRadius: 12, 
+                              padding: '12px 20px',
+                              fontSize: 14, 
+                              fontWeight: 600, 
+                              cursor: 'pointer',
                               transition: 'all 0.2s ease',
-                              display: 'flex', alignItems: 'center', gap: 8,
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              gap: 8,
                               width: '150px',
                               justifyContent: 'center',
                               flexShrink: 0
+                            }}
+                            onMouseEnter={(e) => {
+                              if (selectedQuizzes.length === deletedQuizzes.length) {
+                                e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                                e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                              } else {
+                                e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                                e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (selectedQuizzes.length === deletedQuizzes.length) {
+                                e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                                e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
+                              } else {
+                                e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                                e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                              }
                             }}
                           >
                             <i className={selectedQuizzes.length === deletedQuizzes.length ? 'ri-checkbox-line' : 'ri-checkbox-blank-line'} style={{ fontSize: 16 }}></i>
@@ -1920,16 +2224,21 @@ export default function ArchivePage() {
                               key={quiz.id}
                               style={{
                                 background: selectedQuizzes.includes(quiz.id) 
-                                  ? 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)'
+                                  ? 'rgba(79, 163, 126, 0.08)'
                                   : 'white',
-                                color: selectedQuizzes.includes(quiz.id) ? 'white' : '#2c3e50',
+                                color: '#2c3e50',
                                 borderRadius: 12,
                                 padding: 20,
-                                border: '1px solid #e9ecef',
+                                border: selectedQuizzes.includes(quiz.id) 
+                                  ? '2px solid rgba(79, 163, 126, 0.3)'
+                                  : '1px solid #e9ecef',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: 16,
-                                transition: 'all 0.3s ease'
+                                transition: 'all 0.3s ease',
+                                boxShadow: selectedQuizzes.includes(quiz.id) 
+                                  ? '0 4px 12px rgba(79, 163, 126, 0.15)'
+                                  : '0 2px 4px rgba(0,0,0,0.05)'
                               }}
                             >
                               <input
@@ -1982,17 +2291,35 @@ export default function ArchivePage() {
                                     style={{
                                         background: selectedQuizzes.includes(quiz.id) 
                                           ? 'rgba(255,255,255,0.2)'
-                                          : '#28a745',
-                                      color: 'white',
+                                          : 'rgba(79, 163, 126, 0.1)',
+                                      color: selectedQuizzes.includes(quiz.id) 
+                                        ? 'white'
+                                        : '#4fa37e',
                                         border: selectedQuizzes.includes(quiz.id) 
                                           ? '1px solid rgba(255,255,255,0.3)'
-                                          : 'none',
-                                      borderRadius: 8,
+                                          : '1px solid rgba(79, 163, 126, 0.2)',
+                                      borderRadius: 12,
                                       padding: '8px 16px',
                                       fontSize: 14,
                                       cursor: restoreLoading[quiz.id] ? 'not-allowed' : 'pointer',
-                                      fontWeight: 500,
-                                      opacity: restoreLoading[quiz.id] ? 0.6 : 1
+                                      fontWeight: 600,
+                                      opacity: restoreLoading[quiz.id] ? 0.6 : 1,
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      gap: 6,
+                                      transition: 'all 0.2s ease'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      if (!restoreLoading[quiz.id] && !selectedQuizzes.includes(quiz.id)) {
+                                        e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                                        e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                                      }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      if (!restoreLoading[quiz.id] && !selectedQuizzes.includes(quiz.id)) {
+                                        e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                                        e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                                      }
                                     }}
                                   >
                                     {restoreLoading[quiz.id] ? (
@@ -2004,7 +2331,10 @@ export default function ArchivePage() {
                                         Restoring...
                                       </>
                                     ) : (
-                                      'Restore'
+                                      <>
+                                        <i className="ri-refresh-line" style={{ fontSize: 14 }}></i>
+                                        Restore
+                                      </>
                                     )}
                                   </button>
                                 )}
@@ -2015,17 +2345,35 @@ export default function ArchivePage() {
                                     style={{
                                         background: selectedQuizzes.includes(quiz.id) 
                                           ? 'rgba(255,255,255,0.2)'
-                                          : '#dc3545',
-                                      color: 'white',
+                                          : 'rgba(220, 53, 69, 0.1)',
+                                      color: selectedQuizzes.includes(quiz.id) 
+                                        ? 'white'
+                                        : '#dc3545',
                                         border: selectedQuizzes.includes(quiz.id) 
                                           ? '1px solid rgba(255,255,255,0.3)'
-                                          : 'none',
-                                      borderRadius: 8,
+                                          : '1px solid rgba(220, 53, 69, 0.2)',
+                                      borderRadius: 12,
                                       padding: '8px 16px',
                                       fontSize: 14,
                                       cursor: deleteLoading[quiz.id] ? 'not-allowed' : 'pointer',
-                                      fontWeight: 500,
-                                      opacity: deleteLoading[quiz.id] ? 0.6 : 1
+                                      fontWeight: 600,
+                                      opacity: deleteLoading[quiz.id] ? 0.6 : 1,
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      gap: 6,
+                                      transition: 'all 0.2s ease'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      if (!deleteLoading[quiz.id] && !selectedQuizzes.includes(quiz.id)) {
+                                        e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                                        e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                                      }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      if (!deleteLoading[quiz.id] && !selectedQuizzes.includes(quiz.id)) {
+                                        e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                                        e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
+                                      }
                                     }}
                                   >
                                     {deleteLoading[quiz.id] ? (
@@ -2037,7 +2385,10 @@ export default function ArchivePage() {
                                         Deleting...
                                       </>
                                     ) : (
-                                      'Delete'
+                                      <>
+                                        <i className="ri-delete-bin-6-line" style={{ fontSize: 14 }}></i>
+                                        Delete
+                                      </>
                                     )}
                                   </button>
                                 )}
@@ -2058,6 +2409,121 @@ export default function ArchivePage() {
                       <h2 style={{ margin: 0, fontSize: 24, color: '#2c3e50' }}>
                         Deleted Sections
                       </h2>
+                      {deletedSections.length > 0 && (
+                        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                          {selectedSections.length > 0 && (
+                            <>
+                              {canRestoreItems && (
+                                <button
+                                  onClick={() => handleBulkRestoreClick('sections')}
+                                  style={{
+                                    background: 'rgba(79, 163, 126, 0.1)',
+                                    color: '#4fa37e',
+                                    border: '1px solid rgba(79, 163, 126, 0.2)',
+                                    borderRadius: 12,
+                                    padding: '8px 16px',
+                                    fontSize: 14,
+                                    cursor: 'pointer',
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 6,
+                                    transition: 'all 0.2s ease'
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                                  }}
+                                >
+                                  <i className="ri-refresh-line" style={{ fontSize: 14 }}></i>
+                                  {selectedSections.length === deletedSections.length ? 'Restore All' : `Restore Selected (${selectedSections.length})`}
+                                </button>
+                              )}
+                              {canPermanentlyDelete && (
+                                <button
+                                  onClick={() => handleBulkDeleteClick('sections')}
+                                  style={{
+                                    background: 'rgba(220, 53, 69, 0.1)',
+                                    color: '#dc3545',
+                                    border: '1px solid rgba(220, 53, 69, 0.2)',
+                                    borderRadius: 12,
+                                    padding: '8px 16px',
+                                    fontSize: 14,
+                                    cursor: 'pointer',
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 6,
+                                    transition: 'all 0.2s ease'
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                                    e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                                    e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
+                                  }}
+                                >
+                                  <i className="ri-delete-bin-6-line" style={{ fontSize: 14 }}></i>
+                                  {selectedSections.length === deletedSections.length ? 'Delete All' : `Delete Selected (${selectedSections.length})`}
+                                </button>
+                              )}
+                            </>
+                          )}
+                          <button
+                            onClick={toggleAllSections}
+                            style={{
+                              background: selectedSections.length === deletedSections.length 
+                                ? 'rgba(220, 53, 69, 0.1)'
+                                : 'rgba(79, 163, 126, 0.1)',
+                              color: selectedSections.length === deletedSections.length 
+                                ? '#dc3545'
+                                : '#4fa37e',
+                              border: selectedSections.length === deletedSections.length 
+                                ? '1px solid rgba(220, 53, 69, 0.2)'
+                                : '1px solid rgba(79, 163, 126, 0.2)',
+                              borderRadius: 12, 
+                              padding: '12px 20px',
+                              fontSize: 14, 
+                              fontWeight: 600, 
+                              cursor: 'pointer',
+                              transition: 'all 0.2s ease',
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              gap: 8,
+                              width: '150px',
+                              justifyContent: 'center',
+                              flexShrink: 0
+                            }}
+                            onMouseEnter={(e) => {
+                              if (selectedSections.length === deletedSections.length) {
+                                e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                                e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                              } else {
+                                e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                                e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (selectedSections.length === deletedSections.length) {
+                                e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                                e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
+                              } else {
+                                e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                                e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                              }
+                            }}
+                          >
+                            <i className={selectedSections.length === deletedSections.length ? 'ri-checkbox-line' : 'ri-checkbox-blank-line'} style={{ fontSize: 16 }}></i>
+                            {selectedSections.length === deletedSections.length ? 'Deselect All' : 'Select All'}
+                          </button>
+                        </div>
+                      )}
                     </div>
                     
                     {deletedSections.length === 0 ? (
@@ -2075,16 +2541,40 @@ export default function ArchivePage() {
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                         {deletedSections.map((section) => (
                           <div key={section.id} style={{
-                            background: 'white',
+                            background: selectedSections.includes(section.id) 
+                              ? 'rgba(79, 163, 126, 0.08)'
+                              : 'white',
+                            color: '#2c3e50',
                             borderRadius: 12,
                             padding: 20,
-                            border: '1px solid #e9ecef',
+                            border: selectedSections.includes(section.id) 
+                              ? '2px solid rgba(79, 163, 126, 0.3)'
+                              : '1px solid #e9ecef',
                             display: 'flex',
                             alignItems: 'center',
                             gap: 16,
                             transition: 'all 0.2s ease',
-                            boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                            boxShadow: selectedSections.includes(section.id) 
+                              ? '0 4px 12px rgba(79, 163, 126, 0.15)'
+                              : '0 2px 4px rgba(0,0,0,0.05)'
                           }}>
+                            <input
+                              type="checkbox"
+                              checked={selectedSections.includes(section.id)}
+                              onChange={() => {
+                                if (selectedSections.includes(section.id)) {
+                                  setSelectedSections(prev => prev.filter(id => id !== section.id));
+                                } else {
+                                  setSelectedSections(prev => [...prev, section.id]);
+                                }
+                              }}
+                              style={{
+                                width: 20,
+                                height: 20,
+                                cursor: 'pointer',
+                                accentColor: '#4fa37e'
+                              }}
+                            />
                             <div style={{
                               width: 48,
                               height: 48,
@@ -2145,19 +2635,32 @@ export default function ArchivePage() {
                                 }}
                                 disabled={sectionRestoreLoading}
                                 style={{
-                                  background: '#28a745',
-                                  color: 'white',
-                                  border: 'none',
-                                  borderRadius: 8,
+                                  background: 'rgba(79, 163, 126, 0.1)',
+                                  color: '#4fa37e',
+                                  border: '1px solid rgba(79, 163, 126, 0.2)',
+                                  borderRadius: 12,
                                   padding: '8px 16px',
                                   fontSize: 14,
                                   cursor: sectionRestoreLoading ? 'not-allowed' : 'pointer',
-                                  fontWeight: 500,
+                                  fontWeight: 600,
                                   transition: 'all 0.2s ease',
-                                  opacity: sectionRestoreLoading ? 0.6 : 1
+                                  opacity: sectionRestoreLoading ? 0.6 : 1,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: 6
                                 }}
-                                onMouseOver={(e) => !sectionRestoreLoading && (e.target.style.background = '#218838')}
-                                onMouseOut={(e) => !sectionRestoreLoading && (e.target.style.background = '#28a745')}
+                                onMouseEnter={(e) => {
+                                  if (!sectionRestoreLoading) {
+                                    e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                                  }
+                                }}
+                                onMouseLeave={(e) => {
+                                  if (!sectionRestoreLoading) {
+                                    e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                                  }
+                                }}
                               >
                                 {sectionRestoreLoading ? (
                                   <>
@@ -2169,7 +2672,7 @@ export default function ArchivePage() {
                                   </>
                                 ) : (
                                   <>
-                                    <i className="ri-refresh-line" style={{ marginRight: 4 }}></i>
+                                    <i className="ri-refresh-line" style={{ fontSize: 14 }}></i>
                                     Restore
                                   </>
                                 )}
@@ -2181,19 +2684,32 @@ export default function ArchivePage() {
                                 }}
                                 disabled={sectionDeleteLoading[section.id]}
                                 style={{
-                                  background: '#dc3545',
-                                  color: 'white',
-                                  border: 'none',
-                                  borderRadius: 8,
+                                  background: 'rgba(220, 53, 69, 0.1)',
+                                  color: '#dc3545',
+                                  border: '1px solid rgba(220, 53, 69, 0.2)',
+                                  borderRadius: 12,
                                   padding: '8px 16px',
                                   fontSize: 14,
                                   cursor: sectionDeleteLoading[section.id] ? 'not-allowed' : 'pointer',
-                                  fontWeight: 500,
+                                  fontWeight: 600,
                                   transition: 'all 0.2s ease',
-                                  opacity: sectionDeleteLoading[section.id] ? 0.6 : 1
+                                  opacity: sectionDeleteLoading[section.id] ? 0.6 : 1,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: 6
                                 }}
-                                onMouseOver={(e) => !sectionDeleteLoading[section.id] && (e.target.style.background = '#c82333')}
-                                onMouseOut={(e) => !sectionDeleteLoading[section.id] && (e.target.style.background = '#dc3545')}
+                                onMouseEnter={(e) => {
+                                  if (!sectionDeleteLoading[section.id]) {
+                                    e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                                    e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                                  }
+                                }}
+                                onMouseLeave={(e) => {
+                                  if (!sectionDeleteLoading[section.id]) {
+                                    e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                                    e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
+                                  }
+                                }}
                               >
                                 {sectionDeleteLoading[section.id] ? (
                                   <>
@@ -2205,7 +2721,7 @@ export default function ArchivePage() {
                                   </>
                                 ) : (
                                   <>
-                                    <i className="ri-delete-bin-line" style={{ marginRight: 4 }}></i>
+                                    <i className="ri-delete-bin-6-line" style={{ fontSize: 14 }}></i>
                                     Delete
                                   </>
                                 )}

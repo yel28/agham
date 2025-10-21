@@ -10,6 +10,88 @@ export default function AboutPage() {
   const drawerRef = useRef(null);
   return (
     <div className={styles.page}>
+
+      {/* Floating Science Elements */}
+      <div className={styles.floatingElements}>
+        <div className={styles.floatingElement}>🧪</div>
+        <div className={styles.floatingElement}>🔬</div>
+        <div className={styles.floatingElement}>⚗️</div>
+        <div className={styles.floatingElement}>🧬</div>
+        <div className={styles.floatingElement}>⚛️</div>
+        <div className={styles.floatingElement}>🔭</div>
+        <div className={styles.floatingElement}>💡</div>
+        <div className={styles.floatingElement}>⭐</div>
+        <div className={styles.floatingElement}>🌙</div>
+        <div className={styles.floatingElement}>☀️</div>
+        <div className={styles.floatingElement}>🌍</div>
+        <div className={styles.floatingElement}>🔥</div>
+        <div className={styles.floatingElement}>💧</div>
+        <div className={styles.floatingElement}>🌪️</div>
+        <div className={styles.floatingElement}>⚡</div>
+        <div className={styles.floatingElement}>🌊</div>
+        <div className={styles.floatingElement}>❄️</div>
+        <div className={styles.floatingElement}>🌈</div>
+        <div className={styles.floatingElement}>🌋</div>
+        <div className={styles.floatingElement}>🌌</div>
+        <div className={styles.floatingElement}>🛸</div>
+        <div className={styles.floatingElement}>🍌</div>
+        <div className={styles.floatingElement}>⚙️</div>
+        <div className={styles.floatingElement}>🧲</div>
+        <div className={styles.floatingElement}>🔋</div>
+        <div className={styles.floatingElement}>📡</div>
+        <div className={styles.floatingElement}>🎯</div>
+        <div className={styles.floatingElement}>🔮</div>
+        <div className={styles.floatingElement}>🌠</div>
+        <div className={styles.floatingElement}>🪐</div>
+        <div className={styles.floatingElement}>🌱</div>
+        <div className={styles.floatingElement}>🦠</div>
+        <div className={styles.floatingElement}>🧪</div>
+        <div className={styles.floatingElement}>🔬</div>
+        <div className={styles.floatingElement}>⚗️</div>
+        <div className={styles.floatingElement}>🧬</div>
+        <div className={styles.floatingElement}>⚛️</div>
+        <div className={styles.floatingElement}>🔭</div>
+        <div className={styles.floatingElement}>💡</div>
+        <div className={styles.floatingElement}>🌿</div>
+        <div className={styles.floatingElement}>🦋</div>
+        <div className={styles.floatingElement}>🐛</div>
+        <div className={styles.floatingElement}>🦎</div>
+        <div className={styles.floatingElement}>🦜</div>
+        <div className={styles.floatingElement}>🦅</div>
+        <div className={styles.floatingElement}>🦉</div>
+        <div className={styles.floatingElement}>🦇</div>
+        <div className={styles.floatingElement}>🦆</div>
+        <div className={styles.floatingElement}>🌵</div>
+        <div className={styles.floatingElement}>🌾</div>
+        <div className={styles.floatingElement}>🌰</div>
+        <div className={styles.floatingElement}>🍄</div>
+        <div className={styles.floatingElement}>🌲</div>
+        <div className={styles.floatingElement}>🌳</div>
+        <div className={styles.floatingElement}>🌴</div>
+        <div className={styles.floatingElement}>🌵</div>
+        <div className={styles.floatingElement}>🌶️</div>
+        <div className={styles.floatingElement}>🌽</div>
+        <div className={styles.floatingElement}>🍀</div>
+        <div className={styles.floatingElement}>🍁</div>
+        <div className={styles.floatingElement}>🍂</div>
+        <div className={styles.floatingElement}>🍃</div>
+        <div className={styles.floatingElement}>🦗</div>
+        <div className={styles.floatingElement}>🕷️</div>
+        <div className={styles.floatingElement}>🕸️</div>
+        <div className={styles.floatingElement}>🦂</div>
+        <div className={styles.floatingElement}>🐝</div>
+        <div className={styles.floatingElement}>🐞</div>
+        <div className={styles.floatingElement}>🐜</div>
+        <div className={styles.floatingElement}>🦟</div>
+        <div className={styles.floatingElement}>🦠</div>
+        <div className={styles.floatingElement}>🧫</div>
+        <div className={styles.floatingElement}>🧪</div>
+        <div className={styles.floatingElement}>🔬</div>
+        <div className={styles.floatingElement}>⚗️</div>
+        <div className={styles.floatingElement}>🧬</div>
+        <div className={styles.floatingElement}>⚛️</div>
+      </div>
+
       <nav className={`${styles.navbar} md:flex md:items-center md:justify-between`}>
         <Link href="/homepage" className={styles.logo}>
           <Image src="/logo2.png" alt="AGHAM Logo" width={40} height={40} />
@@ -51,11 +133,9 @@ export default function AboutPage() {
       )}
 
       <div className={styles.mainSection}>
-        <div className={styles.left}>
-          <h1>What is AGHAM?</h1>
-          <div className={styles.aboutBox}>
-            <img src="/info.png" alt="About AGHAM" className={styles.aboutImage} />
-          </div>
+        <div className={styles.hero}>
+            <h1 className={styles.heroTitle}>What is AGHAM?</h1>
+            <img src="/info1.png" alt="About AGHAM" className={styles.aboutImage} />
         </div>
       </div>
     </div>

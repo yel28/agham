@@ -606,7 +606,7 @@ export default function QuizzesPage() {
       await notifyQuizDeleted(teacherEmail, quizTitle);
       
       // Step 6: Show success notification
-      setSuccessMessage('Quiz deleted successfully!');
+      setSuccessMessage('Quiz archived successfully!');
       setShowSuccessNotification(true);
       setTimeout(() => {
         setShowSuccessNotification(false);
@@ -1063,31 +1063,31 @@ export default function QuizzesPage() {
               <button
                 onClick={openCreateQuizModal}
                 style={{
-                  background: 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)',
-                  color: 'white',
-                  border: 'none',
+                  background: '#e8f5e8',
+                  color: '#2e7d32',
+                  border: '1px solid #c8e6c9',
                   borderRadius: 12,
                   padding: '14px 28px',
                   fontSize: 16,
                   fontWeight: 600,
                   cursor: 'pointer',
-                  boxShadow: '0 4px 15px rgba(79, 163, 126, 0.3)',
-                  transition: 'all 0.2s ease',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                  transition: 'all 0.3s ease',
                   display: 'flex',
                   alignItems: 'center',
                   gap: 8,
                   height: 'fit-content'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.transform = 'translateY(-2px)';
-                  e.target.style.boxShadow = '0 6px 20px rgba(79, 163, 126, 0.4)';
+                  e.target.style.background = '#d4edda';
+                  e.target.style.borderColor = '#a5d6a7';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = '0 4px 15px rgba(79, 163, 126, 0.3)';
+                  e.target.style.background = '#e8f5e8';
+                  e.target.style.borderColor = '#c8e6c9';
                 }}
               >
-                <span style={{ fontSize: 20 }}>+</span>
+                <span style={{ fontSize: 20, color: '#2e7d32' }}>+</span>
                 Create New Quiz
               </button>
             )}
@@ -1244,14 +1244,14 @@ export default function QuizzesPage() {
                     }}>{quiz.title}</span>
                     {(canManageQuizzes || canLockUnlockQuizzes || canAssignQuizzes) && (
                       <div className="quiz-buttons-container">
-                        {/* Delete - Only for users who can manage quizzes */}
+                        {/* Archive - Only for users who can manage quizzes */}
                         {canManageQuizzes && (
                           <div
                             className="quiz-button quiz-delete-button"
                             onClick={() => deleteCustomQuiz(quiz.id)}
-                            title="Delete Quiz"
+                            title="Archive Quiz"
                           >
-                            <i className="ri-delete-bin-6-line"></i>
+                            <i className="ri-archive-line"></i>
                           </div>
                         )}
                         
@@ -1293,51 +1293,70 @@ export default function QuizzesPage() {
       {/* Quiz Editing Modal */}
       {modalOpen && (
         <div style={{
-          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.15)', zIndex: 1000,
+          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', 
+          background: 'rgba(0,0,0,0.15)', zIndex: 1000,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
           <div style={{ 
             background: '#fff', 
-            borderRadius: 18, 
+            borderRadius: 24, 
             padding: 32, 
             minWidth: 1000, 
             maxWidth: '90vw', 
             maxHeight: '90vh',
             position: 'relative', 
-            boxShadow: '0 4px 24px rgba(0,0,0,0.12)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
             overflow: 'hidden',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            border: '1px solid rgba(255,255,255,0.2)'
           }}>
             <button
               style={{ 
                 position: 'absolute', 
-                top: 18, 
-                right: 18, 
-                background: 'none', 
-                border: 'none', 
-                fontSize: 28, 
+                top: 20, 
+                right: 20, 
+                background: 'rgba(248, 249, 250, 0.8)', 
+                border: '1px solid rgba(233, 236, 239, 0.8)', 
+                borderRadius: 12,
+                width: 40,
+                height: 40,
+                fontSize: 20, 
                 cursor: 'pointer',
-                zIndex: 1001
+                zIndex: 1001,
+                color: '#6c757d',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s ease'
               }}
               onClick={closeModal}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(233, 236, 239, 0.9)';
+                e.target.style.borderColor = 'rgba(233, 236, 239, 1)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(248, 249, 250, 0.8)';
+                e.target.style.borderColor = 'rgba(233, 236, 239, 0.8)';
+              }}
               aria-label="Close"
             >
               &times;
             </button>
             <div style={{
-              display: 'flex', alignItems: 'center', gap: 12,
-              paddingBottom: 14, marginBottom: 16, borderBottom: '1px solid #e9ecef'
+              display: 'flex', alignItems: 'center', gap: 16,
+              paddingBottom: 20, marginBottom: 20, 
+              borderBottom: '1px solid rgba(233, 236, 239, 0.6)'
             }}>
               <div style={{
-                width: 40, height: 40, borderRadius: 10,
+                width: 48, height: 48, borderRadius: 16,
                 background: 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 3px 10px rgba(79,163,126,0.25)'
+                boxShadow: '0 4px 16px rgba(79,163,126,0.25)'
               }}>
-                <i className="ri-edit-2-line" style={{ color: '#fff', fontSize: 20 }}></i>
+                <i className="ri-edit-2-line" style={{ color: '#fff', fontSize: 22 }}></i>
               </div>
-              <div style={{ fontWeight: 700, fontSize: 22, color: '#2c3e50' }}>
+              <div style={{ fontWeight: 700, fontSize: 24, color: '#2c3e50' }}>
                 {selectedQuizType?.title || selectedQuiz?.title}
               </div>
             </div>
@@ -1348,16 +1367,57 @@ export default function QuizzesPage() {
               marginBottom: '16px'
             }}>
               {questions.map((q, idx) => (
-                <div key={idx} style={{ marginBottom: 24, background: '#ffffff', borderRadius: 12, padding: 18, border: '1px solid #e9ecef', boxShadow: '0 1px 6px rgba(0,0,0,0.05)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-                    <span style={{ fontWeight: 700, fontSize: 16, color: '#2c3e50' }}>Question {idx + 1}</span>
-                    <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
+                <div key={idx} style={{ 
+                  marginBottom: 24, 
+                  background: 'rgba(248, 249, 250, 0.6)', 
+                  borderRadius: 20, 
+                  padding: 24, 
+                  border: '1px solid rgba(233, 236, 239, 0.6)', 
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
+                  {/* Subtle shine effect */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '60%',
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%)',
+                    pointerEvents: 'none'
+                  }}></div>
+                  
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, position: 'relative', zIndex: 1 }}>
+                    <span style={{ fontWeight: 700, fontSize: 18, color: '#2c3e50' }}>Question {idx + 1}</span>
+                    <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
                       <button 
-                        style={{ background: 'rgba(220,53,69,0.08)', border: '1px solid rgba(220,53,69,0.25)', color: '#c82333', borderRadius: 8, padding: '6px 10px', cursor: 'pointer', fontWeight: 600 }} 
+                        style={{ 
+                          background: 'rgba(220, 53, 69, 0.1)', 
+                          border: '1px solid rgba(220, 53, 69, 0.2)', 
+                          color: '#dc3545', 
+                          borderRadius: 12, 
+                          padding: '8px 12px', 
+                          cursor: 'pointer', 
+                          fontWeight: 600,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 6,
+                          transition: 'all 0.2s ease'
+                        }} 
                         title="Delete" 
                         onClick={() => deleteQuestion(idx)}
+                        onMouseEnter={(e) => {
+                          e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                          e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                          e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
+                        }}
                       >
                         <i className="ri-delete-bin-6-line" style={{ fontSize: 16 }}></i>
+                        Delete
                       </button>
                     </div>
                   </div>
@@ -1370,10 +1430,31 @@ export default function QuizzesPage() {
                       updated[idx].text = e.target.value;
                       setQuestions(updated);
                     }}
-                    style={{ width: '100%', background: '#fff8e1', border: '2px solid #ffe3a3', borderRadius: 10, padding: 12, fontWeight: 500, marginBottom: 6, fontSize: 16 }}
+                    style={{ 
+                      width: '100%', 
+                      background: 'rgba(255, 255, 255, 0.8)', 
+                      border: '2px solid rgba(233, 236, 239, 0.8)', 
+                      borderRadius: 16, 
+                      padding: 16, 
+                      fontWeight: 500, 
+                      marginBottom: 16, 
+                      fontSize: 16,
+                      color: '#2c3e50',
+                      transition: 'all 0.2s ease',
+                      position: 'relative',
+                      zIndex: 1
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                      e.target.style.background = 'rgba(255, 255, 255, 1)';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = 'rgba(233, 236, 239, 0.8)';
+                      e.target.style.background = 'rgba(255, 255, 255, 0.8)';
+                    }}
                   />
                   
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, position: 'relative', zIndex: 1 }}>
                     {q.choices.map((choice, cidx) => (
                       <div key={cidx} style={{ textAlign: 'center' }}>
                         <input
@@ -1387,15 +1468,35 @@ export default function QuizzesPage() {
                           }}
                           style={{
                             width: '100%',
-                            background: q.correct === cidx ? '#4fa37e' : '#ffffff',
-                            color: q.correct === cidx ? '#fff' : '#2c3e50',
-                            border: q.correct === cidx ? '2px solid #4fa37e' : '2px solid #e9ecef',
-                            borderRadius: 10,
-                            padding: '12px 10px',
+                            background: q.correct === cidx 
+                              ? 'rgba(79, 163, 126, 0.15)' 
+                              : 'rgba(255, 255, 255, 0.8)',
+                            color: q.correct === cidx ? '#2c3e50' : '#2c3e50',
+                            border: q.correct === cidx 
+                              ? '2px solid rgba(79, 163, 126, 0.4)' 
+                              : '2px solid rgba(233, 236, 239, 0.8)',
+                            borderRadius: 16,
+                            padding: '14px 12px',
                             fontWeight: 600,
                             fontSize: 15,
-                            marginBottom: 6,
+                            marginBottom: 8,
                             textAlign: 'center',
+                            transition: 'all 0.2s ease',
+                            boxShadow: q.correct === cidx 
+                              ? '0 2px 8px rgba(79, 163, 126, 0.2)' 
+                              : '0 1px 4px rgba(0,0,0,0.05)'
+                          }}
+                          onFocus={(e) => {
+                            if (q.correct !== cidx) {
+                              e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                              e.target.style.background = 'rgba(255, 255, 255, 1)';
+                            }
+                          }}
+                          onBlur={(e) => {
+                            if (q.correct !== cidx) {
+                              e.target.style.borderColor = 'rgba(233, 236, 239, 0.8)';
+                              e.target.style.background = 'rgba(255, 255, 255, 0.8)';
+                            }
                           }}
                         />
                         <button
@@ -1406,18 +1507,47 @@ export default function QuizzesPage() {
                             setQuestions(updated);
                           }}
                           style={{
-                            marginTop: 2,
-                            background: q.correct === cidx ? '#4fa37e' : '#fff',
-                            color: q.correct === cidx ? '#fff' : '#3d8b6f',
-                            border: `2px solid #4fa37e`,
-                            borderRadius: 999,
-                            padding: '6px 10px',
-                            fontWeight: 700,
-                            fontSize: 12,
+                            background: q.correct === cidx 
+                              ? 'rgba(79, 163, 126, 0.1)' 
+                              : 'rgba(255, 255, 255, 0.8)',
+                            color: q.correct === cidx ? '#4fa37e' : '#6c757d',
+                            border: q.correct === cidx 
+                              ? '1px solid rgba(79, 163, 126, 0.3)' 
+                              : '1px solid rgba(233, 236, 239, 0.8)',
+                            borderRadius: 12,
+                            padding: '8px 12px',
+                            fontWeight: 600,
+                            fontSize: 13,
                             cursor: 'pointer',
                             width: '100%',
+                            transition: 'all 0.2s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: 6
+                          }}
+                          onMouseEnter={(e) => {
+                            if (q.correct === cidx) {
+                              e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                              e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                            } else {
+                              e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                              e.target.style.borderColor = 'rgba(79, 163, 126, 0.3)';
+                              e.target.style.color = '#4fa37e';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (q.correct === cidx) {
+                              e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                              e.target.style.borderColor = 'rgba(79, 163, 126, 0.3)';
+                            } else {
+                              e.target.style.background = 'rgba(255, 255, 255, 0.8)';
+                              e.target.style.borderColor = 'rgba(233, 236, 239, 0.8)';
+                              e.target.style.color = '#6c757d';
+                            }
                           }}
                         >
+                          <i className={q.correct === cidx ? 'ri-check-line' : 'ri-checkbox-blank-line'} style={{ fontSize: 14 }}></i>
                           {q.correct === cidx ? 'Correct' : 'Mark Correct'}
                         </button>
                       </div>
@@ -1427,20 +1557,72 @@ export default function QuizzesPage() {
               ))}
             </div>
             <div style={{ 
-              borderTop: '1px solid #e9ecef', 
-              paddingTop: '16px',
+              borderTop: '1px solid rgba(233, 236, 239, 0.6)', 
+              paddingTop: '20px',
               flexShrink: 0
             }}>
               <button
-                style={{ background: '#e9f6ef', color: '#3d8b6f', border: '2px solid #cfeadc', borderRadius: 10, padding: '12px 22px', fontWeight: 700, fontSize: 16, marginTop: 6, cursor: 'pointer', width: '100%' }}
+                style={{ 
+                  background: 'rgba(79, 163, 126, 0.1)', 
+                  color: '#4fa37e', 
+                  border: '1px solid rgba(79, 163, 126, 0.2)', 
+                  borderRadius: 16, 
+                  padding: '14px 24px', 
+                  fontWeight: 600, 
+                  fontSize: 16, 
+                  marginBottom: 12, 
+                  cursor: 'pointer', 
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
+                  transition: 'all 0.2s ease'
+                }}
                 onClick={addQuestion}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                  e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                  e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                }}
               >
-                + Add Question
+                <i className="ri-add-line" style={{ fontSize: 18 }}></i>
+                Add Question
               </button>
               <button
-                style={{ background: 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)', color: '#fff', border: 'none', borderRadius: 10, padding: '12px 22px', fontWeight: 700, fontSize: 16, marginTop: 8, cursor: 'pointer', width: '100%' }}
+                style={{ 
+                  background: 'rgba(79, 163, 126, 0.1)', 
+                  color: '#4fa37e', 
+                  border: '1px solid rgba(79, 163, 126, 0.2)', 
+                  borderRadius: 16, 
+                  padding: '14px 24px', 
+                  fontWeight: 600, 
+                  fontSize: 16, 
+                  cursor: 'pointer', 
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 8px rgba(79, 163, 126, 0.15)'
+                }}
                 onClick={handleSaveQuiz}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                  e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                  e.target.style.boxShadow = '0 4px 12px rgba(79, 163, 126, 0.25)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                  e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                  e.target.style.boxShadow = '0 2px 8px rgba(79, 163, 126, 0.15)';
+                }}
               >
+                <i className="ri-save-line" style={{ fontSize: 18 }}></i>
                 Save Quiz
               </button>
               {saveMessage && (
@@ -1470,54 +1652,98 @@ export default function QuizzesPage() {
         >
           <div style={{ 
             background: '#fff', 
-            borderRadius: 18, 
+            borderRadius: 24, 
             padding: 32, 
             minWidth: 1000, 
             maxWidth: '90vw', 
             maxHeight: '90vh',
             position: 'relative', 
-            boxShadow: '0 4px 24px rgba(0,0,0,0.12)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
             overflow: 'hidden',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            border: '1px solid rgba(255,255,255,0.2)',
+            backdropFilter: 'blur(10px)'
           }}>
             <button
               style={{ 
                 position: 'absolute', 
-                top: 18, 
-                right: 18, 
-                background: 'none', 
-                border: 'none', 
-                fontSize: 28, 
+                top: 20, 
+                right: 20, 
+                background: 'rgba(248, 249, 250, 0.8)', 
+                border: '1px solid rgba(233, 236, 239, 0.8)', 
+                borderRadius: 12,
+                width: 40,
+                height: 40,
+                fontSize: 20, 
                 cursor: 'pointer',
-                zIndex: 1001
+                zIndex: 1001,
+                color: '#6c757d',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s ease'
               }}
               onClick={closeCreateQuizModal}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(233, 236, 239, 0.9)';
+                e.target.style.borderColor = 'rgba(233, 236, 239, 1)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(248, 249, 250, 0.8)';
+                e.target.style.borderColor = 'rgba(233, 236, 239, 0.8)';
+              }}
               aria-label="Close"
             >
               &times;
             </button>
             
             <div style={{ 
-              fontWeight: 700, 
-              fontSize: 24, 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 16,
               marginBottom: 24, 
-              textAlign: 'center'
+              paddingBottom: 20,
+              borderBottom: '1px solid rgba(233, 236, 239, 0.6)'
             }}>
-              Create New Quiz
+              <div style={{
+                width: 48, height: 48, borderRadius: 16,
+                background: 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 4px 16px rgba(79,163,126,0.25)'
+              }}>
+                <i className="ri-add-line" style={{ color: '#fff', fontSize: 22 }}></i>
+              </div>
+              <div style={{ fontWeight: 700, fontSize: 24, color: '#2c3e50' }}>
+                Create New Quiz
+              </div>
             </div>
             
             {/* Quiz Details Form */}
             <div style={{ 
               display: 'flex', 
-              gap: 20, 
+              gap: 24, 
               marginBottom: 24,
-              padding: '20px',
-              background: '#f8f9fa',
-              borderRadius: 12
+              padding: '24px',
+              background: 'rgba(248, 249, 250, 0.6)',
+              borderRadius: 20,
+              border: '1px solid rgba(233, 236, 239, 0.6)',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+              position: 'relative',
+              overflow: 'hidden'
             }}>
-              <div style={{ flex: 1 }}>
-                <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: '#333' }}>
+              {/* Subtle shine effect */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '60%',
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%)',
+                pointerEvents: 'none'
+              }}></div>
+              <div style={{ flex: 1, position: 'relative', zIndex: 1 }}>
+                <label style={{ display: 'block', marginBottom: 12, fontWeight: 600, color: '#2c3e50', fontSize: 14 }}>
                   Quiz Title *
                 </label>
                 <input
@@ -1527,19 +1753,27 @@ export default function QuizzesPage() {
                   onChange={(e) => setNewQuizTitle(e.target.value)}
                   style={{
                     width: '100%',
-                    padding: '12px 16px',
-                    border: '2px solid #e9ecef',
-                    borderRadius: 8,
+                    padding: '14px 16px',
+                    border: '2px solid rgba(233, 236, 239, 0.8)',
+                    borderRadius: 16,
                     fontSize: 16,
-                    transition: 'border-color 0.2s ease'
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    color: '#2c3e50',
+                    transition: 'all 0.2s ease'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#4fa37e'}
-                  onBlur={(e) => e.target.style.borderColor = '#e9ecef'}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                    e.target.style.background = 'rgba(255, 255, 255, 1)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'rgba(233, 236, 239, 0.8)';
+                    e.target.style.background = 'rgba(255, 255, 255, 0.8)';
+                  }}
                 />
               </div>
               
-              <div style={{ flex: 1 }}>
-                <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: '#333' }}>
+              <div style={{ flex: 1, position: 'relative', zIndex: 1 }}>
+                <label style={{ display: 'block', marginBottom: 12, fontWeight: 600, color: '#2c3e50', fontSize: 14 }}>
                   Science Topic *
                 </label>
                 <select
@@ -1547,12 +1781,22 @@ export default function QuizzesPage() {
                   onChange={(e) => setNewQuizCategory(e.target.value)}
                   style={{
                     width: '100%',
-                    padding: '12px 16px',
-                    border: '2px solid #e9ecef',
-                    borderRadius: 8,
+                    padding: '14px 16px',
+                    border: '2px solid rgba(233, 236, 239, 0.8)',
+                    borderRadius: 16,
                     fontSize: 16,
-                    background: 'white',
-                    cursor: 'pointer'
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    color: '#2c3e50',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                    e.target.style.background = 'rgba(255, 255, 255, 1)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'rgba(233, 236, 239, 0.8)';
+                    e.target.style.background = 'rgba(255, 255, 255, 0.8)';
                   }}
                 >
                   <option value="">Select a science topic</option>
@@ -1573,16 +1817,59 @@ export default function QuizzesPage() {
               marginBottom: '16px'
             }}>
               {newQuizQuestions.map((q, idx) => (
-                <div key={idx} style={{ marginBottom: 24, background: '#f8f8f8', borderRadius: 12, padding: 18 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                    <span style={{ fontWeight: 600, fontSize: 18 }}>Question {idx + 1}</span>
-                    <button 
-                      style={{ background: 'none', border: 'none', cursor: 'pointer' }} 
-                      title="Delete" 
-                      onClick={() => deleteNewQuizQuestion(idx)}
-                    >
-                      <i className="ri-delete-bin-6-line" style={{ fontSize: 20, color: '#e86786' }}></i>
-                    </button>
+                <div key={idx} style={{ 
+                  marginBottom: 24, 
+                  background: 'rgba(248, 249, 250, 0.6)', 
+                  borderRadius: 20, 
+                  padding: 24, 
+                  border: '1px solid rgba(233, 236, 239, 0.6)', 
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
+                  {/* Subtle shine effect */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '60%',
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%)',
+                    pointerEvents: 'none'
+                  }}></div>
+                  
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, position: 'relative', zIndex: 1 }}>
+                    <span style={{ fontWeight: 700, fontSize: 18, color: '#2c3e50' }}>Question {idx + 1}</span>
+                    <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+                      <button 
+                        style={{ 
+                          background: 'rgba(220, 53, 69, 0.1)', 
+                          border: '1px solid rgba(220, 53, 69, 0.2)', 
+                          color: '#dc3545', 
+                          borderRadius: 12, 
+                          padding: '8px 12px', 
+                          cursor: 'pointer', 
+                          fontWeight: 600,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 6,
+                          transition: 'all 0.2s ease'
+                        }} 
+                        title="Delete" 
+                        onClick={() => deleteNewQuizQuestion(idx)}
+                        onMouseEnter={(e) => {
+                          e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                          e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                          e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
+                        }}
+                      >
+                        <i className="ri-delete-bin-6-line" style={{ fontSize: 16 }}></i>
+                        Delete
+                      </button>
+                    </div>
                   </div>
                   
                   <input
@@ -1594,11 +1881,32 @@ export default function QuizzesPage() {
                       updated[idx].text = e.target.value;
                       setNewQuizQuestions(updated);
                     }}
-                    style={{ width: '100%', background: '#ffe99e', border: 'none', borderRadius: 8, padding: 10, fontWeight: 500, marginBottom: 12, fontSize: 16 }}
+                    style={{ 
+                      width: '100%', 
+                      background: 'rgba(255, 255, 255, 0.8)', 
+                      border: '2px solid rgba(233, 236, 239, 0.8)', 
+                      borderRadius: 16, 
+                      padding: 16, 
+                      fontWeight: 500, 
+                      marginBottom: 16, 
+                      fontSize: 16,
+                      color: '#2c3e50',
+                      transition: 'all 0.2s ease',
+                      position: 'relative',
+                      zIndex: 1
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                      e.target.style.background = 'rgba(255, 255, 255, 1)';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = 'rgba(233, 236, 239, 0.8)';
+                      e.target.style.background = 'rgba(255, 255, 255, 0.8)';
+                    }}
                   />
-                  <div style={{ display: 'flex', gap: 12 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, position: 'relative', zIndex: 1 }}>
                     {q.choices.map((choice, cidx) => (
-                      <div key={cidx} style={{ flex: 1, textAlign: 'center' }}>
+                      <div key={cidx} style={{ textAlign: 'center' }}>
                         <input
                           type="text"
                           placeholder={`Choice ${cidx + 1}`}
@@ -1610,15 +1918,35 @@ export default function QuizzesPage() {
                           }}
                           style={{
                             width: '100%',
-                            background: q.correct === cidx ? '#e86786' : '#f8d7da',
-                            color: q.correct === cidx ? '#fff' : '#b71c1c',
-                            border: 'none',
-                            borderRadius: 10,
-                            padding: '12px 8px',
+                            background: q.correct === cidx 
+                              ? 'rgba(79, 163, 126, 0.15)' 
+                              : 'rgba(255, 255, 255, 0.8)',
+                            color: q.correct === cidx ? '#2c3e50' : '#2c3e50',
+                            border: q.correct === cidx 
+                              ? '2px solid rgba(79, 163, 126, 0.4)' 
+                              : '2px solid rgba(233, 236, 239, 0.8)',
+                            borderRadius: 16,
+                            padding: '14px 12px',
                             fontWeight: 600,
-                            fontSize: 16,
-                            marginBottom: 4,
+                            fontSize: 15,
+                            marginBottom: 8,
                             textAlign: 'center',
+                            transition: 'all 0.2s ease',
+                            boxShadow: q.correct === cidx 
+                              ? '0 2px 8px rgba(79, 163, 126, 0.2)' 
+                              : '0 1px 4px rgba(0,0,0,0.05)'
+                          }}
+                          onFocus={(e) => {
+                            if (q.correct !== cidx) {
+                              e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                              e.target.style.background = 'rgba(255, 255, 255, 1)';
+                            }
+                          }}
+                          onBlur={(e) => {
+                            if (q.correct !== cidx) {
+                              e.target.style.borderColor = 'rgba(233, 236, 239, 0.8)';
+                              e.target.style.background = 'rgba(255, 255, 255, 0.8)';
+                            }
                           }}
                         />
                         <button
@@ -1629,18 +1957,47 @@ export default function QuizzesPage() {
                             setNewQuizQuestions(updated);
                           }}
                           style={{
-                            marginTop: 4,
-                            background: q.correct === cidx ? '#e86786' : '#fff',
-                            color: q.correct === cidx ? '#fff' : '#e86786',
-                            border: `1.5px solid #e86786`,
-                            borderRadius: 6,
-                            padding: '2px 8px',
+                            background: q.correct === cidx 
+                              ? 'rgba(79, 163, 126, 0.1)' 
+                              : 'rgba(255, 255, 255, 0.8)',
+                            color: q.correct === cidx ? '#4fa37e' : '#6c757d',
+                            border: q.correct === cidx 
+                              ? '1px solid rgba(79, 163, 126, 0.3)' 
+                              : '1px solid rgba(233, 236, 239, 0.8)',
+                            borderRadius: 12,
+                            padding: '8px 12px',
                             fontWeight: 600,
                             fontSize: 13,
                             cursor: 'pointer',
                             width: '100%',
+                            transition: 'all 0.2s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: 6
+                          }}
+                          onMouseEnter={(e) => {
+                            if (q.correct === cidx) {
+                              e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                              e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                            } else {
+                              e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                              e.target.style.borderColor = 'rgba(79, 163, 126, 0.3)';
+                              e.target.style.color = '#4fa37e';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (q.correct === cidx) {
+                              e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                              e.target.style.borderColor = 'rgba(79, 163, 126, 0.3)';
+                            } else {
+                              e.target.style.background = 'rgba(255, 255, 255, 0.8)';
+                              e.target.style.borderColor = 'rgba(233, 236, 239, 0.8)';
+                              e.target.style.color = '#6c757d';
+                            }
                           }}
                         >
+                          <i className={q.correct === cidx ? 'ri-check-line' : 'ri-checkbox-blank-line'} style={{ fontSize: 14 }}></i>
                           {q.correct === cidx ? 'Correct' : 'Mark Correct'}
                         </button>
                       </div>
@@ -1652,36 +2009,99 @@ export default function QuizzesPage() {
             
             {/* Action Buttons */}
             <div style={{ 
-              borderTop: '1px solid #e9ecef', 
-              paddingTop: '16px',
+              borderTop: '1px solid rgba(233, 236, 239, 0.6)', 
+              paddingTop: '20px',
               flexShrink: 0
             }}>
               <button
-                style={{ background: '#6c757d', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 28px', fontWeight: 600, fontSize: 18, marginTop: 8, cursor: 'pointer', width: '100%' }}
+                style={{ 
+                  background: 'rgba(79, 163, 126, 0.1)', 
+                  color: '#4fa37e', 
+                  border: '1px solid rgba(79, 163, 126, 0.2)', 
+                  borderRadius: 16, 
+                  padding: '14px 24px', 
+                  fontWeight: 600, 
+                  fontSize: 16, 
+                  marginBottom: 12, 
+                  cursor: 'pointer', 
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
+                  transition: 'all 0.2s ease'
+                }}
                 onClick={addNewQuizQuestion}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                  e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                  e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                }}
               >
-                + Add Question
+                <i className="ri-add-line" style={{ fontSize: 18 }}></i>
+                Add Question
               </button>
               <button
                 style={{ 
                   background: quizCreating 
-                    ? '#a0a0a0' 
+                    ? 'rgba(248, 249, 250, 0.8)' 
+                    : 'rgba(79, 163, 126, 0.1)', 
+                  color: quizCreating 
+                    ? '#6c757d' 
                     : '#4fa37e', 
-                  color: '#fff', 
-                  border: 'none', 
-                  borderRadius: 8, 
-                  padding: '10px 28px', 
+                  border: quizCreating 
+                    ? '1px solid rgba(233, 236, 239, 0.8)' 
+                    : '1px solid rgba(79, 163, 126, 0.2)', 
+                  borderRadius: 16, 
+                  padding: '14px 24px', 
                   fontWeight: 600, 
-                  fontSize: 18, 
-                  marginTop: 8, 
+                  fontSize: 16, 
                   cursor: quizCreating ? 'not-allowed' : 'pointer', 
                   width: '100%',
-                  opacity: quizCreating ? 0.7 : 1
+                  opacity: quizCreating ? 0.7 : 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
+                  transition: 'all 0.2s ease',
+                  boxShadow: quizCreating 
+                    ? 'none' 
+                    : '0 2px 8px rgba(79, 163, 126, 0.15)'
                 }}
                 onClick={saveNewQuizToFirestore}
                 disabled={quizCreating}
+                onMouseEnter={(e) => {
+                  if (!quizCreating) {
+                    e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                    e.target.style.boxShadow = '0 4px 12px rgba(79, 163, 126, 0.25)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!quizCreating) {
+                    e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                    e.target.style.boxShadow = '0 2px 8px rgba(79, 163, 126, 0.15)';
+                  }
+                }}
               >
-                {quizCreating ? 'Creating...' : 'Create Quiz'}
+                {quizCreating ? (
+                  <>
+                    <i className="ri-loader-4-line" style={{ 
+                      animation: 'spin 1s linear infinite',
+                      fontSize: 18 
+                    }}></i>
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <i className="ri-add-line" style={{ fontSize: 18 }}></i>
+                    Create Quiz
+                  </>
+                )}
               </button>
             </div>
             
@@ -1876,46 +2296,78 @@ export default function QuizzesPage() {
             textAlign: 'center', 
             boxShadow: '0 8px 24px rgba(0,0,0,0.2)'
           }}>
-            <h2 style={{ marginBottom: 15, fontSize: 24, color: '#333' }}>Confirm Deletion</h2>
+            <h2 style={{ marginBottom: 15, fontSize: 24, color: '#333' }}>Confirm Archive</h2>
             <p style={{ marginBottom: 25, fontSize: 16, color: '#666' }}>
-              Are you sure you want to delete this quiz? This will permanently remove it from:
+              Are you sure you want to archive this quiz? This will move it to the archive and remove it from:
               <br />• The web interface
               <br />• Unity app assignments
               <br />• All student records
               <br />
-              <strong style={{ color: '#dc3545' }}>This action cannot be undone.</strong>
+              <strong style={{ color: '#dc3545' }}>The quiz will be archived for backup purposes.</strong>
             </p>
             <div style={{ display: 'flex', gap: 15, justifyContent: 'center' }}>
               <button
                 style={{ 
-                  background: '#dc3545', 
-                  color: '#fff', 
-                  border: 'none', 
-                  borderRadius: 8, 
-                  padding: '10px 25px', 
+                  background: 'rgba(220, 53, 69, 0.1)', 
+                  color: '#dc3545', 
+                  border: '1px solid rgba(220, 53, 69, 0.2)', 
+                  borderRadius: 16, 
+                  padding: '12px 24px', 
                   fontSize: 16, 
                   fontWeight: 600, 
                   cursor: 'pointer', 
-                  boxShadow: '0 4px 12px rgba(220, 53, 69, 0.3)'
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 8px rgba(220, 53, 69, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8
                 }}
                 onClick={confirmDelete}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                  e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                  e.target.style.boxShadow = '0 4px 12px rgba(220, 53, 69, 0.25)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                  e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
+                  e.target.style.boxShadow = '0 2px 8px rgba(220, 53, 69, 0.15)';
+                }}
               >
-                Delete
+                <i className="ri-archive-line" style={{ fontSize: 18 }}></i>
+                Archive
               </button>
               <button
                 style={{ 
-                  background: '#6c757d', 
-                  color: '#fff', 
-                  border: 'none', 
-                  borderRadius: 8, 
-                  padding: '10px 25px', 
+                  background: 'rgba(108, 117, 125, 0.1)', 
+                  color: '#6c757d', 
+                  border: '1px solid rgba(108, 117, 125, 0.2)', 
+                  borderRadius: 16, 
+                  padding: '12px 24px', 
                   fontSize: 16, 
                   fontWeight: 600, 
                   cursor: 'pointer', 
-                  boxShadow: '0 4px 12px rgba(108, 117, 125, 0.3)'
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 8px rgba(108, 117, 125, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8
                 }}
                 onClick={cancelDelete}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(108, 117, 125, 0.2)';
+                  e.target.style.borderColor = 'rgba(108, 117, 125, 0.4)';
+                  e.target.style.boxShadow = '0 4px 12px rgba(108, 117, 125, 0.25)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(108, 117, 125, 0.1)';
+                  e.target.style.borderColor = 'rgba(108, 117, 125, 0.2)';
+                  e.target.style.boxShadow = '0 2px 8px rgba(108, 117, 125, 0.15)';
+                }}
               >
+                <i className="ri-close-line" style={{ fontSize: 18 }}></i>
                 Cancel
               </button>
             </div>
@@ -2053,20 +2505,44 @@ export default function QuizzesPage() {
                     onClick={toggleAllSections}
                     style={{
                       background: selectedSections.length === sections.length 
-                        ? 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)'
-                        : 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)',
-                      color: 'white', border: 'none', borderRadius: 12, padding: '12px 20px',
-                      fontSize: 14, fontWeight: 600, cursor: 'pointer',
-                      transition: 'all 0.3s ease', boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                      display: 'flex', alignItems: 'center', gap: 8
+                        ? 'rgba(220, 53, 69, 0.1)'
+                        : 'rgba(79, 163, 126, 0.1)',
+                      color: selectedSections.length === sections.length 
+                        ? '#dc3545' 
+                        : '#4fa37e', 
+                      border: selectedSections.length === sections.length 
+                        ? '1px solid rgba(220, 53, 69, 0.2)' 
+                        : '1px solid rgba(79, 163, 126, 0.2)', 
+                      borderRadius: 12, 
+                      padding: '12px 20px',
+                      fontSize: 14, 
+                      fontWeight: 600, 
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease', 
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: 8
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.transform = 'translateY(-2px)';
-                      e.target.style.boxShadow = '0 6px 20px rgba(0,0,0,0.2)';
+                      if (selectedSections.length === sections.length) {
+                        e.target.style.background = 'rgba(220, 53, 69, 0.2)';
+                        e.target.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+                      } else {
+                        e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                        e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                      }
+                      e.target.style.boxShadow = '0 4px 12px rgba(0,0,0,0.12)';
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.transform = 'translateY(0)';
-                      e.target.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                      if (selectedSections.length === sections.length) {
+                        e.target.style.background = 'rgba(220, 53, 69, 0.1)';
+                        e.target.style.borderColor = 'rgba(220, 53, 69, 0.2)';
+                      } else {
+                        e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                        e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                      }
+                      e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
                     }}
                   >
                     <i className={selectedSections.length === sections.length ? 'ri-checkbox-line' : 'ri-checkbox-blank-line'} style={{ fontSize: 16 }}></i>
@@ -2106,24 +2582,41 @@ export default function QuizzesPage() {
                         <div
                           key={section.id}
                           style={{
-                            padding: '16px 20px', borderBottom: '1px solid #e9ecef',
+                            padding: '16px 20px', 
+                            borderBottom: '1px solid rgba(233, 236, 239, 0.6)',
                             transition: 'all 0.3s ease',
                             background: selectedSections.includes(section.id) 
-                              ? 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)'
+                              ? 'rgba(79, 163, 126, 0.4)'
                               : 'transparent',
-                            color: selectedSections.includes(section.id) ? 'white' : '#2c3e50',
-                            position: 'relative'
+                            color: selectedSections.includes(section.id) ? '#2c3e50' : '#2c3e50',
+                            position: 'relative',
+                            borderRadius: selectedSections.includes(section.id) ? '12px' : '0',
+                            border: selectedSections.includes(section.id) 
+                              ? '2px solid rgba(79, 163, 126, 0.6)' 
+                              : 'none',
+                            margin: selectedSections.includes(section.id) ? '6px 0' : '0',
+                            boxShadow: selectedSections.includes(section.id) 
+                              ? '0 4px 16px rgba(79, 163, 126, 0.3)' 
+                              : 'none'
                           }}
                           onMouseEnter={(e) => {
                             if (!selectedSections.includes(section.id)) {
-                              e.target.style.background = 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
-                              e.target.style.transform = 'translateX(4px)';
+                              e.target.style.background = 'rgba(248, 249, 250, 0.6)';
+                              e.target.style.transform = 'translateX(2px)';
+                            } else {
+                              e.target.style.background = 'rgba(79, 163, 126, 0.5)';
+                              e.target.style.borderColor = 'rgba(79, 163, 126, 0.8)';
+                              e.target.style.boxShadow = '0 6px 20px rgba(79, 163, 126, 0.5)';
                             }
                           }}
                           onMouseLeave={(e) => {
                             if (!selectedSections.includes(section.id)) {
                               e.target.style.background = 'transparent';
                               e.target.style.transform = 'translateX(0)';
+                            } else {
+                              e.target.style.background = 'rgba(79, 163, 126, 0.4)';
+                              e.target.style.borderColor = 'rgba(79, 163, 126, 0.6)';
+                              e.target.style.boxShadow = '0 4px 16px rgba(79, 163, 126, 0.3)';
                             }
                           }}
                         >
@@ -2190,19 +2683,29 @@ export default function QuizzesPage() {
                 <button
                   onClick={closeAssignmentModal}
                   style={{
-                    background: 'linear-gradient(135deg, #6c757d 0%, #5a6268 100%)',
-                    color: 'white', border: 'none', borderRadius: 14, padding: '14px 28px',
-                    fontSize: 16, fontWeight: 600, cursor: 'pointer',
-                    transition: 'all 0.3s ease', boxShadow: '0 4px 16px rgba(108, 117, 125, 0.3)',
-                    display: 'flex', alignItems: 'center', gap: 8
+                    background: 'rgba(108, 117, 125, 0.1)',
+                    color: '#6c757d', 
+                    border: '1px solid rgba(108, 117, 125, 0.2)', 
+                    borderRadius: 16, 
+                    padding: '14px 28px',
+                    fontSize: 16, 
+                    fontWeight: 600, 
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease', 
+                    boxShadow: '0 2px 8px rgba(108, 117, 125, 0.15)',
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 8
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.transform = 'translateY(-3px)';
-                    e.target.style.boxShadow = '0 8px 25px rgba(108, 117, 125, 0.4)';
+                    e.target.style.background = 'rgba(108, 117, 125, 0.2)';
+                    e.target.style.borderColor = 'rgba(108, 117, 125, 0.4)';
+                    e.target.style.boxShadow = '0 4px 12px rgba(108, 117, 125, 0.25)';
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.transform = 'translateY(0)';
-                    e.target.style.boxShadow = '0 4px 16px rgba(108, 117, 125, 0.3)';
+                    e.target.style.background = 'rgba(108, 117, 125, 0.1)';
+                    e.target.style.borderColor = 'rgba(108, 117, 125, 0.2)';
+                    e.target.style.boxShadow = '0 2px 8px rgba(108, 117, 125, 0.15)';
                   }}
                 >
                   <i className="ri-close-line" style={{ fontSize: 18 }}></i>
@@ -2211,19 +2714,29 @@ export default function QuizzesPage() {
                 <button
                   onClick={assignQuiz}
                   style={{
-                    background: 'linear-gradient(135deg, #4fa37e 0%, #3d8b6f 100%)',
-                    color: 'white', border: 'none', borderRadius: 14, padding: '14px 28px',
-                    fontSize: 16, fontWeight: 600, cursor: 'pointer',
-                    transition: 'all 0.3s ease', boxShadow: '0 4px 16px rgba(79, 163, 126, 0.3)',
-                    display: 'flex', alignItems: 'center', gap: 8
+                    background: 'rgba(79, 163, 126, 0.1)',
+                    color: '#4fa37e', 
+                    border: '1px solid rgba(79, 163, 126, 0.2)', 
+                    borderRadius: 16, 
+                    padding: '14px 28px',
+                    fontSize: 16, 
+                    fontWeight: 600, 
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease', 
+                    boxShadow: '0 2px 8px rgba(79, 163, 126, 0.15)',
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 8
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.transform = 'translateY(-3px)';
-                    e.target.style.boxShadow = '0 8px 25px rgba(79, 163, 126, 0.4)';
+                    e.target.style.background = 'rgba(79, 163, 126, 0.2)';
+                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.4)';
+                    e.target.style.boxShadow = '0 4px 12px rgba(79, 163, 126, 0.25)';
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.transform = 'translateY(0)';
-                    e.target.style.boxShadow = '0 4px 16px rgba(79, 163, 126, 0.3)';
+                    e.target.style.background = 'rgba(79, 163, 126, 0.1)';
+                    e.target.style.borderColor = 'rgba(79, 163, 126, 0.2)';
+                    e.target.style.boxShadow = '0 2px 8px rgba(79, 163, 126, 0.15)';
                   }}
                 >
                   <i className="ri-send-plane-line" style={{ fontSize: 18 }}></i>

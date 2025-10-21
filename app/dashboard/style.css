@@ -171,15 +171,18 @@ a {
 
 .sidebar--items a:hover,
 .sidebar--bottom-items a:hover {
-    background-color: #3f5d54;
-    color: #fff;
+    background-color: rgba(79, 163, 126, 0.1);
+    color: #4fa37e;
+    border: 1px solid rgba(79, 163, 126, 0.2);
     transform: translateX(4px);
-    box-shadow: 2px 0 8px rgba(63, 93, 84, 0.2);
+    box-shadow: 2px 0 8px rgba(79, 163, 126, 0.15);
 }
 
 #active--link {
-    background-color: #3f5d54;
-    color: #fff;
+    background-color: rgba(79, 163, 126, 0.1);
+    color: #4fa37e;
+    border: 1px solid rgba(79, 163, 126, 0.2);
+    box-shadow: 0 2px 8px rgba(79, 163, 126, 0.15);
 }
 
 .sidebar--bottom-items li:last-child a {
