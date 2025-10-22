@@ -275,6 +275,22 @@ export default function StudentRecordPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // Validation for name fields - no integers allowed
+    if (name === 'firstName' || name === 'lastName' || name === 'middleName' || name === 'parentGuardianName') {
+      // Check if the value contains any numbers
+      if (/\d/.test(value)) {
+        let fieldLabel = '';
+        if (name === 'middleName') fieldLabel = 'Middle Name';
+        else if (name === 'firstName') fieldLabel = 'First Name';
+        else if (name === 'lastName') fieldLabel = 'Last Name';
+        else if (name === 'parentGuardianName') fieldLabel = 'Parent/Guardian Name';
+        
+        setFieldErrors({ ...fieldErrors, [name]: `${fieldLabel} cannot contain numbers` });
+        return; // Don't update the form if it contains numbers
+      }
+    }
+    
     setForm({ ...form, [name]: value });
     
     // Clear field error when user starts typing
@@ -386,6 +402,22 @@ export default function StudentRecordPage() {
 
   const handleEditInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // Validation for name fields - no integers allowed
+    if (name === 'firstName' || name === 'lastName' || name === 'middleName' || name === 'parentGuardianName') {
+      // Check if the value contains any numbers
+      if (/\d/.test(value)) {
+        let fieldLabel = '';
+        if (name === 'middleName') fieldLabel = 'Middle Name';
+        else if (name === 'firstName') fieldLabel = 'First Name';
+        else if (name === 'lastName') fieldLabel = 'Last Name';
+        else if (name === 'parentGuardianName') fieldLabel = 'Parent/Guardian Name';
+        
+        setFieldErrors({ ...fieldErrors, [name]: `${fieldLabel} cannot contain numbers` });
+        return; // Don't update the form if it contains numbers
+      }
+    }
+    
     const updatedStudent = { ...editStudent, [name]: value };
     
     // Update avatar if gender is changed
@@ -1251,6 +1283,25 @@ export default function StudentRecordPage() {
 
   const handleSectionStudentInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // Validation for name fields - no integers allowed
+    if (name === 'firstName' || name === 'lastName' || name === 'middleName' || name === 'parentGuardianName') {
+      // Check if the value contains any numbers
+      if (/\d/.test(value)) {
+        let fieldLabel = '';
+        if (name === 'middleName') fieldLabel = 'Middle Name';
+        else if (name === 'firstName') fieldLabel = 'First Name';
+        else if (name === 'lastName') fieldLabel = 'Last Name';
+        else if (name === 'parentGuardianName') fieldLabel = 'Parent/Guardian Name';
+        
+        setSectionStudentErrors(prev => ({
+          ...prev,
+          [name]: `${fieldLabel} cannot contain numbers`
+        }));
+        return; // Don't update the form if it contains numbers
+      }
+    }
+    
     setSectionStudentForm(prev => ({
       ...prev,
       [name]: value
@@ -2200,8 +2251,12 @@ export default function StudentRecordPage() {
                       onChange={handleInputChange} 
                       placeholder="Enter middle name" 
                       style={{ 
-                        background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)', 
-                        border: '2px solid #e9ecef', 
+                        background: fieldErrors.middleName 
+                          ? 'linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%)' 
+                          : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)', 
+                        border: fieldErrors.middleName 
+                          ? '2px solid #ff4444' 
+                          : '2px solid #e9ecef', 
                         borderRadius: 10, 
                         padding: '12px 16px', 
                         fontSize: 14,
@@ -2210,15 +2265,21 @@ export default function StudentRecordPage() {
                         width: '100%',
                         boxSizing: 'border-box',
                         transition: 'all 0.3s ease',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+                        boxShadow: fieldErrors.middleName 
+                          ? '0 4px 12px rgba(255, 68, 68, 0.15)' 
+                          : '0 2px 8px rgba(0,0,0,0.05)'
                       }}
                       onFocus={(e) => {
-                        e.target.style.borderColor = '#4fa37e';
-                        e.target.style.boxShadow = '0 4px 12px rgba(79, 163, 126, 0.15)';
+                        e.target.style.borderColor = fieldErrors.middleName ? '#ff4444' : '#4fa37e';
+                        e.target.style.boxShadow = fieldErrors.middleName 
+                          ? '0 4px 12px rgba(255, 68, 68, 0.15)' 
+                          : '0 4px 12px rgba(79, 163, 126, 0.15)';
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = '#e9ecef';
-                        e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+                        e.target.style.borderColor = fieldErrors.middleName ? '#ff4444' : '#e9ecef';
+                        e.target.style.boxShadow = fieldErrors.middleName 
+                          ? '0 4px 12px rgba(255, 68, 68, 0.15)' 
+                          : '0 2px 8px rgba(0,0,0,0.05)';
                       }} 
                     />
                   </div>
@@ -3322,14 +3383,20 @@ export default function StudentRecordPage() {
                       letterSpacing: '0.5px'
                     }}>Parent/Guardian</label>
                     <input name="parentGuardianName" value={editStudent.parentGuardianName} onChange={handleEditInputChange} placeholder="Parent/Guardian Name" style={{ 
-                      background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)', 
-                      border: '1px solid rgba(179, 230, 199, 0.3)', 
+                      background: fieldErrors.parentGuardianName 
+                        ? 'linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%)' 
+                        : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)', 
+                      border: fieldErrors.parentGuardianName 
+                        ? '2px solid #ff4444' 
+                        : '1px solid rgba(179, 230, 199, 0.3)', 
                       borderRadius: 12, 
                       padding: 16, 
                       fontSize: 16,
                       fontWeight: 500,
                       color: '#34495e',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                      boxShadow: fieldErrors.parentGuardianName 
+                        ? '0 4px 12px rgba(255, 68, 68, 0.15)' 
+                        : '0 2px 8px rgba(0, 0, 0, 0.08)',
                       transition: 'all 0.2s ease'
                     }} />
                   </div>
@@ -5588,8 +5655,12 @@ export default function StudentRecordPage() {
                       onChange={handleSectionStudentInputChange} 
                       placeholder="Enter middle name" 
                       style={{ 
-                        background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)', 
-                        border: '2px solid #e9ecef', 
+                        background: sectionStudentErrors.middleName 
+                          ? 'linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%)' 
+                          : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)', 
+                        border: sectionStudentErrors.middleName 
+                          ? '2px solid #ff4444' 
+                          : '2px solid #e9ecef', 
                         borderRadius: 10, 
                         padding: '12px 16px', 
                         fontSize: 14,
@@ -5598,15 +5669,21 @@ export default function StudentRecordPage() {
                         width: '100%',
                         boxSizing: 'border-box',
                         transition: 'all 0.3s ease',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+                        boxShadow: sectionStudentErrors.middleName 
+                          ? '0 4px 12px rgba(255, 68, 68, 0.15)' 
+                          : '0 2px 8px rgba(0,0,0,0.05)'
                       }}
                       onFocus={(e) => {
-                        e.target.style.borderColor = '#4fa37e';
-                        e.target.style.boxShadow = '0 4px 12px rgba(79, 163, 126, 0.15)';
+                        e.target.style.borderColor = sectionStudentErrors.middleName ? '#ff4444' : '#4fa37e';
+                        e.target.style.boxShadow = sectionStudentErrors.middleName 
+                          ? '0 4px 12px rgba(255, 68, 68, 0.15)' 
+                          : '0 4px 12px rgba(79, 163, 126, 0.15)';
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = '#e9ecef';
-                        e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+                        e.target.style.borderColor = sectionStudentErrors.middleName ? '#ff4444' : '#e9ecef';
+                        e.target.style.boxShadow = sectionStudentErrors.middleName 
+                          ? '0 4px 12px rgba(255, 68, 68, 0.15)' 
+                          : '0 2px 8px rgba(0,0,0,0.05)';
                       }}
                     />
                   </div>
