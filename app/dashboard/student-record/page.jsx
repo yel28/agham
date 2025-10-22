@@ -291,6 +291,24 @@ export default function StudentRecordPage() {
       }
     }
     
+    // Validation for LRN field - only integers allowed
+    if (name === 'lrn') {
+      // Check if the value contains any non-numeric characters
+      if (value && !/^\d+$/.test(value)) {
+        setFieldErrors({ ...fieldErrors, [name]: 'LRN must contain only numbers' });
+        return; // Don't update the form if it contains non-numeric characters
+      }
+    }
+    
+    // Validation for Contact Number field - only numbers and + allowed
+    if (name === 'contact') {
+      // Check if the value contains any characters other than numbers and +
+      if (value && !/^[\d+]+$/.test(value)) {
+        setFieldErrors({ ...fieldErrors, [name]: 'Contact Number can only contain numbers and + sign' });
+        return; // Don't update the form if it contains invalid characters
+      }
+    }
+    
     setForm({ ...form, [name]: value });
     
     // Clear field error when user starts typing
@@ -415,6 +433,24 @@ export default function StudentRecordPage() {
         
         setFieldErrors({ ...fieldErrors, [name]: `${fieldLabel} cannot contain numbers` });
         return; // Don't update the form if it contains numbers
+      }
+    }
+    
+    // Validation for LRN field - only integers allowed
+    if (name === 'lrn') {
+      // Check if the value contains any non-numeric characters
+      if (value && !/^\d+$/.test(value)) {
+        setFieldErrors({ ...fieldErrors, [name]: 'LRN must contain only numbers' });
+        return; // Don't update the form if it contains non-numeric characters
+      }
+    }
+    
+    // Validation for Contact Number field - only numbers and + allowed
+    if (name === 'contact') {
+      // Check if the value contains any characters other than numbers and +
+      if (value && !/^[\d+]+$/.test(value)) {
+        setFieldErrors({ ...fieldErrors, [name]: 'Contact Number can only contain numbers and + sign' });
+        return; // Don't update the form if it contains invalid characters
       }
     }
     
@@ -1299,6 +1335,30 @@ export default function StudentRecordPage() {
           [name]: `${fieldLabel} cannot contain numbers`
         }));
         return; // Don't update the form if it contains numbers
+      }
+    }
+    
+    // Validation for LRN field - only integers allowed
+    if (name === 'lrn') {
+      // Check if the value contains any non-numeric characters
+      if (value && !/^\d+$/.test(value)) {
+        setSectionStudentErrors(prev => ({
+          ...prev,
+          [name]: 'LRN must contain only numbers'
+        }));
+        return; // Don't update the form if it contains non-numeric characters
+      }
+    }
+    
+    // Validation for Contact Number field - only numbers and + allowed
+    if (name === 'contact') {
+      // Check if the value contains any characters other than numbers and +
+      if (value && !/^[\d+]+$/.test(value)) {
+        setSectionStudentErrors(prev => ({
+          ...prev,
+          [name]: 'Contact Number can only contain numbers and + sign'
+        }));
+        return; // Don't update the form if it contains invalid characters
       }
     }
     
