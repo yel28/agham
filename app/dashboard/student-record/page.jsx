@@ -2282,6 +2282,20 @@ export default function StudentRecordPage() {
                           : '0 2px 8px rgba(0,0,0,0.05)';
                       }} 
                     />
+                    {fieldErrors.middleName && (
+                      <div style={{ 
+                        color: '#ff4444', 
+                        fontSize: 12, 
+                        marginTop: 6,
+                        fontWeight: 500,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4
+                      }}>
+                        <i className="ri-error-warning-line" style={{ fontSize: '14px' }}></i>
+                        {fieldErrors.middleName}
+                      </div>
+                    )}
                   </div>
                   
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -5686,6 +5700,20 @@ export default function StudentRecordPage() {
                           : '0 2px 8px rgba(0,0,0,0.05)';
                       }}
                     />
+                    {sectionStudentErrors.middleName && (
+                      <div style={{ 
+                        color: '#ff4444', 
+                        fontSize: 12, 
+                        marginTop: 6,
+                        fontWeight: 500,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4
+                      }}>
+                        <i className="ri-error-warning-line" style={{ fontSize: '14px' }}></i>
+                        {sectionStudentErrors.middleName}
+                      </div>
+                    )}
                   </div>
                   
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
